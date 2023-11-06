@@ -25,6 +25,3 @@
   <img src="https://github.com/quyld17/ITSS-back-end/assets/75574584/a572d533-8754-41c0-8726-eec93bb95a22)" width="600" title="Creat pull request">
   <img src="https://github.com/quyld17/ITSS-back-end/assets/75574584/50f06422-2862-40f8-8cd4-dcc7a105b55c)" width="600" title="Creat pull request">
 </p>
-
-
-test
