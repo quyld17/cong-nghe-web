@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Website - Admin Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+</head>
+<style>
+    body {
+        background-color: #001529;
+    }
+    /* Add a black background color to the top navigation */
+    .topnav {
+        overflow: hidden;
+        height: 80px;
+      }
+      
+      /* Style the links inside the navigation bar */
+      .topnav a {
+        float: left;
+        color: #f2f2f2;
+        text-align: center;
+        height: 80px;
+        width: 200px;
+        padding-top: 20px;
+        text-decoration: none;
+        font-size: 25px;
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      
+      /* Change the color of links on hover */
+      .topnav a:hover {
+        background-color: #ddd;
+        color: black;
+      }
+      
+      /* Add a color to the active/current link */
+      .topnav a.active {
+        background-color: #F1F4F6;
+        color:#001529;
+      }
+
+      img {
+        max-width: 100%;
+      }
+
+      .main-container {
+        display: flex;
+        background-color: #F1F4F6;
+        flex-direction: row;
+        max-width: 100%;
+        height: 600px;
+      }
+
+      .main-container .statistical {
+        display: flex;
+        max-width: 70%;
+        width: 100%;
+      }
+
+      .main-container .statistical .sta-title {
+        max-width: 100%;
+        width: 1000px;
+        height: 500px;
+        margin-left: auto;
+        margin-right: auto;
+        border-radius: 5px;
+        box-shadow: 0px 6px 25px 0 rgba(0, 0, 0, 0.19);
+        margin-top: 40px;
+        padding-top: 15px;
+        padding-left: 15px;
+        font-family:'Courier New', Courier, monospace;
+        font-size: 30px;
+        background-color: #FFFFFF;
+        
+      }
+
+      .main-container .statistical .sta-title .sta-detail {
+        display: flex;
+        flex-direction: row;
+        margin-left: 15px;
+        padding-right: 15px;
+      }
+
+      .s-name {
+        margin-left: 15px;
+        width: 300px;
+        text-align: center;
+        padding-top: 50px;
+        font-size: 25px;
+        color: #BEC0C3;
+      }
+
+      .s-int {
+        margin-left: 15px;
+        width: 300px;
+        text-align: center;
+        padding-top: 50px;
+        font-size: 70px;
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        color: #495057;
+      }
+
+      .s-money {
+        margin-left: 15px;
+        width: 300px;
+        text-align: center;
+        padding-top: 50px;
+        font-size: 70px;
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        color: #3AC47D;
+      }
+
+      .s-money a {
+        font-size: 40px;
+      }
+
+      .s-per {
+        margin-left: 30px;
+        width: 300px;
+        text-align: center;
+        padding-top: 0px;
+        font-size: 15px;
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        color: #3AC47D;
+      }
+
+      .s-per a {
+        color: #495057;
+      }
+
+      .top-customer {
+        max-width: 25%;
+        width: 1000px;
+        height: 500px;
+        margin-left: auto;
+        margin-right: auto;
+        border-radius: 5px;
+        box-shadow: 0px 6px 25px 0 rgba(0, 0, 0, 0.19);
+        margin-top: 40px;
+        padding-top: 15px;
+        padding-left: 15px;
+        font-family:'Courier New', Courier, monospace;
+        font-size: 30px;
+        background-color: #FFFFFF;
+      }
+
+      .top-customer-title {
+        display: flex;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .top-customer .top-head {
+        font-size: 12px;
+        color:#001529;
+      }
+      
+      table {
+        width: 95%;
+        
+      }
+
+      .gold {
+        text-shadow:  -2px 0 gold, 0 2px gold,      2px 0 gold, 0 -2px gold;
+        font-size: 15px;
+      }
+
+      .silver {
+        text-shadow:  -2px 0 silver, 0 2px silver,      2px 0 silver, 0 -2px silver;
+        font-size: 14px;
+      }
+
+      .copper {
+        text-shadow:  -1px 0 #B87333, 0 1px #B87333,      1px 0 #B87333, 0 -1px #B87333;
+        font-size: 13px;
+      }
+
+      td {
+    
+        text-align: center;
+      }
+    
+</style>
+<body>
+    <header>
+        <div class="topnav">
+            <a class="logo" style="padding-top: 0px;"><center><img src="../public/image/logo.png"></center></a>
+            <a class="active" href="/">Home</a>
+            <a href="/products">Products</a>
+            <a href="/orders">Orders</a>
+            <a href="/customer">Customer</a>
+            <a href="/logout" style="margin-left: 300px;">Log out</a>
+          </div>
+    </header>
+    <div class="main-container">
+        <div class="statistical" >
+            <div class="sta-title">
+                <div style="color: #747C91;">Statistical</div>
+                <hr width="97%" align="left"/>
+                <div class="sta-detail">
+                    <div class="order">
+                        <div class="s-name">Orders</div>
+                        <div class="s-int"><%= data.totalOrders%></div>
+                        <div class="s-per"><%= data.successOrderRate%>% <a>Success</a></div>
+                    </div>
+                    <div class="product">
+                        <div class="s-name">Products</div>
+                        <div class="s-int"><%= data.totalProduct%></div>
+                    </div>
+                    <div class="revenue">
+                        <div class="s-name">Revenue</div>
+                        <div class="s-money"><a>vnd</a> <%= data.totalRevenue%><a>M</a></div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="top-customer">
+            <div class="top-customer-title">Top Buyer</div>
+            <hr width="97%" align="left"/>
+            <div class="top-head">
+                <table frame="void">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th width="180px">Name</th>
+                            <th>Expenditure</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for (let i = 0; i < rankL; i++) { %> 
+                            <% if (i == 0) { %>
+                                <tr>
+                                    <td class="gold"><%= i+1 %></td>
+                                    <td width="180px"><%= rank[i].fN %></td>
+                                    <td><%= rank[i].tE %></td>
+                                </tr>
+                            <% } %>
+                            <% if (i == 1) { %>
+                                <tr>
+                                    <td class="silver"><%= i+1 %></td>
+                                    <td width="180px"><%= rank[i].fN %></td>
+                                    <td><%= rank[i].tE %></td>
+                                </tr>
+                            <% } %>
+                            <% if (i == 2) { %>
+                                <tr>
+                                    <td class="copper"><%= i+1 %></td>
+                                    <td width="180px"><%= rank[i].fN %></td>
+                                    <td><%= rank[i].tE %></td>
+                                </tr>
+                            <% } %>
+                            <% if (i > 2) { %>
+                                <tr>
+                                    <td><%= i+1 %></td>
+                                    <td width="180px"><%= rank[i].fN %></td>
+                                    <td><%= rank[i].tE %></td>
+                                </tr>
+                            <% } %>
+                            
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
