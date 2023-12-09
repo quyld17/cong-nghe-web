@@ -8,34 +8,21 @@ r.post("/sign-up", express.json(), async (req, res) => {
   const account = req.body;
   if (account) {
     try {
-      if (
-        account.password === "" ||
-        account.mail === "" ||
-        account.auth_method === ""
-      ) {
+      if (account.password === "" || account.email === "") {
         return res.status(400).json("Invalid input");
       }
 
-      const userAlreadyExisted = await isUserAlreadyRegistered(account.mail);
+      const userAlreadyExisted = await isUserAlreadyRegistered(account.email);
       if (userAlreadyExisted) {
         return res.status(400).json("User already registered");
       }
 
       const role = "user";
-      let user_name = "";
-      for (let i = 0; i < account.mail.length; i++) {
-        if (account.mail[i] === "@") {
-          break;
-        }
-        user_name += account.mail[i];
-      }
 
       const userSignUpResult = await signUp(
-        user_name,
+        account.email,
         account.password,
-        account.mail,
-        role,
-        account.auth_method
+        role
       );
       if (userSignUpResult) {
         res.status(200).json("User registered successfully");
