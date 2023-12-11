@@ -13,5 +13,7 @@ app.get('/', homeController.getAdminPage);
 
 app.get('/products', homeController.getProductsAdmin)
 
+app.get('/sign-up', homeController.getSignUpPage);
+
 app.listen(1234);
 

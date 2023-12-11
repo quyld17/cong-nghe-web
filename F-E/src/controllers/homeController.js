@@ -56,6 +56,10 @@ let getProductsAdmin = async (req, res) => {
     return res.render('productsAdmin.ejs');
 }
 
+let getSignUpPage = async (req, res) => {
+    return res.render('signup.ejs');
+}
+
 module.exports = {
-    getAdminPage, getProductsAdmin
+    getAdminPage, getProductsAdmin, getSignUpPage
 }
