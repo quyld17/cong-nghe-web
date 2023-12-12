@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <title>Sign in</title>
+    <link rel="stylesheet" href="/css/style.css">
+  </head>
+  <style>
+    body {
+      background-image: url('/image/bg.png');
+      background-size: cover;
+      background-position: 50% 0%;
+      width: 100%;
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 0;
+      font-family: 'Courier New', Courier, monospace;
+    }
+  </style>
+  <body>
+    <div class="signup">
+      <h1 class="signup-heading">Sign in</h1>
+        <label for="email" class="signup-label">Email</label>
+        <input type="text" name="email" id="email" class="signup-input" placeholder="">
+        <label for="password" class="signup-label">Password</label>
+        <input type="password" name="password" id="password" class="signup-input" placeholder="">
+        <button type="submit" class="signup-submit" id="signup-btn">Sign in</button>
+      <p class="signup-already">
+        <span>Don't have an account.  </span>
+        <a href="/sign-up" class="signup-link">Create account</a>
+      </p>
+    </div>
+  </body>
+  <script>
+
+
+    var signup = document.getElementById("signup-btn");
+    var email = document.getElementById("email");
+    var password = document.getElementById("password");
+    var data;
+    
+    signup.addEventListener("click", async function() {
+      if (email.value=='' || password.value=='') alert("Please fill in all the information");
+      else {       
+        data = {
+            password: password.value,
+            email: email.value
+          }
+          await fetch("http://localhost:4000/sign-in", {
+            method: "POST",
+            headers:{
+              "Content-Type": "application/json"
+            },
+            body:JSON.stringify(data)
+          })
+        }
+      }
+    )
+  </script>
+</html>

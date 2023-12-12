@@ -49,13 +49,21 @@ let getAdminPage = async (req, res) => {
     
     let data = {totalOrders, totalProduct, totalRevenue, successOrderRate}
 
-    return res.render('index.ejs', { data: data, rank: rank, rankL: rankL});
+    return res.render('adminPage.ejs', { data: data, rank: rank, rankL: rankL});
 }
 
 let getProductsAdmin = async (req, res) => {
     return res.render('productsAdmin.ejs');
 }
 
+let getSignUpPage = async (req, res) => {
+    return res.render('signup.ejs');
+}
+
+let getSignInPage = async (req, res) => {
+    return res.render('signin.ejs');
+}
+
 module.exports = {
-    getAdminPage, getProductsAdmin
+    getAdminPage, getProductsAdmin, getSignUpPage, getSignInPage
 }

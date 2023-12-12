@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <title>Sign up</title>
+    <link rel="stylesheet" href="/css/style.css">
+  </head>
+  <style>
+    body {
+      background-image: url('/image/bg.png');
+      background-size: cover;
+      background-position: 50% 0%;
+      width: 100%;
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 0;
+      font-family: 'Courier New', Courier, monospace;
+    }
+  </style>
+  <body>
+    <div class="signup">
+      <h1 class="signup-heading">Sign up</h1>
+
+        <label for="fullname" class="signup-label">Fullname</label>
+        <input type="text" name="fullname" id="fullname" class="signup-input" placeholder="">
+        <label for="email" class="signup-label">Email</label>
+        <input type="text" name="email" id="email" class="signup-input" placeholder="">
+        <label for="password" class="signup-label">Password</label>
+        <input type="password" name="password" id="password" class="signup-input" placeholder="">
+
+        <button type="submit" class="signup-submit" id="signup-btn">Sign up</button>
+      
+      <p class="signup-already">
+        <span>Already have an email.  </span>
+        <a href="/sign-in" class="signup-link">Sign in</a>
+      </p>
+    </div>
+  </body>
+  <script>
+
+
+    var signup = document.getElementById("signup-btn");
+    var fullname = document.getElementById("fullname");
+    var email = document.getElementById("email");
+    var password = document.getElementById("password");
+    var data;
+    
+    signup.addEventListener("click", async function() {
+      if (fullname.value == '' || email.value=='' || password.value=='') alert("Please fill in all the information");
+      else {
+          
+          data = {
+            password: password.value,
+            email: email.value
+          }
+          await fetch("http://localhost:4000/sign-up", {
+            method: "POST",
+            headers:{
+              "Content-Type": "application/json"
+            },
+            body:JSON.stringify(data)
+          })
+        }
+      }
+    )
+  </script>
+</html>

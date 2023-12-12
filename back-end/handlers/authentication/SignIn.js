@@ -11,13 +11,13 @@ r.post("/sign-in", express.json(), async (req, res) => {
   const account = req.body;
   if (account) {
     try {
-      if (account.mail === "" || account.password === "") {
+      if (account.email === "" || account.password === "") {
         return res.status(400).json("Invalid input");
       }
 
       const signInResult = await signIn(account);
       if (signInResult) {
-        const user_data = await getUserNameAndImage(account.mail);
+        const user_data = await getUserNameAndImage(account.email);
         const token = jwt.sign(
           { user_name: user_data.user_name, avatar: user_data.image },
           secretKey,
