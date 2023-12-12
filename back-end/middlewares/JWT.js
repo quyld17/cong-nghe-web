@@ -1,4 +1,3 @@
-const { getUserId } = require("../entities/Users");
 const { secretKey } = require("../services/JWT");
 
 const jwt = require("jsonwebtoken");
@@ -10,17 +9,10 @@ async function tokenVerification(token, res) {
   const decodedToken = jwt.verify(token, secretKey);
 
   try {
-    const user_id = await getUserId(decodedToken.user_name);
-
-    if (!user_id) {
-      return res.status(401).json("User not found");const secretKey = "itss-back-end";
-
-      module.exports = {
-        secretKey,
-      };
-      
+    if (!decodedToken.user_id) {
+      return res.status(401).json("User not found");
     }
-    return user_id;
+    return decodedToken.user_id;
   } catch (err) {
     console.error("Error:", err);
     return res.status(500).json("Internal Server Error");
