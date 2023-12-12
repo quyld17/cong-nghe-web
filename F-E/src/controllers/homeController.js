@@ -2,7 +2,7 @@ const pool = require('../config/connectDB');
 
 let getAdminPage = async (req, res) => {
     const [rows, field] = await pool.execute ('select * from order_products');
-    const [rows2, field2] = await pool.execute('select * from order_');
+    const [rows2, field2] = await pool.execute('select * from `order`');
     const [rank, field3] = await pool.execute('select full_name as fN, total_expenditure as tE from user');
 
     let totalOrders = rows2.length;
@@ -53,7 +53,24 @@ let getAdminPage = async (req, res) => {
 }
 
 let getProductsAdmin = async (req, res) => {
-    return res.render('productsAdmin.ejs');
+    const [rows, field] = await pool.execute ('select * from product');
+    return res.render('productsAdmin.ejs', {
+        data: rows
+    });
+}
+
+let getOrdersAdmin = async (req, res) => {
+    const [rows, field] = await pool.execute ('select * from `order`');
+    return res.render('orderAdmin.ejs', {
+        data: rows
+    });
+}
+
+let getCustomerAdmin = async (req, res) => {
+    const [rows, field] = await pool.execute ('select * from `user`');
+    return res.render('customerAdmin.ejs', {
+        data: rows
+    });
 }
 
 let getSignUpPage = async (req, res) => {
@@ -65,5 +82,6 @@ let getSignInPage = async (req, res) => {
 }
 
 module.exports = {
-    getAdminPage, getProductsAdmin, getSignUpPage, getSignInPage
+    getAdminPage, getProductsAdmin, getSignUpPage, getSignInPage,
+    getOrdersAdmin, getCustomerAdmin
 }
