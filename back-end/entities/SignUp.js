@@ -8,8 +8,7 @@ async function signUp(email, password, role) {
       if (err) {
         reject(err);
       } else {
-        const affectedRows = results.affectedRows;
-        resolve(affectedRows > 0);
+        resolve(results.affectedRows > 0);
       }
     });
   });
@@ -23,8 +22,7 @@ async function isUserAlreadyRegistered(email) {
       if (err) {
         reject(err);
       } else {
-        const count = results[0].count;
-        resolve(count > 0);
+        resolve(results[0].count > 0);
       }
     });
   });

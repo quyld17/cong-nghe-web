@@ -7,6 +7,7 @@ CREATE TABLE `user` (
   `phone_number` CHAR(11),
   `gender` TINYINT,
   `role` CHAR(10) NOT NULL,
+  `total_expenditure` INT,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
