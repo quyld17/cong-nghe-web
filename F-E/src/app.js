@@ -9,11 +9,13 @@ configViewEngine(app);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', homeController.getAdminPage);
+app.get('/admin', homeController.getAdminPage);
 
 app.get('/products', homeController.getProductsAdmin)
 
 app.get('/sign-up', homeController.getSignUpPage);
+
+app.get('/sign-in', homeController.getSignInPage);
 
 app.listen(1234);
 
