@@ -279,6 +279,12 @@
         display: flex;
         flex-direction: column;
       }
+
+      .products-operation button {
+        margin-top: 15px;
+        margin-left: 100px;
+      }
+
       .products-admin-container {
         background-color: #F9FAFD;
         display: flex;
@@ -286,6 +292,21 @@
         margin: 15px;
         width: 80%;
         height: 500px;
+      }
+
+      .products-admin-container .categories {
+        background-color: #001529;
+        margin: 15px;
+        padding: 10px;
+        color: #ffffff;
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: 15px;
+        align-items: center;
+      }
+
+      .products-admin-container .categories a {
+        text-decoration: none;
+        color: #ffffff;
       }
 
       .products-admin-container thead {

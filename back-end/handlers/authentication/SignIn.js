@@ -1,5 +1,5 @@
 const { signIn } = require("../../entities/SignIn");
-const { getUserNameAndImage } = require("../../entities/Users");
+const { getUserIdByEmail, getRole } = require("../../entities/Users");
 const { secretKey } = require("../../services/JWT");
 
 const Router = require("express");
@@ -17,19 +17,16 @@ r.post("/sign-in", express.json(), async (req, res) => {
 
       const signInResult = await signIn(account);
       if (signInResult) {
-        const user_data = await getUserNameAndImage(account.email);
-        const token = jwt.sign(
-          { user_name: user_data.user_name, avatar: user_data.image },
-          secretKey,
-          {
-            expiresIn: "24h",
-          }
-        );
+        const user_id = await getUserIdByEmail(account.email);
+        const role = await getRole(account.email);
+        const token = jwt.sign({ user_id: user_id, role: role }, secretKey, {
+          expiresIn: "24h",
+        });
         return res.status(200).json({ jwt: token });
       } else {
         return res
           .status(400)
-          .json("Wrong username or password. Please try again");
+          .json("Wrong email or password. Please try again");
       }
     } catch (err) {
       console.error("Error:", err);

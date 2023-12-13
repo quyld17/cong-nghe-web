@@ -3,12 +3,19 @@ const path = require('path');
 const configViewEngine = require('./config/viewEngine');
 const homeController = require('./controllers/homeController');
 
+
 const app = express();
 const port = 1234;
 
 configViewEngine(app);
 
+
+
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', homeController.getCheck);
+
+app.get('/check/:token', homeController.postCheck);
 
 app.get('/admin', homeController.getAdminPage);
 
