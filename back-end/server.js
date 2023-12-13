@@ -1,6 +1,8 @@
 const SignUp = require("./handlers/authentication/SignUp");
 const SignIn = require("./handlers/authentication/SignIn");
 
+const AdminGetProducts = require("./handlers/admin/products/Get");
+
 const express = require("express");
 const cors = require("cors");
 
@@ -11,6 +13,8 @@ app.use(cors());
 try {
   app.use(SignUp);
   app.use(SignIn);
+
+  app.use("/admin", AdminGetProducts);
 } catch (err) {
   console.log("error", err);
 }

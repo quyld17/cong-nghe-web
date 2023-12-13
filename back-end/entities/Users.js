@@ -40,20 +40,37 @@ async function getRole(email) {
   });
 }
 
-// async function verifyAdmin(user_id) {
-//   const query = ` SELECT role
-//                   FROM users
-//                   WHERE user_id = ?;`;
+async function verifyAdmin(user_id) {
+  const query = ` SELECT role
+                  FROM user
+                  WHERE user_id = ?;`;
 
+  return new Promise((resolve, reject) => {
+    db.query(query, [user_id], (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        if (results.length === 0) {
+          resolve(null);
+        } else {
+          resolve(results[0].role === "admin");
+        }
+      }
+    });
+  });
+}
+
+// function getUserId(user_name) {
+//   const query = "SELECT user_id FROM users WHERE user_name = ?;";
 //   return new Promise((resolve, reject) => {
-//     db.query(query, [user_id], (err, results) => {
+//     db.query(query, [user_name], (err, results) => {
 //       if (err) {
 //         reject(err);
 //       } else {
 //         if (results.length === 0) {
 //           resolve(null);
 //         } else {
-//           resolve(results[0].role);
+//           resolve(results[0].user_id);
 //         }
 //       }
 //     });
@@ -87,6 +104,7 @@ async function getRole(email) {
 module.exports = {
   getUserIdByEmail,
   getRole,
-  // verifyAdmin,
+  verifyAdmin,
+  // getUserId,
   // getUserDetails,
 };
