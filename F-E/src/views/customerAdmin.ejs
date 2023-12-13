@@ -11,14 +11,49 @@
 <body>
     <header>
         <div class="topnav">
-            <a href="/admin" style="padding-top: 0px; padding-right: 20px;"><img src="https://img.upanh.tv/2023/11/25/logo.png" alt="logo.png" border="0"></a>
+            <a href="/" style="padding-top: 0px; padding-right: 20px;"><img src="https://img.upanh.tv/2023/11/25/logo.png" alt="logo.png" border="0"></a>
             <a href="/products">Products</a>
             <a href="/orders">Orders</a>
             <a class="active" href="/customer">Customer</a>
-            <a href="/" onclick="return confirm('Confirm Logout')" style="position: relative;  right: 0px;">Log out</a>
+            <a href="/" onclick="let cf = confirm('Confirm Logout'); if (cf) localStorage.removeItem('jwt'); return cf" style="position: relative;  right: 0px;">Log out</a>
           </div>
     </header>
     <div class="main-container">
+        <div class="customer-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 30px">ID</th>
+                        <th style="width: 200px">Name</th>
+                        <th style="width: 30px">Gender</th>
+                        <th style="width: 40px">Birth</th>
+                        <th style="width: 100px;">Email</th>
+                        <th style="width: 60px">Phone</th>
+                        <th style="width: 60px">Expenditure</th>
+                        <th style="width: 60px">Created at</th>
+                    </tr>
+                </thead>
+                <tbody style="max-height: 700px;">
+                    <% for (let i = 0; i < data.length; i++) { %>
+                        <tr>
+                            <td><%= data[i].user_id %></td>
+                            <td><a href=""><%= data[i].full_name %></a></td>
+                            <% if (data[i].gender == 1) { %>
+                                <td class="gender-men">Men</td>
+                            <% } %>
+                            <% if (data[i].gender == 0) { %>
+                                <td class="gender-women">Woman</td>
+                            <% } %>                            
+                            <td><%= data[i].data_of_birth %></td>
+                            <td><%= data[i].email %></td>
+                            <td><%= data[i].phone_number %></td>
+                            <td><%= data[i].total_expenditure %></td>
+                            <td><%= data[i].created_at %></td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
     </div>
     
 </body>

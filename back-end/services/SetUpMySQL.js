@@ -7,4 +7,5 @@ const db = mysql.createConnection({
   database: "cn-web",
 });
 
+
 module.exports = db;

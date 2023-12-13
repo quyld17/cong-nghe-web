@@ -11,14 +11,40 @@
 <body>
     <header>
         <div class="topnav">
-            <a href="/admin" style="padding-top: 0px; padding-right: 20px;"><img src="https://img.upanh.tv/2023/11/25/logo.png" alt="logo.png" border="0"></a>
+            <a href="/" style="padding-top: 0px; padding-right: 20px;"><img src="https://img.upanh.tv/2023/11/25/logo.png" alt="logo.png" border="0"></a>
             <a href="/products">Products</a>
             <a class="active" href="/orders">Orders</a>
             <a href="/customer">Customer</a>
-            <a href="/"  onclick="return confirm('Confirm Logout')" style="position: relative;  right: 0px;">Log out</a>
+            <a href="/"  onclick="let cf = confirm('Confirm Logout'); if (cf) localStorage.removeItem('jwt'); return cf" style="position: relative;  right: 0px;">Log out</a>
           </div>
     </header>
     <div class="main-container">
+        <div class="orders-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 30px">Order ID</th>
+                        <th style="width: 200px">Customer</th>
+                        <th style="width: 30px">Price</th>
+                        <th style="width: 40px">Pay</th>
+                        <th style="width: 60px">Status</th>
+                        <th style="width: 60px">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (let i = 0; i < data.length; i++) { %>
+                        <tr>
+                            <td><a href=""><%= data[i].order_id %></a></td>
+                            <td><a href=""><%= data[i].user_name %></a></td>
+                            <td><%= data[i].total_price %></td>
+                            <td><%= data[i].payment_method %></td>
+                            <td class="status"><div class="<%= data[i].status %>"><%= data[i].status %></div></td>
+                            <td><%= data[i].created_at %></td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
     </div>
     
 </body>

@@ -1,6 +1,7 @@
 
     body {
         background-color: #001529;
+        max-height: 800px;
     }
     /* Add a black background color to the top navigation */
     .topnav {
@@ -44,7 +45,7 @@
         background-color: #F1F4F6;
         flex-direction: row;
         max-width: 100%;
-        height: 680px;
+        max-height: 100%px;
       }
 
       .main-container .statistical {
@@ -275,6 +276,7 @@
       }
 
       /*products admin page */
+      
       .products-container {
         display: flex;
         flex-direction: column;
@@ -292,6 +294,8 @@
         margin: 15px;
         width: 80%;
         height: 500px;
+        border-radius: 5px;
+        box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 10px;
       }
 
       .products-admin-container .categories {
@@ -313,4 +317,179 @@
         font-family: 'Courier New', Courier, monospace;
         color: #63676b;
       }
+      /* end product admin */ 
+
+      /* order admin */
+      .orders-container {
+        background-color: #f0f0f0;
+        margin: 15px;
+        border-radius: 10px;
+        width: 95%;
+        height: 550px;
+        box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 10px;
+      }
+
+      .orders-container thead {
+        font-family: 'Courier New', Courier, monospace;
+      }
+
+      .orders-container tbody {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+      }
+
+      .orders-container a {
+        text-decoration: none;
+        color: #3a3b3d;
+      }
+
+      .orders-container .status {
+        position: relative;
+        display: flex;
+      }
+
+      .orders-container .Complete {
+        background-color: #bbd1c3;
+        color: #27b85e;
+        margin: auto;
+        margin-top: 8px;
+        width: 80px;
+        border-radius: 8px;
+      }
+
+      .orders-container .Pending {
+        background-color: #d4dbbb;
+        color: #929433;
+        margin: auto;
+        margin-top: 8px;
+        width: 70px;
+        border-radius: 8px;
+      }
+
+      .orders-container .Cancelled {
+        background-color: #f5c0b0;
+        color: #963c20;
+        margin: auto;
+        margin-top: 8px;
+        width: 75px;
+        border-radius: 8px;
+      }
+
+      /* end order admin */
+
+      /* customer admin */
+      .customer-container {
+        position: relative;
+        background-color: #f0f0f0;
+        margin: 15px;
+        border-radius: 10px;
+        width: 95%;
+        height: 600px;
+        box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 10px;
+      }
+
+      .customer-container table {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+      }
+
+      .customer-container a {
+        text-decoration: none;
+        color: #3a3b3d;
+      }
+      /*end customer admin */
+
+      /*creat product */
+
+      .creat-product {
+        display: flex;
+        flex-direction: row;
+      }
+
+      .data-input {
+        display: flex;
+        flex-direction: column;
+        background-color: #ece5e5;
+        margin: 15px;
+        padding: 15px;
+        max-width: 50%;
+        height: 580px;
+        border-radius: 5px;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 24px;
+        box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 10px;
+      }
+
+      .data-input h3{
+        margin-left: 30px;
+      }
+
+      .data-input label {
+        margin-top: 15px;
+        margin-left: 5px;
+      }
+
+      .data-input select {
+        margin-top: 15px;
+        width: 220px;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 20px;
+      }
+
+      .data-input input {
+        margin-top: 15px;
+        padding-left: 12px;
+        border: 0.5px solid #dbdbdb;
+        border-radius: 5px;
+        height: 30px;
+        font-size: 20px;
+      }
+
+      .data-input .imgsetup {
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 15px;
+      }
+
+      .data-input .imgsetup button{
+        background-color: #a8d1d1;
+        border: 0px;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 20px;
+        box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 2px;
+      }
+
+      .data-input #sub {
+        border: 0px;
+        background-color: #79addc;
+        color: #fff;
+        border-radius: 17px;
+        margin-top: 80px;
+        padding: 6px;
+        font-size: 22px;
+        box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 2px;
+      }
+
+      .data-input #cancel {
+        border: 0px;
+        background-color: #ffffff;
+        color:#63676b;
+        border-radius: 17px;
+        margin-top: 80px;
+        padding: 6px;
+        font-size: 22px;
+        box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 2px;
+      }
+
+      .i-input img {
+        margin-top: 150px;
+        max-width: 90%;
+        height: auto;
+      }
+
+
+
+
+      /*end creat product */
+    
+
+
     

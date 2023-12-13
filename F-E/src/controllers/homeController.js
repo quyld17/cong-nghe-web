@@ -16,7 +16,7 @@ let postCheck = async (req, res) => {
     if (decoded.role == "admin") {
         const [rows, field] = await pool.execute ('select * from order_products');
         const [rows2, field2] = await pool.execute('select * from `order`');
-        const [rank, field3] = await pool.execute('select full_name as fN, total_expenditure as tE from user');
+        const [rank, field3] = await pool.execute('select full_name as fN, total_expenditure as tE from user where role = "user"');
 
         let totalOrders = rows2.length;
         let totalProduct = 0;
@@ -72,10 +72,6 @@ let postCheck = async (req, res) => {
     
 }
 
-let getAdminPage = async (req, res) => {
-    
-}
-
 let getProductsAdmin = async (req, res) => {
     const [rows, field] = await pool.execute ('select * from product');
     const [rows2, field2] = await pool.execute ('select * from category');
@@ -87,13 +83,19 @@ let getProductsAdmin = async (req, res) => {
 
 let getOrdersAdmin = async (req, res) => {
     const [rows, field] = await pool.execute ('select * from `order`');
+    for (let i = 0; i < rows.length; i++) {
+        const [rows2, field2] = await pool.execute('select full_name from `user` where user_id = ?', [rows[i].user_id])
+        
+        rows[i].user_name = rows2[0].full_name
+    }
     return res.render('orderAdmin.ejs', {
         data: rows
     });
 }
 
 let getCustomerAdmin = async (req, res) => {
-    const [rows, field] = await pool.execute ('select * from `user`');
+    var role = "user"
+    const [rows, field] = await pool.execute ('select * from `user` where role = ?', [role]);
     return res.render('customerAdmin.ejs', {
         data: rows
     });
@@ -107,7 +109,12 @@ let getSignInPage = async (req, res) => {
     return res.render('signin.ejs');
 }
 
+let creatProduct = async (req, res) => {
+    const [rows, field] = await pool.execute('select * from category')
+    return res.render('creatProduct.ejs', { data: rows  });
+}
+
 module.exports = {
-    getCheck, getAdminPage, getProductsAdmin, getSignUpPage,
+    getCheck, getProductsAdmin, getSignUpPage, creatProduct,
     getSignInPage, getOrdersAdmin, getCustomerAdmin, postCheck
 }

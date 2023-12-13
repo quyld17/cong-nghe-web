@@ -12,11 +12,11 @@
 <body>
     <header>
         <div class="topnav">
-            <a href="/admin" style="padding-top: 0px; padding-right: 20px;"><img src="https://img.upanh.tv/2023/11/25/logo.png" alt="logo.png" border="0"></a>
+            <a href="/" style="padding-top: 0px; padding-right: 20px;"><img src="https://img.upanh.tv/2023/11/25/logo.png" alt="logo.png" border="0"></a>
             <a href="/products">Products</a>
             <a  href="/orders">Orders</a>
             <a  href="/customer">Customer</a>
-            <a href="/" onclick="return confirm('Confirm Logout')" style="position: relative;  right: 0px;">Log out</a>
+            <a href="/" onclick="let cf = confirm('Confirm Logout'); if (cf) localStorage.removeItem('jwt'); return cf" style="position: relative;  right: 0px;">Log out</a>
           </div>
     </header>
     <div class="main-container">
