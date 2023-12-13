@@ -58,13 +58,16 @@
             password: password.value,
             email: email.value
           }
-          await fetch("http://localhost:4000/sign-in", {
+          var check = await fetch("http://localhost:4000/sign-in", {
             method: "POST",
             headers:{
               "Content-Type": "application/json"
             },
             body:JSON.stringify(data)
           })
+          var d = await check.json();
+          localStorage.setItem("jwt", d.jwt);
+          window.location =  "http://localhost:1234/"
         }
       }
     )

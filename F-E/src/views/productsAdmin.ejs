@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Commerce Website - Admin Page</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
@@ -15,10 +15,46 @@
             <a class="active" href="/products">Products</a>
             <a href="/orders">Orders</a>
             <a href="/customer">Customer</a>
-            <a href="/logout" style="position: relative;  right: 0px;">Log out</a>
+            <a href="/" onclick="return confirm('Confirm Logout')" style="position: relative;  right: 0px;">Log out</a>
           </div>
     </header>
-    <div class="main-container">
+    <div class="main-container products-container">
+        <div class="products-operation">
+            <button type="button">ADD NEW PRODUCT</button>
+        </div>
+        <div class="products-admin-container">
+            <div class="categories">
+                <h3>Categories</h3>
+                <a href="/products">View All</a>
+                <% for (let i = 0; i < category.length; i++) { %>
+                    <a href="/products/<%= category.category_name %>"><%= category.category_name %></a>
+                <% } %>
+            </div>
+            <table >
+                <thead>
+                    <tr>
+                        <th style="width: 30px;">ID</th>
+                        <th style="width: 200px;">Name</th>
+                        <th style="width: 60px;">Price</th>
+                        <th style="width: 40px;">In stock</th>
+                        <th style="width: 30px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (let i = 0; i < data.length; i++) { %>
+                        <tr>
+                            <td style="width: 30px;"><%= data[i].product_id %></td>
+                            <td style="width: 200px;"><%= data[i].product_name %></td>
+                            <td style="width: 60px;"><%= data[i].price %></td>
+                            <td style="width: 40px;"><%= data[i].in_stock_quantity %></td>
+                            <td style="width: 30px;"><a href="">Delete</a></td>
+                        </tr>
+                    <% } %>
+                </tbody>
+                
+            </table>
+            
+        </div>
     </div>
     
 </body>

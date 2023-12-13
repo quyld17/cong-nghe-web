@@ -4,14 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
     <title>Sign up</title>
     <link rel="stylesheet" href="/css/style.css">
   </head>
@@ -62,16 +54,26 @@
       else {
           
           data = {
+            fullname: fullname.value,
             password: password.value,
             email: email.value
           }
-          await fetch("http://localhost:4000/sign-up", {
+          var check = await fetch("http://localhost:4000/sign-up", {
             method: "POST",
             headers:{
               "Content-Type": "application/json"
             },
             body:JSON.stringify(data)
           })
+          var STT = await check.json();
+          if (STT == 'User registered successfully') {
+            alert(STT);
+            window.location = '/sign-in'
+          }
+          else {
+            alert(STT);
+            window.location = '/sign-up'
+          }
         }
       }
     )

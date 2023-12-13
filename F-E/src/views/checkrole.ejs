@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waiting...</title>
+</head>
+<body>
+
+</body>
+<script>
+    var token = localStorage.getItem("jwt")
+    if (token == null || token.value == "") {
+        window.location = "http://localhost:1234/sign-in";
+    } 
+    else {
+        var data = {    token: token    }
+        var hef = "http://localhost:1234/check/" + token
+        window.location = hef
+    }
+    
+</script>
+</html>
