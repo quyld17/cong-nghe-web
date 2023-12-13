@@ -1,0 +1,135 @@
+*******Authentication*******
+
+1. Sign up
+Path: /sign-up
+Method: POST
+Request:
+    Body: 
+        {
+            email:      string  (required),
+            password:   string  (required)
+        }
+Response:
+    {
+        "User registered successfully"
+    }    
+
+2. Sign in
+Path: /sign-in
+Method: POST
+Request:
+    Body: 
+        {
+            email:      string  (required),
+            password:   string  (required)
+        }
+Response:
+    {
+        jwt: string 
+    }    
+    // Decode token ra de lay user_id va role
+
+*******Admin*******
+
+I. Products
+1. Create 
+Path: /admin/product
+Method: PUT
+Request:
+    Headers:
+        {
+            authorization: jwt
+        }
+    Body: 
+        {
+            category_id:        int,
+            product_name:       string,
+            price:              int,
+            in_stock_quantity:  int,
+            image_url:          string
+        }
+Response:
+    {
+        "Created product successfully"
+    }    
+
+2. Get all products
+Path: /admin/products
+Method: GET
+Request:
+    Headers:
+        {
+            authorization: jwt
+        }
+Response:
+    [
+        {
+            product_id:         int,
+            category_id:        int,
+            product_name:       string,
+            price:              int,
+            in_stock_quantity:  int,
+            image_url:          string
+        }
+    ] 
+
+3. Get product details
+Path: /admin/product/:id
+Method: GET
+Request:
+    Headers:
+        {
+            authorization: jwt
+        }
+    Params:
+        {
+            id: int
+        }
+Response:
+    {
+        product_id:         int,
+        category_id:        int,
+        product_name:       string,
+        price:              int,
+        in_stock_quantity:  int,
+        image_url:          string
+    }
+    
+4. Update product
+Path: /admin/product
+Method: PATCH
+Request:
+    Headers:
+        {
+            authorization: jwt
+        }
+    Body: 
+        {
+            product_id:         int,
+            category_id:        int,
+            product_name:       string,
+            price:              int,
+            in_stock_quantity:  int,
+            image_url:          string
+        }
+Response:
+    {
+        "Updated product successfully"
+    }
+
+5. Delete product
+Path: /admin/product/:id
+Method: DELETE
+Request:
+    Headers:
+        {
+            authorization: jwt
+        }
+    Params:
+        {
+            id: int
+        }
+Response:
+    {
+        "Deleted product successfully"
+    }
