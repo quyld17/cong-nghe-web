@@ -1,11 +1,11 @@
 const { tokenVerification } = require("../../../middlewares/JWT");
 const { verifyAdmin } = require("../../../entities/Users");
-const { createProduct } = require("../../../entities/Products");
+const { updateProduct } = require("../../../entities/Products");
 
 const Router = require("express");
 const r = Router();
 
-r.put("/product", Router.json(), async (req, res) => {
+r.patch("/product", Router.json(), async (req, res) => {
   const token = req.headers.authorization;
   if (!token) {
     return res.status(400).json("Token not found");
@@ -23,6 +23,7 @@ r.put("/product", Router.json(), async (req, res) => {
   if (product) {
     try {
       if (
+        product.product_id === null ||
         product.category_id === null ||
         product.product_name === "" ||
         product.price === null ||
@@ -31,11 +32,11 @@ r.put("/product", Router.json(), async (req, res) => {
       ) {
         return res.status(400).json("No input");
       }
-      const createProductResult = await createProduct(product);
-      if (createProductResult) {
-        return res.status(200).json("Created product successfully");
+      const updateProductResult = await updateProduct(product);
+      if (updateProductResult) {
+        return res.status(200).json("Updated product successfully");
       } else {
-        return res.status(500).json("Failed to create product");
+        return res.status(500).json("Failed to update product");
       }
     } catch (err) {
       console.error("Error:", err);

@@ -6,7 +6,6 @@ const {
 } = require("../../../entities/Products");
 
 const Router = require("express");
-// const express = require("express");
 const r = Router();
 
 r.get("/products", async (req, res) => {

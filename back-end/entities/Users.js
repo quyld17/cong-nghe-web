@@ -60,23 +60,6 @@ async function verifyAdmin(user_id) {
   });
 }
 
-// function getUserId(user_name) {
-//   const query = "SELECT user_id FROM users WHERE user_name = ?;";
-//   return new Promise((resolve, reject) => {
-//     db.query(query, [user_name], (err, results) => {
-//       if (err) {
-//         reject(err);
-//       } else {
-//         if (results.length === 0) {
-//           resolve(null);
-//         } else {
-//           resolve(results[0].user_id);
-//         }
-//       }
-//     });
-//   });
-// }
-
 // async function getUserDetails(user_id) {
 //   const query = ` SELECT
 //                     user_id,
@@ -105,6 +88,5 @@ module.exports = {
   getUserIdByEmail,
   getRole,
   verifyAdmin,
-  // getUserId,
   // getUserDetails,
 };
