@@ -31,7 +31,7 @@ Response:
 
 *******Admin*******
 
-I. Products
+I. Product
 1. Create 
 Path: /admin/product
 Method: PUT
@@ -133,3 +133,21 @@ Response:
     {
         "Deleted product successfully"
     }
+
+II. Category
+1. Create 
+Path: /admin/category
+Method: PUT
+Request:
+    Headers:
+        {
+            authorization: jwt
+        }
+    Body: 
+        {
+            category_name:    string
+        }
+Response:
+    {
+        "Created category successfully"
+    } 
