@@ -151,3 +151,25 @@ Response:
     {
         "Created category successfully"
     } 
+
+III. Order
+1. Update status
+Path: /admin/order/:id
+Method: PATCH
+Request:
+    Headers:
+        {
+            authorization: jwt
+        }
+    Body: 
+        {
+            status: string
+        }
+    Params: 
+        {
+            id: int
+        }
+Response:
+    {
+        "Updated order successfully"
+    }
