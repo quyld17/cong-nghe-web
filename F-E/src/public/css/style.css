@@ -299,6 +299,8 @@
       }
 
       .products-admin-container .categories {
+        display: flex;
+        flex-direction: column;
         background-color: #001529;
         margin: 15px;
         padding: 10px;
@@ -309,6 +311,7 @@
       }
 
       .products-admin-container .categories a {
+        padding-top: 15px;
         text-decoration: none;
         color: #ffffff;
       }

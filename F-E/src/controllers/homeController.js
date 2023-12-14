@@ -1,6 +1,10 @@
 const pool = require('../config/connectDB');
 const { jwtDecode } = require('jwt-decode');
 
+let checkData = async (req, res) => {
+    let d = req.body
+    console.log(d)
+}
 
 let getCheck = async (req, res) => {
     return res.render('checkrole.ejs')  
@@ -116,5 +120,6 @@ let creatProduct = async (req, res) => {
 
 module.exports = {
     getCheck, getProductsAdmin, getSignUpPage, creatProduct,
-    getSignInPage, getOrdersAdmin, getCustomerAdmin, postCheck
+    getSignInPage, getOrdersAdmin, getCustomerAdmin, postCheck,
+    checkData
 }

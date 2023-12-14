@@ -78,6 +78,8 @@
 
     var imgsrc = document.getElementById("imgsrc")
 
+    var data
+
     btnView.addEventListener("click", async function(){
         imgsrc.src = img.value
     })
@@ -117,25 +119,20 @@
                 alert('Please add at least 1 photo for the product')
             }
             else {
-                console.log({
+                data = {
                     category_id: Number(category.value),
                     product_name: iname.value,
                     price: Number(price.value),
                     in_stock_quantity: Number(quantity.value),
                     image_url: arrImage[0]
-                })
+                }
                 var check = await fetch("http://localhost:4000/admin/product", {
                     method: "PUT",
                     headers: {
-                        "authorization": jwt
+                        "authorization": jwt,
+                        "Content-Type": "application/json"
                     },
-                    body: {
-                        category_id: Number(category.value),
-                        product_name: iname.value,
-                        price: Number(price.value),
-                        in_stock_quantity: Number(quantity.value),
-                        image_url: arrImage[0]
-                    }
+                    body: JSON.stringify(data)
                 })
                 var d = await check.json();
                 alert(d);

@@ -27,7 +27,7 @@
                 <h3>Categories</h3>
                 <a href="/products">View All</a>
                 <% for (let i = 0; i < category.length; i++) { %>
-                    <a href="/products/<%= category.category_name %>"><%= category.category_name %></a>
+                    <a href="/products/<%= category[i].category_id %>"><%= category[i].category_name %></a>
                 <% } %>
             </div>
             <table >

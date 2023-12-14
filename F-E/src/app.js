@@ -13,6 +13,10 @@ configViewEngine(app);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(express.json())
+
+app.post('/checkdata', homeController.checkData);
+
 app.get('/', homeController.getCheck);
 
 app.get('/check/:token', homeController.postCheck);
