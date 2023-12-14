@@ -6,6 +6,10 @@ const AdminDeleteProduct = require("./handlers/admin/products/Delete");
 const AdminCreateProduct = require("./handlers/admin/products/Create");
 const AdminUpdateProduct = require("./handlers/admin/products/Update");
 
+const AdminCreateCategory = require("./handlers/admin/categories/Create");
+
+const AdminUpdateOrder = require("./handlers/admin/orders/Update");
+
 const express = require("express");
 const cors = require("cors");
 
@@ -21,6 +25,10 @@ try {
   app.use("/admin", AdminDeleteProduct);
   app.use("/admin", AdminCreateProduct);
   app.use("/admin", AdminUpdateProduct);
+
+  app.use("/admin", AdminCreateCategory);
+
+  app.use("/admin", AdminUpdateOrder);
 } catch (err) {
   console.log("error", err);
 }
