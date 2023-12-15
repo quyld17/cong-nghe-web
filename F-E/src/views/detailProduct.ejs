@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Website - Admin Page</title>
+    <link rel="stylesheet" href="/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <header>
+        <div class="topnav">
+            <a href="/" style="padding-top: 0px; padding-right: 20px;"><img src="https://img.upanh.tv/2023/11/25/logo.png" alt="logo.png" border="0"></a>
+            <a class="active" href="/products">Products</a>
+            <a href="/orders">Orders</a>
+            <a href="/customer">Customer</a>
+            <a href="/" onclick="let cf = confirm('Confirm Logout'); if (cf) localStorage.removeItem('jwt'); return cf" style="position: relative;  right: 0px;">Log out</a>
+          </div>
+    </header>
+    <div class="main-container products-container">
+       <div class="detail-product">
+            <div class="detail-product-body">
+                <div class="detail-product-detail">
+                    <h2 id="product_name"><%= data.product_name %></h2>
+                    <div class="detail-product-detail-infor">
+                        <button class="img-tranfer" id="left"><</button>
+                        <img src="<%= img[0].image_url %>" alt="" srcset="" id="img_product">
+                        <button class="img-tranfer" id="right">></button>
+                        <div class="price-in-stock">
+                            <h4 id="category"><%= data.category_name %></h4>
+                            <div class="price-instock-infor">
+                                <h3>Price</h3>
+                                <input type="text" id="product_price" value="<%= data.price %>">
+                            </div>
+                            <div class="price-instock-infor">
+                                <h3>In stock</h3>
+                                <input type="text" id="in_stock" value="<%= data.in_stock_quantity %>">
+                            </div>
+                            <div class="product-operation">
+                                <button type="button" id="Update">Update</button>
+                                <button type="button" id="btnDelete">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+       </div>
+    </div>
+    
+</body>
+<script>
+    const jwt = localStorage.getItem("jwt")
+
+    var left = document.getElementById("left");
+    var right = document.getElementById("right");
+    var Update = document.getElementById("Update");
+    var btnDelete = document.getElementById("btnDelete");
+
+    var img_product = document.getElementById("img_product")
+    var product_price = document.getElementById("product_price")
+    var in_stock = document.getElementById("in_stock")
+
+    var data
+    
+    var count = 0;
+
+    left.addEventListener("click", {
+    })
+
+    Update.addEventListener("click", async function(){
+        if(confirm("Update confirm")) {
+            data = {
+                product_id: Number('<%= data.product_id %>'),
+                category_id: Number('<%= data.category_id %>'),
+                product_name: String('<%= data.product_name %>'),
+                price: product_price.value,
+                in_stock_quantity: in_stock.value,
+                image_url: img_product.src
+            }
+            var check = await fetch("http://localhost:4000/admin/product", {
+                method: "PATCH",
+                headers: {
+                    "authorization": jwt,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+
+            var d = await check.json();
+            alert(d);
+            window.location = "http://localhost:1234/product/<%= data.product_id %>"
+        }        
+    })
+
+    btnDelete.addEventListener("click", async function(){
+        if(confirm("Delete confirm")) {
+
+            var check = await fetch("http://localhost:4000/admin/product/<%= data.product_id %>", {
+                method: "DELETE",
+                headers: {
+                    "authorization": jwt,
+                    "Content-Type": "application/json"
+                }
+            })
+
+            var d = await check.json();
+            alert(d);
+            window.location = "http://localhost:1234/products"
+        }        
+    })
+
+</script>
+</html>

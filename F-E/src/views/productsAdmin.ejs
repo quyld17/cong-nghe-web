@@ -27,8 +27,12 @@
                 <h3>Categories</h3>
                 <a href="/products">View All</a>
                 <% for (let i = 0; i < category.length; i++) { %>
-                    <a href="/products/<%= category[i].category_id %>"><%= category[i].category_name %></a>
+                    <a href="/category/<%= category[i].category_id %>"><%= category[i].category_name %></a>
                 <% } %>
+                <div class="new-category">
+                    <input type="text" id="newCategory" placeholder="Add category">
+                    <button type="button" id="btnAddCategory">Add</button>
+                </div>
             </div>
             <table >
                 <thead>
@@ -37,17 +41,15 @@
                         <th style="width: 200px;">Name</th>
                         <th style="width: 60px;">Price</th>
                         <th style="width: 40px;">In stock</th>
-                        <th style="width: 30px;"></th>
                     </tr>
                 </thead>
                 <tbody>
                     <% for (let i = 0; i < data.length; i++) { %>
                         <tr>
                             <td style="width: 30px;"><%= data[i].product_id %></td>
-                            <td style="width: 200px;"><%= data[i].product_name %></td>
+                            <td style="width: 200px;"><a href="/product/<%= data[i].product_id %>" class="product-name"><%= data[i].product_name %></a></td>
                             <td style="width: 60px;"><%= data[i].price %></td>
                             <td style="width: 40px;"><%= data[i].in_stock_quantity %></td>
-                            <td style="width: 30px;"><a href="">Delete</a></td>
                         </tr>
                     <% } %>
                 </tbody>
@@ -59,9 +61,40 @@
     
 </body>
 <script>
+
+    const jwt = localStorage.getItem("jwt")
+
     var btnAdd = document.getElementById('btn-ANP')
+    var btnAddCategory = document.getElementById("btnAddCategory")
+
+    var category_name = document.getElementById("newCategory")
+
     btnAdd.addEventListener("click", async function() {
         window.location = "http://localhost:1234/products/newProduct"
     })
+
+    btnAddCategory.addEventListener("click", async function() {
+        if (category_name.value == "") {
+            alert("Please fill in category name")
+        }
+        else {
+            if (confirm('Confirm add new category: ' + category_name.value)) {
+                var check = await fetch ("http://localhost:4000/admin/category", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "authorization": jwt
+                    },
+                    body: JSON.stringify({
+                        category_name: category_name.value
+                    })
+                })
+                var d = await check.json();
+                alert(d);
+                window.location = "http://localhost:1234/products"
+            }
+        }
+    })
+
 </script>
 </html>

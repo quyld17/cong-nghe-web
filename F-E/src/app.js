@@ -33,6 +33,10 @@ app.get('/sign-in', homeController.getSignInPage);
 
 app.get('/products/newProduct', homeController.creatProduct);
 
+app.get('/product/:id', homeController.getDetailProductPage);
+
+app.get('/category/:id', homeController.getProductSearchCategory);
+
 app.listen(port, () => {
     console.log(`Website running on port ${port}`);
   });

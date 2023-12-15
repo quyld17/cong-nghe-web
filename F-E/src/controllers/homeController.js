@@ -34,7 +34,7 @@ let postCheck = async (req, res) => {
         // Tính tỉ lệ đơn thành công, tổng doanh thu
         for (let i = 0; i<rows2.length; i++) {
             
-            if (rows2[i].status = 'delivered') {
+            if (rows2[i].status == 'Complete') {
                 totalOrdersS ++;
                 totalRevenue += Number(rows2[i].total_price);
             }
@@ -118,8 +118,31 @@ let creatProduct = async (req, res) => {
     return res.render('creatProduct.ejs', { data: rows  });
 }
 
+let getProductSearchCategory = async (req, res) => {
+    const id = req.params.id
+    const [rows, field] = await pool.execute ('select * from product where category_id = ?', [id]);
+    const [rows2, field2] = await pool.execute ('select * from category');
+    return res.render('productsAdmin.ejs', {
+        data: rows,
+        category: rows2
+    });
+
+}
+
+let getDetailProductPage = async (req, res) => {
+    var id = req.params.id
+    const [rows, field] = await pool.execute('select * from product where product_id = ?', [id])
+    const [rows2, field2] = await pool.execute('select category_name from category where category_id = ?', [rows[0].category_id])
+    rows[0].category_name = rows2[0].category_name
+    const [rows3, field3] = await pool.execute('select * from product_image where product_id = ?', [id])
+    return res.render('detailProduct.ejs', {
+        data: rows[0],
+        img: rows3
+    })
+}
+
 module.exports = {
     getCheck, getProductsAdmin, getSignUpPage, creatProduct,
     getSignInPage, getOrdersAdmin, getCustomerAdmin, postCheck,
-    checkData
-}
+    checkData, getDetailProductPage, getProductSearchCategory
+} 
