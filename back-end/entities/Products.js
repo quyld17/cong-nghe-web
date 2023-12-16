@@ -25,27 +25,53 @@ async function getProducts() {
 }
 
 async function getProductDetails(product_id) {
-  const query = ` SELECT 
-                    product.*, 
-                    product_image.image_url
+  const query = ` SELECT product.*
                   FROM product
-                  JOIN product_image
-                  WHERE 
-                    product.product_id = ? AND
-                    product.product_id = product_image.product_id;`;
+                  WHERE product.product_id = ?;`;
+
+  const queryImgs = ` SELECT image_url
+                      FROM product_image
+                      WHERE product_id = ?;`;
 
   return new Promise((resolve, reject) => {
-    db.query(query, [product_id], (err, results) => {
-      if (err) {
+    Promise.all([
+      new Promise((resolveQuery, rejectQuery) => {
+        db.query(query, [product_id], (err, results) => {
+          if (err) {
+            rejectQuery(err);
+          } else {
+            if (results.length === 0) {
+              resolveQuery(null);
+            } else {
+              resolveQuery(results[0]);
+            }
+          }
+        });
+      }),
+
+      new Promise((resolveQueryImgs, rejectQueryImgs) => {
+        db.query(queryImgs, [product_id], (err, resultsImgs) => {
+          if (err) {
+            rejectQueryImgs(err);
+          } else {
+            const imageUrls = resultsImgs.map((result) => result.image_url);
+            resolveQueryImgs(imageUrls);
+          }
+        });
+      }),
+    ])
+      .then(([productDetails, imageUrls]) => {
+        const result = {
+          productDetails: {
+            ...productDetails,
+            imageUrls: imageUrls,
+          },
+        };
+        resolve(result);
+      })
+      .catch((err) => {
         reject(err);
-      } else {
-        if (results.length === 0) {
-          resolve(null);
-        } else {
-          resolve(results[0]);
-        }
-      }
-    });
+      });
   });
 }
 
