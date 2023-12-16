@@ -63,7 +63,7 @@ async function getProductDetails(product_id) {
       .then(([productDetails, imageUrls]) => {
         const result = {
           ...productDetails,
-          imageUrls: imageUrls,
+          image_urls: imageUrls,
         };
         resolve(result);
       })
