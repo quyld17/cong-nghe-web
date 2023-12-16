@@ -92,7 +92,7 @@ Response:
         product_name:       string,
         price:              int,
         in_stock_quantity:  int,
-        image_url:          string
+        image_url:          array (string)
     }
     
 4. Update product
