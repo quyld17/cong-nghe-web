@@ -2,10 +2,10 @@ const { tokenVerification } = require("../../../middlewares/JWT");
 const { verifyAdmin } = require("../../../entities/Users");
 const { createProduct } = require("../../../entities/Products");
 
-const Router = require("express");
-const r = Router();
+const express = require("express");
+const r = express();
 
-r.put("/product", Router.json(), async (req, res) => {
+r.put("/product", express.json(), async (req, res) => {
   const token = req.headers.authorization;
   if (!token) {
     return res.status(400).json("Token not found");
