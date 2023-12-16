@@ -62,10 +62,8 @@ async function getProductDetails(product_id) {
     ])
       .then(([productDetails, imageUrls]) => {
         const result = {
-          productDetails: {
-            ...productDetails,
-            imageUrls: imageUrls,
-          },
+          ...productDetails,
+          imageUrls: imageUrls,
         };
         resolve(result);
       })
