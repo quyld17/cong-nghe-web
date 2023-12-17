@@ -27,24 +27,25 @@ let postCheck = async (req, res) => {
         let totalRevenue = 0;
 
         let totalOrdersS = 0; //Tổng đơn thành công
-        let totalProductS = 0;
+        let totalProductS = 0; 
 
         
 
         // Tính tỉ lệ đơn thành công, tổng doanh thu
-        for (let i = 0; i<rows2.length; i++) {
-            
+        for (let i = 0; i<rows2.length; i++) {    
             if (rows2[i].status == 'Complete') {
                 totalOrdersS ++;
                 totalRevenue += Number(rows2[i].total_price);
+                for (let j = 0; j < rows.length; j++) {
+                   if (rows[j].order_id == rows2[i].order_id) {
+                        totalProductS += rows[j].quantity;
+                        console.log(rows[j].quantity)
+                   }
+                }
             }
         }
         let successOrderRate = totalOrdersS/totalOrders * 100;
 
-        // Tính tổng sản phẩm bán ra
-        for (let i = 0; i<rows.length; i++) {
-            totalProduct += rows[i].quantity;
-        }
 
         //Xếp hạng người dùng
         let tmp = {};
@@ -64,7 +65,7 @@ let postCheck = async (req, res) => {
         // set độ dài của bảng xếp hạng, chỉ hiển thị tối đa top 10;
         let rankL = Math.min(10, rank.length);
         
-        let data = {totalOrders, totalProduct, totalRevenue, successOrderRate}
+        let data = {totalOrders, totalProductS, totalRevenue, successOrderRate}
 
         return res.render('adminPage.ejs', { data: data, rank: rank, rankL: rankL});
     }
@@ -141,8 +142,22 @@ let getDetailProductPage = async (req, res) => {
     })
 }
 
+let getDetailOrder = async (req, res) => {
+    let id = req.params.id;
+    const [rows, field] = await pool.execute('select * from `order` where order_id = ?', [id])
+
+    var user_id = rows[0].user_id
+
+    const [rows2, field2] = await pool.execute('select * from order_products where order_id = ?', [id])
+    const [rows3, field3] = await pool.execute('select * from user where user_id = ?', [user_id])
+    const [rows4, field4] = await pool.execute('select * from address where user_id = ? and is_default = ?', [user_id, 1])
+    rows[0].user_name = rows3[0].full_name;
+    rows[0].phone_number = rows3[0].phone_number;
+    return res.render('detailOrder.ejs', {   data: rows[0], products: rows2, address: rows4[0]  })
+}
+
 module.exports = {
     getCheck, getProductsAdmin, getSignUpPage, creatProduct,
     getSignInPage, getOrdersAdmin, getCustomerAdmin, postCheck,
-    checkData, getDetailProductPage, getProductSearchCategory
+    checkData, getDetailProductPage, getProductSearchCategory, getDetailOrder
 } 

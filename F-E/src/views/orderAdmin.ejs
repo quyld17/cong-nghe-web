@@ -34,9 +34,9 @@
                 <tbody>
                     <% for (let i = 0; i < data.length; i++) { %>
                         <tr>
-                            <td><a href=""><%= data[i].order_id %></a></td>
+                            <td><a href="/order/<%= data[i].order_id %>"><%= data[i].order_id %></a></td>
                             <td><a href=""><%= data[i].user_name %></a></td>
-                            <td><%= data[i].total_price %></td>
+                            <td><%= data[i].total_price.replace(/\B(?=(\d{3})+(?!\d))/g, '.') %></td>
                             <td><%= data[i].payment_method %></td>
                             <td class="status"><div class="<%= data[i].status %>"><%= data[i].status %></div></td>
                             <td><%= data[i].created_at %></td>

@@ -124,7 +124,7 @@
                     product_name: iname.value,
                     price: Number(price.value),
                     in_stock_quantity: Number(quantity.value),
-                    image_url: arrImage[0]
+                    image_url: arrImage
                 }
                 var check = await fetch("http://localhost:4000/admin/product", {
                     method: "PUT",

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Website - Admin Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <header>
+        <div class="topnav">
+            <a href="/" style="padding-top: 0px; padding-right: 20px;"><img src="https://img.upanh.tv/2023/11/25/logo.png" alt="logo.png" border="0"></a>
+            <a href="/products">Products</a>
+            <a class="active" href="/orders">Orders</a>
+            <a href="/customer">Customer</a>
+            <a href="/"  onclick="let cf = confirm('Confirm Logout'); if (cf) localStorage.removeItem('jwt'); return cf" style="position: relative;  right: 0px;">Log out</a>
+          </div>
+    </header>
+    <div class="main-container">
+        <div class="order-body">
+            <div class="header-order">
+                <a href=""><span>Order #<%= data.order_id %></span></a>
+                <a href=""><span class="user-order"><%= data.user_name %></span></a>
+                <a href="" class="phone-order">Phone: <%= data.phone_number %></a>
+            </div>
+            <hr>
+            <div class="products-order">
+                <h2>Products</h2>
+                <% for (let i = 0; i < products.length; i++) { %>
+                    <div class="products-order-detail">
+                        <a href="/product/<%= products[i].product_id %>"><%= products[i].product_name %></a>
+                        <div class="span-product">
+                            <span>Qty: <%= products[i].quantity %></span>
+                            <span>Price: <%= products[i].price.replace(/\B(?=(\d{3})+(?!\d))/g, '.') %></span>
+                        </div>
+                    </div>
+                <% } %>                
+            </div>
+            <hr>
+            <div class="bottom-order">
+                <div class="bottom-order-left">
+                    <h1>Address:</h1>
+                    <h2>No.<%= address.house_number %>, <%= address.street %> Street, <%= address.ward %> Ward, <%= address.district %> District, <%= address.city %> City</h2>
+                    <h1>Created at:</h1>
+                    <h2><%= data.created_at %></h2>
+                </div>
+                <div class="bottom-order-right">
+                    <div class="section-name">
+                        <h4>Total price</h4>
+                        <h4>Payment Method</h4>
+                        <h4>Status</h4>
+                    </div>
+                    <div class="section-detail">
+                        <h4><%= data.total_price.replace(/\B(?=(\d{3})+(?!\d))/g, '.') %></h4>
+                        <h4><%= data.payment_method %></h4>
+                        <% if (data.status == 'Cancelled' || data.status == 'Complete') { %>
+                            <h4 class="<%= data.status %>"><%= data.status %></h4>
+                        <% } %>
+                        <% if (data.status == 'Pending') { %>
+                            <select name="" id="" class="<%= data.status %>">
+                                <option selected value="<%= data.status %>"><%= data.status %></option>
+                                <option value="Complete">Complete</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        <% } %>
+                        
+                    </div>
+                </div>
+            </div>
+            <% if (data.status == 'Pending') { %>
+                <div class="operation-order">
+                    <button type="button">Update status</button>
+                </div>
+            <% } %>
+        </div>
+    </div>
+    
+</body>
+</html>

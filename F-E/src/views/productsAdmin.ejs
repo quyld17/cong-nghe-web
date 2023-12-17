@@ -34,27 +34,22 @@
                     <button type="button" id="btnAddCategory">Add</button>
                 </div>
             </div>
-            <table >
-                <thead>
-                    <tr>
-                        <th style="width: 30px;">ID</th>
-                        <th style="width: 200px;">Name</th>
-                        <th style="width: 60px;">Price</th>
-                        <th style="width: 40px;">In stock</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% for (let i = 0; i < data.length; i++) { %>
-                        <tr>
-                            <td style="width: 30px;"><%= data[i].product_id %></td>
-                            <td style="width: 200px;"><a href="/product/<%= data[i].product_id %>" class="product-name"><%= data[i].product_name %></a></td>
-                            <td style="width: 60px;"><%= data[i].price %></td>
-                            <td style="width: 40px;"><%= data[i].in_stock_quantity %></td>
-                        </tr>
-                    <% } %>
-                </tbody>
-                
-            </table>
+            <div>
+                <div class="list-product" style="border: 0px;">
+                    <p style="width: 30px; text-align: center;">ID</p>
+                    <p style="width: 550px; text-align: center;">Name</p>
+                    <p style="width: 180px; text-align: center;">Price</p>
+                    <p style="width: 180px; text-align: center;">In stock</p>
+                </div>
+                <% for (let i = 0; i < data.length; i++) { %>
+                    <div class="list-product">
+                        <p style="width: 30px; text-align: center;"><%= data[i].product_id %></p>
+                        <p style="width: 550px; text-align: center;"><a href="/product/<%= data[i].product_id %>" class="product-name"><%= data[i].product_name %></a></p>
+                        <p style="width: 180px; text-align: center;"><%= data[i].price.replace(/\B(?=(\d{3})+(?!\d))/g, '.') %></p>
+                        <p style="width: 180px; text-align: center;"><%= data[i].in_stock_quantity %></p>
+                    </div>
+                <% } %>
+            </div>
             
         </div>
     </div>
@@ -85,7 +80,7 @@
                         "Content-Type": "application/json",
                         "authorization": jwt
                     },
-                    body: JSON.stringify({
+                    body: JSON.sdivingify({
                         category_name: category_name.value
                     })
                 })

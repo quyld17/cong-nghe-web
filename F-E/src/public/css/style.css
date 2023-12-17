@@ -298,6 +298,18 @@
         box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 10px;
       }
 
+      .list-product {
+        display: flex;
+        flex-direction: row; 
+        align-items: center;
+        height: 25px;
+        margin-top: 5px;
+        border: 0.5px solid #63676b;
+        border-radius: 5px;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        font-weight: lighter;
+      }
+
       .product-name {
         text-decoration: none;
         color: #234d77;
@@ -321,11 +333,6 @@
         padding-top: 15px;
         text-decoration: none;
         color: #ffffff;
-      }
-
-      .products-admin-container thead {
-        font-family: 'Courier New', Courier, monospace;
-        color: #63676b;
       }
 
       .new-category {
@@ -623,10 +630,162 @@
         box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 10px;
       }
 
-      
-
       /* end detail product admin */
     
+      /* detail order */
+      .order-body {
+        width: 700px;
+        background-color: #d6dfe6;
+        border-radius: 5px;
+        margin-top: 20px;
+        margin-left: 50%;
+        margin-bottom: 20px;
+        transform: translate(-50%, 0%);
+        padding: 15px;
+        box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 10px;
+      }
 
+      .header-order {
+        display: inline-flex;
+        font-family:'Courier New', Courier, monospace;
+        padding-bottom: 15px;
+      }
+
+      .header-order a {
+        text-decoration: none;
+      }
+
+      .header-order span {
+        font-size: 32px;
+        font-weight:bolder;
+        color: #000;
+      }
+
+      .header-order .user-order {
+        margin-left: 15px;
+        color: #617398;
+        text-shadow: #f7f8f8 0px 0px 1px;
+      }
+
+      .products-order {
+        margin-bottom: 30px;
+      }
+
+      .products-order h2 {
+        font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        color: #63676b;
+      }
+
+      .products-order-detail {
+        display: flex;
+        flex-direction: row;
+        margin-top: 15px;
+        height: 50px;
+        border: 1px solid #9fa3a7;
+        border-radius: 5px;
+        align-items: center;
+      }
+
+      .products-order-detail a {
+        text-decoration: none;
+        width: 48%;
+        margin-left: 15px;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        color: #51607f;
+      }
+
+      .span-product span {
+        margin-left: 50px;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+      }
+
+      .bottom-order {
+        display: flex;
+        flex-direction: row;
+      }
+
+      .bottom-order-left {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .bottom-order-left h1 {
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font-size: 18px;
+      }
+
+      .bottom-order-left h2 {
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        font-weight: lighter;
+        color: #63676b;
+        width: 60%;
+        margin-top: 0px;
+        font-size: 12px;
+      }
+
+      .bottom-order-right {
+        display: flex;
+        flex-direction: row;
+      }
+
+      .section-name h4 {
+        text-align: right;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        font-weight: lighter;
+        width: 170px;
+      }
+
+      .section-detail {
+        margin-left: 20px;
+      }
+
+      .section-detail .Complete {
+        background-color: #bbd1c3;
+        color: #27b85e;
+        border: 0px;
+        border-radius: 8px;
+        padding: 2px;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
+      .section-detail .Pending {
+        background-color: #d4dbbb;
+        color: #929433;
+        border-radius: 8px;
+        border: 0px;
+        padding: 2px;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
+      .section-detail .Cancelled {
+        background-color: #f5c0b0;
+        color: #963c20;
+        border-radius: 8px;
+        border: 0px;
+        padding: 2px;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
+      .operation-order button {
+        margin-left: 90%;
+        padding: 12px;
+        width: 160px;
+        border: 0px;
+        border-radius: 20px;
+        color: #fff;
+        font-size: 20px;
+        transform: translate(-100%, 0%);
+        background-color: #386386;
+        box-shadow: #696868 0px 0px 10px;
+      }
+
+      .phone-order {
+        margin-left: 30px;
+  
+      }
+      /* end detail order */
 
     

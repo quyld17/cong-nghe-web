@@ -62,11 +62,33 @@
     var product_price = document.getElementById("product_price")
     var in_stock = document.getElementById("in_stock")
 
+    var arrImg = []
+
+    arrImg = arrayToUse = JSON.parse('<%- JSON.stringify(img)%>')
+
+
     var data
     
     var count = 0;
 
-    left.addEventListener("click", {
+    left.addEventListener("click", async function() {
+        if (count == 0) {
+            count = arrImg.length() - 1;
+        }
+        else {
+            count --;
+        }   
+        img_product.src = arrImg[count].image_url
+    })
+
+    right.addEventListener("click", async function() {
+        if (count == arrImg.length() - 1) {
+            count = 0;
+        }
+        else {
+            count ++;
+        }   
+        img_product.src = arrImg[count].image_url
     })
 
     Update.addEventListener("click", async function(){

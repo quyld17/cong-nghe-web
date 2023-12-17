@@ -37,6 +37,8 @@ app.get('/product/:id', homeController.getDetailProductPage);
 
 app.get('/category/:id', homeController.getProductSearchCategory);
 
+app.get('/order/:id', homeController.getDetailOrder);
+
 app.listen(port, () => {
     console.log(`Website running on port ${port}`);
   });
