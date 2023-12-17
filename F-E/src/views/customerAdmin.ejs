@@ -29,14 +29,13 @@
                         <th style="width: 100px;">Email</th>
                         <th style="width: 60px">Phone</th>
                         <th style="width: 60px">Expenditure</th>
-                        <th style="width: 60px">Created at</th>
                     </tr>
                 </thead>
                 <tbody style="max-height: 700px;">
                     <% for (let i = 0; i < data.length; i++) { %>
                         <tr>
                             <td><%= data[i].user_id %></td>
-                            <td><a href=""><%= data[i].full_name %></a></td>
+                            <td><a href="/customer/<%= data[i].user_id %>"><%= data[i].full_name %></a></td>
                             <% if (data[i].gender == 1) { %>
                                 <td class="gender-men">Men</td>
                             <% } %>
@@ -46,7 +45,6 @@
                             <td><%= data[i].email %></td>
                             <td><%= data[i].phone_number %></td>
                             <td><%= data[i].total_expenditure %></td>
-                            <td><%= data[i].created_at %></td>
                         </tr>
                     <% } %>
                 </tbody>

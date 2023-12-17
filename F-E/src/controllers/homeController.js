@@ -156,8 +156,16 @@ let getDetailOrder = async (req, res) => {
     return res.render('detailOrder.ejs', {   data: rows[0], products: rows2, address: rows4[0]  })
 }
 
+let getDetailCustomer = async (req, res) => {
+    const id = req.params.id;
+    const [rows, field] = await pool.execute('select * from user where user_id = ?', [id])
+    const [rows2, field2] = await pool.execute('select * from address where user_id = ?', [id])
+    return res.render('detailCustomer.ejs')
+}
+
 module.exports = {
     getCheck, getProductsAdmin, getSignUpPage, creatProduct,
     getSignInPage, getOrdersAdmin, getCustomerAdmin, postCheck,
-    checkData, getDetailProductPage, getProductSearchCategory, getDetailOrder
+    checkData, getDetailProductPage, getProductSearchCategory, getDetailOrder,
+    getDetailCustomer
 } 
