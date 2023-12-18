@@ -27,7 +27,7 @@ r.put("/product", express.json(), async (req, res) => {
         product.product_name === "" ||
         product.price === null ||
         product.in_stock_quantity === null ||
-        product.image_url === ""
+        product.image_urls.length === 0
       ) {
         return res.status(400).json("No input");
       }
