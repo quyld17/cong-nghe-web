@@ -160,7 +160,7 @@ let getDetailCustomer = async (req, res) => {
     const id = req.params.id;
     const [rows, field] = await pool.execute('select * from user where user_id = ?', [id])
     const [rows2, field2] = await pool.execute('select * from address where user_id = ?', [id])
-    return res.render('detailCustomer.ejs')
+    return res.render('detailCustomer.ejs', {   data: rows, address: rows2  })
 }
 
 module.exports = {
