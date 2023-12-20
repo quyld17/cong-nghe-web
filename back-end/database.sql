@@ -26,6 +26,7 @@ CREATE TABLE `address` (
 CREATE TABLE `order` (
   `order_id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
+  `address_id` INT NOT NULL,
   `total_price` DECIMAL(12,0) NOT NULL,
   `payment_method` VARCHAR(255) NOT NULL,
   `status` VARCHAR(20) NOT NULL,

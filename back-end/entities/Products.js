@@ -143,23 +143,28 @@ async function createProduct(product) {
           }
 
           const product_id = results.insertId;
-          db.query(
-            insertImageQuery,
-            [product_id, product.image_url, 1],
-            (err, imageResults) => {
-              if (err) {
-                return db.rollback(() => reject(err));
-              }
-
-              db.commit((err) => {
+          let is_thumbnail = 1;
+          for (let i = 0; i < product.image_urls.length; i++) {
+            if (i !== 0) {
+              is_thumbnail = 0;
+            }
+            db.query(
+              insertImageQuery,
+              [product_id, product.image_urls[i], is_thumbnail],
+              (err, imageResults) => {
                 if (err) {
                   return db.rollback(() => reject(err));
                 }
-
-                resolve(results);
-              });
+              }
+            );
+          }
+          db.commit((err) => {
+            if (err) {
+              return db.rollback(() => reject(err));
             }
-          );
+
+            resolve(results);
+          });
         }
       );
     });
