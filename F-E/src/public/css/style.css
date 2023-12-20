@@ -3,6 +3,10 @@
         background-color: #001529;
         max-height: 800px;
     }
+
+    .err {
+      border: 1px solid #e92222;
+    }
     /* Add a black background color to the top navigation */
     .topnav {
         overflow: hidden;
@@ -37,6 +41,32 @@
 
       .topnav img {
         max-height: 100%;      
+      }
+
+      .input-search {
+        display: flex;
+        flex-direction: row;
+        margin-top: 10px;
+        margin-bottom: 15px;
+        margin-left: 50%;
+        transform: translate(-50%, 0%);
+        box-shadow: #284057 0px 0px 5px;
+        border-radius: 15px;
+      }
+
+      .input-search input {
+        height: 30px;
+        padding-left: 15px;
+        width: 95%;
+        border: 0px;
+        border-radius: 15px 0px 0px 15px;
+      }
+
+      .input-search button {
+        width: 5%;
+        border: 0px;
+        background-color: #001529;
+        border-radius: 0px 15px 15px 0px;
       }
 
 
@@ -284,7 +314,17 @@
 
       .products-operation button {
         margin-top: 15px;
-        margin-left: 100px;
+        margin-left: 150px;
+        text-align: center;
+        padding-left: 15px;
+        padding-right: 15px;
+        height: 30px;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        background-color:#1c486e;
+        color: #ffffff;
+        border: 0px;
+        border-radius: 15px;
+        box-shadow: #ffffff 0px 0px 5px;
       }
 
       .products-admin-container {
@@ -788,4 +828,91 @@
       }
       /* end detail order */
 
+      /* detail customer */
+      .detail-customer-body {
+        width: 1000px;
+        background-color: #d6dfe6;
+        border-radius: 5px;
+        margin-top: 20px;
+        margin-left: 50%;
+        margin-bottom: 20px;
+        transform: translate(-30%, 0%);
+        padding: 15px;
+        box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 10px;
+      }
+
+      .header-customer {
+        display: flex;
+        flex-direction: row
+      }
+      .gender-customer img {
+        display: block;
+        object-fit: cover;
+        width: 400px;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: #547592 0px 0px 10px;
+      }
+
+      .infor-customer {
+        margin-left: 30px;
+      }
+
+      .infor-customer h3 {
+        font-family:'Courier New', Courier, monospace;
+        font-size: 30px;
+        color: #001529;
+      }
+
+      .infor-customer-h4 {
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        font-weight: lighter;
+        font-size: 18px;
+      }
+
+      .infor-customer-h4 span {
+        font-weight: 900;
+        color: #001529;
+      }
+      
+      .header-customer button {
+        position: absolute;
+        right: 15px;
+        height: 30px;
+        border-radius: 15px;
+        padding-left: 10px;
+        padding-right: 10px;
+        border: 0px;
+        background-color: #6587c2;
+        color: #fff;  
+        box-shadow: #ffffff 0px 0px 5px;      
+      }
+
+      .address-customer {
+        width: 570px;
+      }
+
+      .address-customer h5 {
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        font-size: 18px;
+      }
+
+      .address-customer h6 {
+        font-family: 'Courier New', Courier, monospace;
+        font-weight: lighter;
+        font-size: 10px;
+      }
+
+      .address-customer span {
+        color: #d41616;
+      }
+
+      .bottom-customer h5 {
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        font-weight: lighter;
+        font-size: 14px;
+        color: #656b72;
+      }
+
+      /* end detail customer */
     

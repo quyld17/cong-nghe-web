@@ -39,7 +39,6 @@ let postCheck = async (req, res) => {
                 for (let j = 0; j < rows.length; j++) {
                    if (rows[j].order_id == rows2[i].order_id) {
                         totalProductS += rows[j].quantity;
-                        console.log(rows[j].quantity)
                    }
                 }
             }
@@ -133,7 +132,7 @@ let getProductSearchCategory = async (req, res) => {
 let getDetailProductPage = async (req, res) => {
     var id = req.params.id
     const [rows, field] = await pool.execute('select * from product where product_id = ?', [id])
-    const [rows2, field2] = await pool.execute('select category_name from category where category_id = ?', [rows[0].category_id])
+    const [rows2, field2] = await pool.execute('select category_name from category where category_id = ?', [rows[0].category_id]) 
     rows[0].category_name = rows2[0].category_name
     const [rows3, field3] = await pool.execute('select * from product_image where product_id = ?', [id])
     return res.render('detailProduct.ejs', {
@@ -160,12 +159,82 @@ let getDetailCustomer = async (req, res) => {
     const id = req.params.id;
     const [rows, field] = await pool.execute('select * from user where user_id = ?', [id])
     const [rows2, field2] = await pool.execute('select * from address where user_id = ?', [id])
-    return res.render('detailCustomer.ejs', {   data: rows, address: rows2  })
+    return res.render('detailCustomer.ejs', {   data: rows[0], address: rows2  })
+}
+
+let searchOrders = async (req, res) => {
+    const key = req.params.key
+    const [rows, field] = await pool.execute ('select * from `order`');
+    let data = []
+    var cnt = 0;
+
+    for (let i = 0; i < rows.length; i++) {
+        const [rows2, field2] = await pool.execute('select full_name from `user` where user_id = ?', [rows[i].user_id])
+        if (String(rows[i].order_id).includes(key) || rows2[0].full_name.includes(key)) {
+            rows[i].user_name = rows2[0].full_name;
+            data[cnt] = rows[i];
+            cnt++;
+        }
+    }
+    return res.render('orderAdmin.ejs', {
+        data: data
+    });
+}
+
+let searchProducts = async (req, res) => {
+    const key = req.params.key
+    var data = []
+    var cnt = 0;
+    const [rows, field] = await pool.execute ('select * from product');
+    for (let i = 0; i < rows.length; i++){
+        if(String(rows[i].product_id).includes(key) || rows[i].product_name.includes(key)) {
+            data[cnt] = rows[i];
+            cnt ++;
+        }
+    }
+    const [rows2, field2] = await pool.execute ('select * from category');
+    return res.render('productsAdmin.ejs', {
+        data: data,
+        category: rows2
+    });
+}
+
+let searchCustomers = async (req, res) => {
+    const key = req.params.key
+    var role = "user";
+    var data = []
+    var cnt = 0 ;
+    const [rows, field] = await pool.execute ('select * from `user` where role = ?', [role]);
+    
+    for (let i = 0; i < rows.length; i++) {
+        if(String(rows[i].user_id).includes(key) || rows[i].full_name.includes(key)) {
+            data[cnt] = rows[i];
+            cnt ++;
+        }
+    }
+    return res.render('customerAdmin.ejs', {
+        data: data
+    });
+}
+
+let orderOfCustomer = async (req, res) => {
+    const id = req.params.id;
+    const [rows, field] = await pool.execute ('select * from `order` where user_id = ?', [id]);
+    for (let i = 0; i < rows.length; i++) {
+        const [rows2, field2] = await pool.execute('select full_name from `user` where user_id = ?', [rows[i].user_id])
+        
+        rows[i].user_name = rows2[0].full_name
+    }
+    return res.render('orderAdmin.ejs', {
+        data: rows
+    });
+
 }
 
 module.exports = {
     getCheck, getProductsAdmin, getSignUpPage, creatProduct,
     getSignInPage, getOrdersAdmin, getCustomerAdmin, postCheck,
     checkData, getDetailProductPage, getProductSearchCategory, getDetailOrder,
-    getDetailCustomer
-} 
+    getDetailCustomer, searchOrders, searchProducts, searchCustomers,
+    orderOfCustomer
+}

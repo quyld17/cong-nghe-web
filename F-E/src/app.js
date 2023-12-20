@@ -41,7 +41,16 @@ app.get('/order/:id', homeController.getDetailOrder);
 
 app.get('/customer/:id', homeController.getDetailCustomer);
 
+app.get('/orders/search/:key', homeController.searchOrders);
+
+app.get('/products/search/:key', homeController.searchProducts);
+
+app.get('/customers/search/:key', homeController.searchCustomers);
+
+app.get('/customer/:id/orders', homeController.orderOfCustomer);
+
 app.listen(port, () => {
     console.log(`Website running on port ${port}`);
   });
 
+ 

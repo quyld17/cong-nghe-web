@@ -85,20 +85,25 @@
     })
 
     btnAdd.addEventListener("click", async function(){
-        var ck = 0;
-        for (let i = 0; i<arrImage.length; i++) {
-            if (arrImage[i] == img.value) {
-                ck++;
-                break;
+        if (img.value == "") {
+            alert("No photos added")
+        }
+        else {
+            var ck = 0;
+            for (let i = 0; i<arrImage.length; i++) {
+                if (arrImage[i] == img.value) {
+                    ck++;
+                    break;
+                }
             }
+            if (ck == 0) {
+                arrImage[count] = img.value;
+                img.value = "";
+                count++;
+                alert("Added " + count + " photo")
+            }
+            else alert('This photo was added previously');
         }
-        if (ck == 0) {
-            arrImage[count] = img.value;
-            img.value = "";
-            count++;
-            alert("Added " + count + " photo")
-        }
-        else alert('This photo was added previously');
     })
 
     btnCancel.addEventListener("click", async function(){
@@ -124,7 +129,7 @@
                     product_name: iname.value,
                     price: Number(price.value),
                     in_stock_quantity: Number(quantity.value),
-                    image_url: arrImage
+                    image_urls: arrImage
                 }
                 var check = await fetch("http://localhost:4000/admin/product", {
                     method: "PUT",
@@ -136,7 +141,9 @@
                 })
                 var d = await check.json();
                 alert(d);
-                window.location = "http://localhost:1234/products/newProduct"
+                if (d == "Created product successfully") {
+                    window.location = "http://localhost:1234/products/newProduct"
+                }
             }
         }
     })

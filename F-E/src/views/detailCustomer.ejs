@@ -22,9 +22,41 @@
         <div class="detail-customer-container">
             <div class="detail-customer-body">
                 <div class="header-customer">
+                    <div class="gender-customer">
+                        <% if (data.gender == 0) { %>
+                            <img src="https://img.freepik.com/premium-vector/avatar-icon001_750950-50.jpg" alt="" srcset="">
+                        <% } else { %>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFolOUWbzHBdwHp74I0ar2xsYgyb4YxSyPGkbqYEsxxu_lGbBIEgqlAGQGcj0rO4clvNU&usqp=CAU" alt="">
+                            <% } %> 
+
+                    </div>
+                    <div class="infor-customer">
+                        <h3>Customer <span>#<%= data.user_id %>  </span><%= data.full_name %></h3>
+                        <h4 class="infor-customer-h4">Email address: <span><%= data.email%></span></h4>
+                        <h4 class="infor-customer-h4">Date of Birth: <span><%= data.date_of_birth %></span></h4>
+                        <h4 class="infor-customer-h4">Phone number: <span><%= data.phone_number%></span></h4>
+                        <h4 class="infor-customer-h4">Total Expenditure: <span><%= String(data.total_expenditure).replace(/\B(?=(\d{3})+(?!\d))/g, '.')%></span></h4>
+                        <div class="address-customer">
+                            <center><h5>Address:</h5></center>
+                            <% for (let i = 0; i < address.length; i++) { %>
+                                <% if (address[i].is_default == 1) { %>
+                                    <h6>No. <%= address[i].house_number %>, <%= address[i].street %> Street, <%= address[i].ward %> Ward, <%= address[i].district %> District, <%= address[i].city %> City <span>[Default]</span></h6>
+                                <% } else { %>
+                                    <h6>No. <%= address[i].house_number %>, <%= address[i].street %> Street, <%= address[i].ward %> Ward, <%= address[i].district %> District, <%= address[i].city %> City</h6>
+                                <% } %>
+                            <% } %>
+                        </div>
+                    </div>
+                    <form action="/customer/<%= data.user_id %>/orders">
+                        <button type="submit">View all order</button>
+                    </form>
                     
                 </div>
+                <div class="bottom-customer">
+                    <h5>Created at : <%= data.created_at%></h5>
+                </div>
             </div>
+            
         </div>
     </div>
     
