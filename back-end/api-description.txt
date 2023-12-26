@@ -1,4 +1,4 @@
-*******Authentication*******
+*******AUTHENTICATION*******
 
 1. Sign up
 Path: /sign-up
@@ -29,7 +29,7 @@ Response:
     }    
     // Decode token ra de lay user_id va role
 
-*******Admin*******
+*******ADMIN*******
 
 I. Product
 1. Create 
@@ -172,4 +172,42 @@ Request:
 Response:
     {
         "Updated order successfully"
+    }
+
+*******USER*******
+
+I. Cart
+1. Add product to cart
+Path: /user/cart/
+Method: PUT
+Request:
+    Headers:
+        {
+            authorization: jwt
+        }
+    Body: 
+        {
+            product_id: int,
+            quantity:   int
+        }
+Response:
+    {
+        "Added product to cart successfully"
+    }
+
+2. Delete product from cart
+Path: /user/cart/:id
+Method: DELETE
+Request:
+    Headers:
+        {
+            authorization: jwt
+        }
+    Params: 
+        {
+            id: int
+        }
+Response:
+    {
+        "Deleted product successfully"
     }
