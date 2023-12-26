@@ -19,7 +19,7 @@ app.post('/checkdata', homeController.checkData);
 
 app.get('/', homeController.getCheck);
 
-app.get('/check/:token', homeController.postCheck);
+app.get('/check/:token', homeController.checkRole);
 
 app.get('/products', homeController.getProductsAdmin);
 
@@ -48,6 +48,10 @@ app.get('/products/search/:key', homeController.searchProducts);
 app.get('/customers/search/:key', homeController.searchCustomers);
 
 app.get('/customer/:id/orders', homeController.orderOfCustomer);
+
+
+
+app.get('/user/product/:id', homeController.deatailProductUser);
 
 app.listen(port, () => {
     console.log(`Website running on port ${port}`);
