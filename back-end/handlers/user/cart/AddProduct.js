@@ -1,9 +1,10 @@
-const { tokenVerification } = require("../../middlewares/JWT");
+const { tokenVerification } = require("../../../middlewares/JWT");
+const { addProductToCart } = require("../../../entities/Cart");
 
 const Router = require("express");
 const r = Router();
 
-r.put("/add-product", Router.json(), async (req, res) => {
+r.put("/", Router.json(), async (req, res) => {
   const token = req.headers.authorization;
   if (!token) {
     return res.status(400).json("Token not found");
@@ -19,13 +20,13 @@ r.put("/add-product", Router.json(), async (req, res) => {
       return res.status(400).json("Invalid input");
     }
 
-    const addProductToCartResult = addProductToCart(user_id, product);
+    const addProductToCartResult = await addProductToCart(user_id, product);
     if (addProductToCartResult) {
       return res.status(200).json("Added product to cart successfully");
     } else {
       return res.status(500).json("Failed to add product to cart");
     }
-  } catch (error) {
+  } catch (err) {
     console.error("Error:", err);
     return res.status(500).json("Internal Server Error");
   }

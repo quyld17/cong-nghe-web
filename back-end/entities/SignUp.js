@@ -1,7 +1,11 @@
 const db = require("../services/SetUpMySQL");
 
 async function signUp(email, password, role) {
-  const query = "INSERT INTO user (email, password, role) VALUES (?, ?, ?);";
+  const query = ` INSERT INTO user (
+                    email,
+                    password, 
+                    role) 
+                  VALUES (?, ?, ?);`;
 
   return new Promise((resolve, reject) => {
     db.query(query, [email, password, role], (err, results) => {
@@ -15,7 +19,9 @@ async function signUp(email, password, role) {
 }
 
 async function isUserAlreadyRegistered(email) {
-  const query = "SELECT COUNT(*) AS count FROM user WHERE email = ?";
+  const query = ` SELECT COUNT(*) AS count 
+                  FROM user   
+                  WHERE email = ?;`;
 
   return new Promise((resolve, reject) => {
     db.query(query, [email], (err, results) => {

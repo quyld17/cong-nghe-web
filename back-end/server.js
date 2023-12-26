@@ -10,6 +10,8 @@ const AdminCreateCategory = require("./handlers/admin/categories/Create");
 const AdminUpdateOrder = require("./handlers/admin/orders/Update");
 
 const UserDetails = require("./handlers/user/Details");
+const UserAddProductToCart = require("./handlers/user/cart/AddProduct");
+const UserDeleteProductFromCart = require("./handlers/user/cart/DeleteProduct");
 
 const express = require("express");
 const cors = require("cors");
@@ -28,10 +30,12 @@ try {
   app.use("/admin", AdminUpdateProduct);
 
   app.use("/admin", AdminCreateCategory);
-
   app.use("/admin", AdminUpdateOrder);
 
   app.use("/user", UserDetails);
+
+  app.use("/user/cart", UserAddProductToCart);
+  app.use("/user/cart", UserDeleteProductFromCart);
 } catch (err) {
   console.log("error", err);
 }

@@ -1,8 +1,11 @@
 const db = require("../services/SetUpMySQL");
 
 async function signIn(account) {
-  const query =
-    "SELECT COUNT(*) AS count from user WHERE email = ? and password = ?;";
+  const query = ` SELECT COUNT(*) AS count 
+                  FROM user 
+                  WHERE 
+                    email = ? AND 
+                    password = ?;`;
 
   return new Promise((resolve, reject) => {
     db.query(query, [account.email, account.password], (err, results) => {
