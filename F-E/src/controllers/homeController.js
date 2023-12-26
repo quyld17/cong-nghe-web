@@ -1,6 +1,10 @@
 const pool = require('../config/connectDB');
 const { jwtDecode } = require('jwt-decode');
 
+let checkData = async (req, res) => {
+    let d = req.body
+    console.log(d)
+}
 
 let getCheck = async (req, res) => {
     return res.render('checkrole.ejs')  
@@ -16,31 +20,31 @@ let postCheck = async (req, res) => {
     if (decoded.role == "admin") {
         const [rows, field] = await pool.execute ('select * from order_products');
         const [rows2, field2] = await pool.execute('select * from `order`');
-        const [rank, field3] = await pool.execute('select full_name as fN, total_expenditure as tE from user');
+        const [rank, field3] = await pool.execute('select full_name as fN, total_expenditure as tE from user where role = "user"');
 
         let totalOrders = rows2.length;
         let totalProduct = 0;
         let totalRevenue = 0;
 
         let totalOrdersS = 0; //Tổng đơn thành công
-        let totalProductS = 0;
+        let totalProductS = 0; 
 
         
 
         // Tính tỉ lệ đơn thành công, tổng doanh thu
-        for (let i = 0; i<rows2.length; i++) {
-            
-            if (rows2[i].status = 'delivered') {
+        for (let i = 0; i<rows2.length; i++) {    
+            if (rows2[i].status == 'Complete') {
                 totalOrdersS ++;
                 totalRevenue += Number(rows2[i].total_price);
+                for (let j = 0; j < rows.length; j++) {
+                   if (rows[j].order_id == rows2[i].order_id) {
+                        totalProductS += rows[j].quantity;
+                   }
+                }
             }
         }
         let successOrderRate = totalOrdersS/totalOrders * 100;
 
-        // Tính tổng sản phẩm bán ra
-        for (let i = 0; i<rows.length; i++) {
-            totalProduct += rows[i].quantity;
-        }
 
         //Xếp hạng người dùng
         let tmp = {};
@@ -60,7 +64,7 @@ let postCheck = async (req, res) => {
         // set độ dài của bảng xếp hạng, chỉ hiển thị tối đa top 10;
         let rankL = Math.min(10, rank.length);
         
-        let data = {totalOrders, totalProduct, totalRevenue, successOrderRate}
+        let data = {totalOrders, totalProductS, totalRevenue, successOrderRate}
 
         return res.render('adminPage.ejs', { data: data, rank: rank, rankL: rankL});
     }
@@ -69,10 +73,6 @@ let postCheck = async (req, res) => {
     }
     }
     
-    
-}
-
-let getAdminPage = async (req, res) => {
     
 }
 
@@ -87,13 +87,19 @@ let getProductsAdmin = async (req, res) => {
 
 let getOrdersAdmin = async (req, res) => {
     const [rows, field] = await pool.execute ('select * from `order`');
+    for (let i = 0; i < rows.length; i++) {
+        const [rows2, field2] = await pool.execute('select full_name from `user` where user_id = ?', [rows[i].user_id])
+        
+        rows[i].user_name = rows2[0].full_name
+    }
     return res.render('orderAdmin.ejs', {
         data: rows
     });
 }
 
 let getCustomerAdmin = async (req, res) => {
-    const [rows, field] = await pool.execute ('select * from `user`');
+    var role = "user"
+    const [rows, field] = await pool.execute ('select * from `user` where role = ?', [role]);
     return res.render('customerAdmin.ejs', {
         data: rows
     });
@@ -107,7 +113,128 @@ let getSignInPage = async (req, res) => {
     return res.render('signin.ejs');
 }
 
+let creatProduct = async (req, res) => {
+    const [rows, field] = await pool.execute('select * from category')
+    return res.render('creatProduct.ejs', { data: rows  });
+}
+
+let getProductSearchCategory = async (req, res) => {
+    const id = req.params.id
+    const [rows, field] = await pool.execute ('select * from product where category_id = ?', [id]);
+    const [rows2, field2] = await pool.execute ('select * from category');
+    return res.render('productsAdmin.ejs', {
+        data: rows,
+        category: rows2
+    });
+
+}
+
+let getDetailProductPage = async (req, res) => {
+    var id = req.params.id
+    const [rows, field] = await pool.execute('select * from product where product_id = ?', [id])
+    const [rows2, field2] = await pool.execute('select category_name from category where category_id = ?', [rows[0].category_id]) 
+    rows[0].category_name = rows2[0].category_name
+    const [rows3, field3] = await pool.execute('select * from product_image where product_id = ?', [id])
+    return res.render('detailProduct.ejs', {
+        data: rows[0],
+        img: rows3
+    })
+}
+
+let getDetailOrder = async (req, res) => {
+    let id = req.params.id;
+    const [rows, field] = await pool.execute('select * from `order` where order_id = ?', [id])
+
+    var user_id = rows[0].user_id
+
+    const [rows2, field2] = await pool.execute('select * from order_products where order_id = ?', [id])
+    const [rows3, field3] = await pool.execute('select * from user where user_id = ?', [user_id])
+    const [rows4, field4] = await pool.execute('select * from address where user_id = ? and is_default = ?', [user_id, 1])
+    rows[0].user_name = rows3[0].full_name;
+    rows[0].phone_number = rows3[0].phone_number;
+    return res.render('detailOrder.ejs', {   data: rows[0], products: rows2, address: rows4[0]  })
+}
+
+let getDetailCustomer = async (req, res) => {
+    const id = req.params.id;
+    const [rows, field] = await pool.execute('select * from user where user_id = ?', [id])
+    const [rows2, field2] = await pool.execute('select * from address where user_id = ?', [id])
+    return res.render('detailCustomer.ejs', {   data: rows[0], address: rows2  })
+}
+
+let searchOrders = async (req, res) => {
+    const key = req.params.key
+    const [rows, field] = await pool.execute ('select * from `order`');
+    let data = []
+    var cnt = 0;
+
+    for (let i = 0; i < rows.length; i++) {
+        const [rows2, field2] = await pool.execute('select full_name from `user` where user_id = ?', [rows[i].user_id])
+        if (String(rows[i].order_id).includes(key) || rows2[0].full_name.includes(key)) {
+            rows[i].user_name = rows2[0].full_name;
+            data[cnt] = rows[i];
+            cnt++;
+        }
+    }
+    return res.render('orderAdmin.ejs', {
+        data: data
+    });
+}
+
+let searchProducts = async (req, res) => {
+    const key = req.params.key
+    var data = []
+    var cnt = 0;
+    const [rows, field] = await pool.execute ('select * from product');
+    for (let i = 0; i < rows.length; i++){
+        if(String(rows[i].product_id).includes(key) || rows[i].product_name.includes(key)) {
+            data[cnt] = rows[i];
+            cnt ++;
+        }
+    }
+    const [rows2, field2] = await pool.execute ('select * from category');
+    return res.render('productsAdmin.ejs', {
+        data: data,
+        category: rows2
+    });
+}
+
+let searchCustomers = async (req, res) => {
+    const key = req.params.key
+    var role = "user";
+    var data = []
+    var cnt = 0 ;
+    const [rows, field] = await pool.execute ('select * from `user` where role = ?', [role]);
+    
+    for (let i = 0; i < rows.length; i++) {
+        if(String(rows[i].user_id).includes(key) || rows[i].full_name.includes(key)) {
+            data[cnt] = rows[i];
+            cnt ++;
+        }
+    }
+    return res.render('customerAdmin.ejs', {
+        data: data
+    });
+}
+
+let orderOfCustomer = async (req, res) => {
+    const id = req.params.id;
+    const [rows, field] = await pool.execute ('select * from `order` where user_id = ?', [id]);
+    for (let i = 0; i < rows.length; i++) {
+        const [rows2, field2] = await pool.execute('select full_name from `user` where user_id = ?', [rows[i].user_id])
+        
+        rows[i].user_name = rows2[0].full_name
+    }
+    return res.render('orderAdmin.ejs', {
+        data: rows
+    });
+
+}
+
 module.exports = {
-    getCheck, getAdminPage, getProductsAdmin, getSignUpPage,
-    getSignInPage, getOrdersAdmin, getCustomerAdmin, postCheck
+    getCheck, getProductsAdmin, getSignUpPage, creatProduct,
+    getSignInPage, getOrdersAdmin, getCustomerAdmin, postCheck,
+    checkData, getDetailProductPage, getProductSearchCategory, getDetailOrder,
+    getDetailCustomer, searchOrders, searchProducts, searchCustomers,
+    orderOfCustomer
 }

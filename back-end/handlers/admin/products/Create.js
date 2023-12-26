@@ -18,7 +18,7 @@ r.put("/product", express.json(), async (req, res) => {
   if (!verifyAdminResult) {
     return res.status(403).json("User not allowed");
   }
-
+  
   const product = req.body;
   if (product) {
     try {

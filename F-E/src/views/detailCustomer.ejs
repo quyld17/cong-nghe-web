@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Website - Admin Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <header>
+        <div class="topnav">
+            <a href="/" style="padding-top: 0px; padding-right: 20px;"><img src="https://img.upanh.tv/2023/11/25/logo.png" alt="logo.png" border="0"></a>
+            <a href="/products">Products</a>
+            <a href="/orders">Orders</a>
+            <a class="active" href="/customer">Customer</a>
+            <a href="/" onclick="let cf = confirm('Confirm Logout'); if (cf) localStorage.removeItem('jwt'); return cf" style="position: relative;  right: 0px;">Log out</a>
+          </div>
+    </header>
+    <div class="main-container">
+        <div class="detail-customer-container">
+            <div class="detail-customer-body">
+                <div class="header-customer">
+                    <div class="gender-customer">
+                        <% if (data.gender == 0) { %>
+                            <img src="https://img.freepik.com/premium-vector/avatar-icon001_750950-50.jpg" alt="" srcset="">
+                        <% } else { %>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFolOUWbzHBdwHp74I0ar2xsYgyb4YxSyPGkbqYEsxxu_lGbBIEgqlAGQGcj0rO4clvNU&usqp=CAU" alt="">
+                            <% } %> 
+
+                    </div>
+                    <div class="infor-customer">
+                        <h3>Customer <span>#<%= data.user_id %>  </span><%= data.full_name %></h3>
+                        <h4 class="infor-customer-h4">Email address: <span><%= data.email%></span></h4>
+                        <h4 class="infor-customer-h4">Date of Birth: <span><%= data.date_of_birth %></span></h4>
+                        <h4 class="infor-customer-h4">Phone number: <span><%= data.phone_number%></span></h4>
+                        <h4 class="infor-customer-h4">Total Expenditure: <span><%= String(data.total_expenditure).replace(/\B(?=(\d{3})+(?!\d))/g, '.')%></span></h4>
+                        <div class="address-customer">
+                            <center><h5>Address:</h5></center>
+                            <% for (let i = 0; i < address.length; i++) { %>
+                                <% if (address[i].is_default == 1) { %>
+                                    <h6>No. <%= address[i].house_number %>, <%= address[i].street %> Street, <%= address[i].ward %> Ward, <%= address[i].district %> District, <%= address[i].city %> City <span>[Default]</span></h6>
+                                <% } else { %>
+                                    <h6>No. <%= address[i].house_number %>, <%= address[i].street %> Street, <%= address[i].ward %> Ward, <%= address[i].district %> District, <%= address[i].city %> City</h6>
+                                <% } %>
+                            <% } %>
+                        </div>
+                    </div>
+                    <form action="/customer/<%= data.user_id %>/orders">
+                        <button type="submit">View all order</button>
+                    </form>
+                    
+                </div>
+                <div class="bottom-customer">
+                    <h5>Created at : <%= data.created_at%></h5>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+</body>
+</html>

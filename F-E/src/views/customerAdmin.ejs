@@ -4,22 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Commerce Website - Admin Page</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
     <header>
         <div class="topnav">
-            <a href="/admin" style="padding-top: 0px; padding-right: 20px;"><img src="https://img.upanh.tv/2023/11/25/logo.png" alt="logo.png" border="0"></a>
+            <a href="/" style="padding-top: 0px; padding-right: 20px;"><img src="https://img.upanh.tv/2023/11/25/logo.png" alt="logo.png" border="0"></a>
             <a href="/products">Products</a>
             <a href="/orders">Orders</a>
             <a class="active" href="/customer">Customer</a>
-            <a href="/" onclick="return confirm('Confirm Logout')" style="position: relative;  right: 0px;">Log out</a>
+            <a href="/" onclick="let cf = confirm('Confirm Logout'); if (cf) localStorage.removeItem('jwt'); return cf" style="position: relative;  right: 0px;">Log out</a>
           </div>
     </header>
     <div class="main-container">
+        <div class="customer-container">
+            <div class="input-search">
+                <input type="text" id="search-input" placeholder="Search by id or name">
+                <button type="button" id="search-btn"><i class="fas fa-search" style="color: aliceblue;"></i></button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 30px">ID</th>
+                        <th style="width: 200px">Name</th>
+                        <th style="width: 30px">Gender</th>
+                        <th style="width: 100px;">Email</th>
+                        <th style="width: 60px">Phone</th>
+                        <th style="width: 60px">Expenditure</th>
+                    </tr>
+                </thead>
+                <tbody style="max-height: 700px;">
+                    <% for (let i = 0; i < data.length; i++) { %>
+                        <tr>
+                            <td><%= data[i].user_id %></td>
+                            <td><a href="/customer/<%= data[i].user_id %>"><%= data[i].full_name %></a></td>
+                            <% if (data[i].gender == 1) { %>
+                                <td class="gender-men">Men</td>
+                            <% } %>
+                            <% if (data[i].gender == 0) { %>
+                                <td class="gender-women">Woman</td>
+                            <% } %>                            
+                            <td><%= data[i].email %></td>
+                            <td><%= data[i].phone_number %></td>
+                            <td><%= String(data[i].total_expenditure).replace(/\B(?=(\d{3})+(?!\d))/g, '.') %></td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
     </div>
     
 </body>
+<script>
+    var search_input = document.getElementById("search-input")
+    var search_btn = document.getElementById("search-btn")
+
+    search_btn.addEventListener("click", async function(){
+        if (search_input.value == "") { 
+            alert('Enter name or id in the search box')
+        }
+        else {
+            window.location = "http://localhost:1234/customers/search/" + search_input.value
+        }
+    })
+</script>
 </html>
