@@ -211,3 +211,21 @@ Response:
     {
         "Deleted product successfully"
     }
+
+3. Update cart product quantity
+Path: /user/cart/
+Method: PATCH
+Request:
+    Headers:
+        {
+            authorization: jwt
+        }
+    Body: 
+        {
+            product_id: int,
+            quantity:   int
+        }
+Response:
+    {
+        "Updated quantity successfully"
+    }
