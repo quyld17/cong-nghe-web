@@ -7,8 +7,9 @@ const AdminCreateProduct = require("./handlers/admin/products/Create");
 const AdminUpdateProduct = require("./handlers/admin/products/Update");
 
 const AdminCreateCategory = require("./handlers/admin/categories/Create");
-
 const AdminUpdateOrder = require("./handlers/admin/orders/Update");
+
+const UserDetails = require("./handlers/user/Details");
 
 const express = require("express");
 const cors = require("cors");
@@ -29,6 +30,8 @@ try {
   app.use("/admin", AdminCreateCategory);
 
   app.use("/admin", AdminUpdateOrder);
+
+  app.use("/user", UserDetails);
 } catch (err) {
   console.log("error", err);
 }

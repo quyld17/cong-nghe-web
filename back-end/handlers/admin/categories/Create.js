@@ -37,7 +37,7 @@ r.put("/category", Router.json(), async (req, res) => {
       }
     } catch (err) {
       console.error("Error:", err);
-      res.status(500).json("Internal Server Error");
+      return res.status(500).json("Internal Server Error");
     }
   } else {
     return res.status(400).json("No input");

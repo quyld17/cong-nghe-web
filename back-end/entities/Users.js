@@ -60,33 +60,43 @@ async function verifyAdmin(user_id) {
   });
 }
 
-// async function getUserDetails(user_id) {
-//   const query = ` SELECT
-//                     user_id,
-//                     full_name,
-//                     mail,
-//                     image
-//                   FROM users
-//                   WHERE user_id = ?`;
+async function updateUserDetails(user, user_id) {
+  const query = ` UPDATE user
+                  SET 
+                    full_name = ?,
+                    date_of_birth = ?,
+                    phone_number = ?,
+                    gender = ?
+                  WHERE user_id = ?;`;
 
-//   return new Promise((resolve, reject) => {
-//     db.query(query, [user_id], (err, results) => {
-//       if (err) {
-//         reject(err);
-//       } else {
-//         if (results.length === 0) {
-//           resolve(null);
-//         } else {
-//           resolve(results[0]);
-//         }
-//       }
-//     });
-//   });
-// }
+  return new Promise((resolve, reject) => {
+    db.query(
+      query,
+      [
+        user.full_name,
+        user.date_of_birth,
+        user.phone_number,
+        user.gender,
+        user_id,
+      ],
+      (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          if (results.length === 0) {
+            resolve(null);
+          } else {
+            resolve(results.affectedRows > 0);
+          }
+        }
+      }
+    );
+  });
+}
 
 module.exports = {
   getUserIdByEmail,
   getRole,
   verifyAdmin,
-  // getUserDetails,
+  updateUserDetails,
 };
