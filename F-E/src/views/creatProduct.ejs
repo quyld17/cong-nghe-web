@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Website - Admin Page</title>
+    <link rel="stylesheet" href="/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <header>
+        <div class="topnav">
+            <a href="/" style="padding-top: 0px; padding-right: 20px;"><img src="https://img.upanh.tv/2023/11/25/logo.png" alt="logo.png" border="0"></a>
+            <a class="active" href="/products">Products</a>
+            <a href="/orders">Orders</a>
+            <a href="/customer">Customer</a>
+            <a href="/" onclick="let cf = confirm('Confirm Logout'); if (cf) localStorage.removeItem('jwt'); return cf" style="position: relative;  right: 0px;">Log out</a>
+          </div>
+    </header>
+    <div class="main-container products-container">
+        <div class="creat-product">
+            <div class="data-input">
+                <h3>New product</h3>
+                <label for="name_product">Product name</label>
+                <input type="text" id="iname">
+                <select name="category" id="category">
+                    <option selected value="">Select category</option>
+                    <% for (let i = 0; i < data.length; i++) { %>
+                        <option value="<%= data[i].category_id %>"><%= data[i].category_name %></option>
+                    <% } %>
+                </select>
+                <div style="display: flex; flex-direction: row;">
+                    <div style="display: flex; flex-direction: column;">
+                        <label for="price_product">Price</label>
+                        <input type="text" id="price" style="width: 325px;">
+                    </div>
+                    <div style="display: flex; flex-direction: column;  margin-left:78px">
+                        <label for="quantity_product" >Quantity</label>
+                        <input type="text" id="quantity" style="width: 325px;">
+                    </div>
+                </div>
+                <label for="img_product" >Image</label>
+                <input type="text" id="img">
+
+                <div class="imgsetup">
+                    <button type="button" id="view">View</button>
+                    <button type="button" id="add">Add</button>
+                </div>
+                <div>
+                    <button type="button" id="sub">Creat product</button>
+                    <button type="button" id="cancel">Cancel</button>
+                </div>
+            </div>
+            <div class="i-input">
+                <center><img src="" alt="" srcset="" id="imgsrc"></center>
+            </div>
+        </div>
+    </div>
+    
+</body>
+<script>
+    var jwt = localStorage.getItem("jwt")
+
+    const btnView = document.getElementById("view")
+    const btnAdd = document.getElementById("add")
+    const btnSub = document.getElementById("sub")
+    const btnCancel = document.getElementById("cancel")
+
+    var arrImage = []
+    var count = 0;
+
+    var iname = document.getElementById("iname")
+    var category = document.getElementById("category")
+    var price = document.getElementById("price")
+    var quantity = document.getElementById("quantity")
+    var img = document.getElementById("img")
+
+    var imgsrc = document.getElementById("imgsrc")
+
+    var data
+
+    btnView.addEventListener("click", async function(){
+        imgsrc.src = img.value
+    })
+
+    btnAdd.addEventListener("click", async function(){
+        if (img.value == "") {
+            alert("No photos added")
+        }
+        else {
+            var ck = 0;
+            for (let i = 0; i<arrImage.length; i++) {
+                if (arrImage[i] == img.value) {
+                    ck++;
+                    break;
+                }
+            }
+            if (ck == 0) {
+                arrImage[count] = img.value;
+                img.value = "";
+                count++;
+                alert("Added " + count + " photo")
+            }
+            else alert('This photo was added previously');
+        }
+    })
+
+    btnCancel.addEventListener("click", async function(){
+        if (iname.value != undefined || price.value != "" || quantity.value != "" || count != 0) {
+            if(confirm("You have unsaved changes that will be lost if you decide to continue. \n Are you sure you want to leave this page" )) {
+                window.location = "http://localhost:1234/products"
+            }
+        }
+        else window.location = "http://localhost:1234/products"
+    })
+
+    btnSub.addEventListener("click", async function(){
+        if (iname.value == undefined || price.value == "" || quantity.value == "" || category.value =="") {
+            alert('Please fill in all information')
+        }
+        else {
+            if(count == 0) {
+                alert('Please add at least 1 photo for the product')
+            }
+            else {
+                data = {
+                    category_id: Number(category.value),
+                    product_name: iname.value,
+                    price: Number(price.value),
+                    in_stock_quantity: Number(quantity.value),
+                    image_urls: arrImage
+                }
+                var check = await fetch("http://localhost:4000/admin/product", {
+                    method: "PUT",
+                    headers: {
+                        "authorization": jwt,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
+                var d = await check.json();
+                alert(d);
+                if (d == "Created product successfully") {
+                    window.location = "http://localhost:1234/products/newProduct"
+                }
+            }
+        }
+    })
+
+
+</script>
+</html>
