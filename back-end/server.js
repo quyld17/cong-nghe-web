@@ -12,6 +12,7 @@ const AdminUpdateOrder = require("./handlers/admin/orders/Update");
 const UserDetails = require("./handlers/user/Details");
 const UserAddProductToCart = require("./handlers/user/cart/AddProduct");
 const UserDeleteProductFromCart = require("./handlers/user/cart/DeleteProduct");
+const UserUpdateProductQuantity = require("./handlers/user/cart/UpdateQuantity");
 
 const express = require("express");
 const cors = require("cors");
@@ -36,6 +37,7 @@ try {
 
   app.use("/user/cart", UserAddProductToCart);
   app.use("/user/cart", UserDeleteProductFromCart);
+  app.use("/user/cart", UserUpdateProductQuantity);
 } catch (err) {
   console.log("error", err);
 }
