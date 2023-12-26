@@ -162,7 +162,6 @@ async function createProduct(product) {
             if (err) {
               return db.rollback(() => reject(err));
             }
-
             resolve(results);
           });
         }

@@ -18,20 +18,19 @@ r.post("/sign-up", express.json(), async (req, res) => {
       }
 
       const role = "user";
-
       const userSignUpResult = await signUp(
         account.email,
         account.password,
         role
       );
       if (userSignUpResult) {
-        res.status(200).json("User registered successfully");
+        return res.status(200).json("User registered successfully");
       } else {
-        res.status(500).json("Failed to register user");
+        return res.status(500).json("Failed to register user");
       }
     } catch (err) {
       console.error("Error:", err);
-      res.status(500).json("Internal Server Error");
+      return res.status(500).json("Internal Server Error");
     }
   }
 });

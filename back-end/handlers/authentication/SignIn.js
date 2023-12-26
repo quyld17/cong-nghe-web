@@ -30,7 +30,7 @@ r.post("/sign-in", express.json(), async (req, res) => {
       }
     } catch (err) {
       console.error("Error:", err);
-      res.status(500).json("Internal Server Error");
+      return res.status(500).json("Internal Server Error");
     }
   }
 });

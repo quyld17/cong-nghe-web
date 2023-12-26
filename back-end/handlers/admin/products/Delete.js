@@ -30,10 +30,10 @@ r.delete("/product/:id", async (req, res) => {
       }
     } catch (err) {
       console.error("Error:", err);
-      res.status(500).json("Internal Server Error");
+      return res.status(500).json("Internal Server Error");
     }
   } else {
-    res.status(400).json("Bad request");
+    return res.status(400).json("Bad request");
   }
 });
 
