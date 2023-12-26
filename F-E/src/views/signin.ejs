@@ -66,8 +66,13 @@
             body:JSON.stringify(data)
           })
           var d = await check.json();
-          localStorage.setItem("jwt", d.jwt);
-          window.location =  "http://localhost:1234/"
+          if (d.jwt) {
+            localStorage.setItem("jwt", d.jwt);
+            window.location =  "http://localhost:1234/"
+          }
+          else {
+            alert(d);
+          }
         }
       }
     )

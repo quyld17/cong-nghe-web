@@ -7,4 +7,10 @@ const db = mysql.createConnection({
   database: "cn-web",
 });
 
+// const db = mysql.createConnection({
+//   host: "localhost",
+//   user: "root",
+//   database: "cnw",
+// });
+
 module.exports = db;

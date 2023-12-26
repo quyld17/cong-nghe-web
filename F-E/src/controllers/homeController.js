@@ -10,67 +10,81 @@ let getCheck = async (req, res) => {
     return res.render('checkrole.ejs')  
 }
 
-let postCheck = async (req, res) => {
+let checkRole = async (req, res) => {
     var token = req.params.token
     if (token == 'undefined') {
         return res.redirect('/sign-in')
     }
     else {
         const decoded = jwtDecode(token);
-    if (decoded.role == "admin") {
-        const [rows, field] = await pool.execute ('select * from order_products');
-        const [rows2, field2] = await pool.execute('select * from `order`');
-        const [rank, field3] = await pool.execute('select full_name as fN, total_expenditure as tE from user where role = "user"');
+        if (decoded.role == "admin") {
+            const [rows, field] = await pool.execute ('select * from order_products');
+            const [rows2, field2] = await pool.execute('select * from `order`');
+            const [rank, field3] = await pool.execute('select full_name as fN, total_expenditure as tE from user where role = "user"');
 
-        let totalOrders = rows2.length;
-        let totalProduct = 0;
-        let totalRevenue = 0;
+            let totalOrders = rows2.length;
+            let totalProduct = 0;
+            let totalRevenue = 0;
 
-        let totalOrdersS = 0; //Tổng đơn thành công
-        let totalProductS = 0; 
+            let totalOrdersS = 0; //Tổng đơn thành công
+            let totalProductS = 0; 
 
-        
+            
 
-        // Tính tỉ lệ đơn thành công, tổng doanh thu
-        for (let i = 0; i<rows2.length; i++) {    
-            if (rows2[i].status == 'Complete') {
-                totalOrdersS ++;
-                totalRevenue += Number(rows2[i].total_price);
-                for (let j = 0; j < rows.length; j++) {
-                   if (rows[j].order_id == rows2[i].order_id) {
-                        totalProductS += rows[j].quantity;
-                   }
+            // Tính tỉ lệ đơn thành công, tổng doanh thu
+            for (let i = 0; i<rows2.length; i++) {    
+                if (rows2[i].status == 'Complete') {
+                    totalOrdersS ++;
+                    totalRevenue += Number(rows2[i].total_price);
+                    for (let j = 0; j < rows.length; j++) {
+                    if (rows[j].order_id == rows2[i].order_id) {
+                            totalProductS += rows[j].quantity;
+                    }
+                    }
                 }
             }
-        }
-        let successOrderRate = totalOrdersS/totalOrders * 100;
+            let successOrderRate = totalOrdersS/totalOrders * 100;
 
 
-        //Xếp hạng người dùng
-        let tmp = {};
-        for (let i = 0; i<rank.length - 1; i++) {
-            for (let j = i+1; j < rank.length; j++) {
-                if (rank[i].tE < rank[j].tE) {
-                    tmp = rank[i];
-                    rank[i] = rank[j];
-                    rank[j] = tmp;
+            //Xếp hạng người dùng
+            let tmp = {};
+            for (let i = 0; i<rank.length - 1; i++) {
+                for (let j = i+1; j < rank.length; j++) {
+                    if (rank[i].tE < rank[j].tE) {
+                        tmp = rank[i];
+                        rank[i] = rank[j];
+                        rank[j] = tmp;
+                    }
                 }
             }
+
+            //Đổi về triệu vnđ
+            totalRevenue /= 1000000;
+
+            // set độ dài của bảng xếp hạng, chỉ hiển thị tối đa top 10;
+            let rankL = Math.min(10, rank.length);
+            
+            let data = {totalOrders, totalProductS, totalRevenue, successOrderRate}
+
+            return res.render('admin/adminPage.ejs', { data: data, rank: rank, rankL: rankL});
         }
-
-        //Đổi về triệu vnđ
-        totalRevenue /= 1000000;
-
-        // set độ dài của bảng xếp hạng, chỉ hiển thị tối đa top 10;
-        let rankL = Math.min(10, rank.length);
-        
-        let data = {totalOrders, totalProductS, totalRevenue, successOrderRate}
-
-        return res.render('adminPage.ejs', { data: data, rank: rank, rankL: rankL});
-    }
-    else {
-        return res.send('user')
-    }
+        else {
+            var data = []
+            const [rows, field] = await pool.execute ('select product_id, product_name, price from product');
+            data = rows;
+            const [rows2, field2] = await pool.execute ('select * from category');
+            for (let i = 0; i<data.length; i++) {
+                const [rows3, field3] = await pool.execute('select image_url from product_image where product_id = ? and is_thumbnail = 1', [rows[i].product_id])
+                data[i].image_url = rows3[0].image_url;
+                const [rows4, field4] = await pool.execute('SELECT op.product_id, o.order_id, SUM(op.quantity) AS total_quantity FROM `order` o JOIN order_products op ON o.order_id = op.order_id WHERE o.status = ? and product_id = ? GROUP BY o.order_id', ["Complete", rows[i].product_id]);
+                if (rows4[0]) data[i].sold = Number(rows4[0].total_quantity);
+                else data[i].sold = 0;
+            }
+            return res.render('user/user.ejs', {
+                data: data,
+                category: rows2
+            });
+        }
     }
     
     
@@ -79,7 +93,7 @@ let postCheck = async (req, res) => {
 let getProductsAdmin = async (req, res) => {
     const [rows, field] = await pool.execute ('select * from product');
     const [rows2, field2] = await pool.execute ('select * from category');
-    return res.render('productsAdmin.ejs', {
+    return res.render('admin/productsAdmin.ejs', {
         data: rows,
         category: rows2
     });
@@ -92,7 +106,7 @@ let getOrdersAdmin = async (req, res) => {
         
         rows[i].user_name = rows2[0].full_name
     }
-    return res.render('orderAdmin.ejs', {
+    return res.render('admin/orderAdmin.ejs', {
         data: rows
     });
 }
@@ -100,7 +114,7 @@ let getOrdersAdmin = async (req, res) => {
 let getCustomerAdmin = async (req, res) => {
     var role = "user"
     const [rows, field] = await pool.execute ('select * from `user` where role = ?', [role]);
-    return res.render('customerAdmin.ejs', {
+    return res.render('admin/customerAdmin.ejs', {
         data: rows
     });
 }
@@ -115,14 +129,14 @@ let getSignInPage = async (req, res) => {
 
 let creatProduct = async (req, res) => {
     const [rows, field] = await pool.execute('select * from category')
-    return res.render('creatProduct.ejs', { data: rows  });
+    return res.render('admin/creatProduct.ejs', { data: rows  });
 }
 
 let getProductSearchCategory = async (req, res) => {
     const id = req.params.id
     const [rows, field] = await pool.execute ('select * from product where category_id = ?', [id]);
     const [rows2, field2] = await pool.execute ('select * from category');
-    return res.render('productsAdmin.ejs', {
+    return res.render('admin/productsAdmin.ejs', {
         data: rows,
         category: rows2
     });
@@ -135,7 +149,7 @@ let getDetailProductPage = async (req, res) => {
     const [rows2, field2] = await pool.execute('select category_name from category where category_id = ?', [rows[0].category_id]) 
     rows[0].category_name = rows2[0].category_name
     const [rows3, field3] = await pool.execute('select * from product_image where product_id = ?', [id])
-    return res.render('detailProduct.ejs', {
+    return res.render('admin/detailProduct.ejs', {
         data: rows[0],
         img: rows3
     })
@@ -152,14 +166,14 @@ let getDetailOrder = async (req, res) => {
     const [rows4, field4] = await pool.execute('select * from address where user_id = ? and is_default = ?', [user_id, 1])
     rows[0].user_name = rows3[0].full_name;
     rows[0].phone_number = rows3[0].phone_number;
-    return res.render('detailOrder.ejs', {   data: rows[0], products: rows2, address: rows4[0]  })
+    return res.render('admin/detailOrder.ejs', {   data: rows[0], products: rows2, address: rows4[0]  })
 }
 
 let getDetailCustomer = async (req, res) => {
     const id = req.params.id;
     const [rows, field] = await pool.execute('select * from user where user_id = ?', [id])
     const [rows2, field2] = await pool.execute('select * from address where user_id = ?', [id])
-    return res.render('detailCustomer.ejs', {   data: rows[0], address: rows2  })
+    return res.render('admin/detailCustomer.ejs', {   data: rows[0], address: rows2  })
 }
 
 let searchOrders = async (req, res) => {
@@ -176,7 +190,7 @@ let searchOrders = async (req, res) => {
             cnt++;
         }
     }
-    return res.render('orderAdmin.ejs', {
+    return res.render('admin/orderAdmin.ejs', {
         data: data
     });
 }
@@ -193,7 +207,7 @@ let searchProducts = async (req, res) => {
         }
     }
     const [rows2, field2] = await pool.execute ('select * from category');
-    return res.render('productsAdmin.ejs', {
+    return res.render('admin/productsAdmin.ejs', {
         data: data,
         category: rows2
     });
@@ -212,7 +226,7 @@ let searchCustomers = async (req, res) => {
             cnt ++;
         }
     }
-    return res.render('customerAdmin.ejs', {
+    return res.render('admin/customerAdmin.ejs', {
         data: data
     });
 }
@@ -225,16 +239,57 @@ let orderOfCustomer = async (req, res) => {
         
         rows[i].user_name = rows2[0].full_name
     }
-    return res.render('orderAdmin.ejs', {
+    return res.render('admin/orderAdmin.ejs', {
         data: rows
     });
 
 }
 
+
+
+
+
+let deatailProductUser = async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        // Sử dụng async/await để đảm bảo xử lý đồng bộ
+        const [rows, fields] = await pool.execute('SELECT p.*, c.category_name FROM product AS p JOIN category AS c ON p.category_id = c.category_id WHERE p.product_id = ?', [id]);
+    
+        if (rows.length === 0) {
+            return res.status(404).send('Không tìm thấy sản phẩm'); // Xử lý trường hợp không tìm thấy sản phẩm
+        }
+    
+        const data = rows[0];
+    
+        // Khởi tạo thuộc tính sold nếu chưa tồn tại
+        data.sold = 0;
+    
+        // Lấy danh sách hình ảnh sản phẩm
+        const [rows3, fields3] = await pool.execute('SELECT * FROM product_image WHERE product_id = ?', [id]);
+    
+        // Lấy tổng số lượng đã bán
+        const [rows4, fields4] = await pool.execute('SELECT op.product_id, o.order_id, SUM(op.quantity) AS total_quantity FROM `order` o JOIN order_products op ON o.order_id = op.order_id WHERE o.status = ? AND product_id = ? GROUP BY o.order_id', ["Complete", id]);
+    
+        if (rows4.length > 0) {
+            data.sold = Number(rows4[0].total_quantity);
+        }
+    
+        // Trả về dữ liệu cho trang web
+        return res.render('user/detailProduct.ejs', {
+            data: data,
+            arrImage: rows3
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        return res.status(500).send('Error'); // Xử lý trường hợp lỗi truy vấn
+    }
+}
+
 module.exports = {
     getCheck, getProductsAdmin, getSignUpPage, creatProduct,
-    getSignInPage, getOrdersAdmin, getCustomerAdmin, postCheck,
+    getSignInPage, getOrdersAdmin, getCustomerAdmin, checkRole,
     checkData, getDetailProductPage, getProductSearchCategory, getDetailOrder,
     getDetailCustomer, searchOrders, searchProducts, searchCustomers,
-    orderOfCustomer
+    orderOfCustomer, deatailProductUser
 }
