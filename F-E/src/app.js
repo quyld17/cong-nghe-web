@@ -19,6 +19,12 @@ app.post('/checkdata', homeController.checkData);
 
 app.get('/', homeController.getCheck);
 
+app.get('/home', homeController.getHomePage);
+
+app.get('/filter/category/:categoryId', homeController.getFilterPage);
+
+app.get('/search/products/:key', homeController.searchProductsPage);
+
 app.get('/check/:token', homeController.checkRole);
 
 app.get('/products', homeController.getProductsAdmin);
@@ -51,7 +57,13 @@ app.get('/customer/:id/orders', homeController.orderOfCustomer);
 
 
 
-app.get('/user/product/:id', homeController.deatailProductUser);
+app.get('/user/:userId/product/:productId', homeController.detailProductUser);
+
+app.get('/user/:userId/search/products/:key', homeController.searchUserProducts);
+
+app.get('/user/:userId/profile', homeController.getUserProfile);
+
+app.get('/user/:userId/cart', homeController.getCartUserPage);
 
 app.listen(port, () => {
     console.log(`Website running on port ${port}`);

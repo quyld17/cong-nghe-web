@@ -13,10 +13,7 @@
     <header>
         <div class="topnav">
             <a href="/" style="padding-top: 0px; padding-right: 20px;"><img src="/image/logo.png" alt="logo.png" border="0"></a>
-            <a href="/user/<%= userId%>/cart"><i class="fa-solid fa-cart-shopping"></i> Cart</a>
-            <a  href="/user/<%= userId%>/orders"><i class="fa-solid fa-clipboard-list"></i> Orders</a>
-            <a href="/user/<%= userId%>/profile"><i class="fa-solid fa-user"></i> Profile</a>
-            <a href="/" onclick="let cf = confirm('Confirm Logout'); if (cf) localStorage.removeItem('jwt'); return cf" class="logout"><i class="fa-solid fa-right-from-bracket"></i> Log out</a>
+            <a href="/sign-in" class="logout"><i class="fa-solid fa-right-to-bracket"></i> Sign in</a>
           </div>
     </header>
     <div class="main-container">
@@ -25,7 +22,7 @@
                 <h3>Categories</h3>
                 <a href="/">View All</a>
                 <% for (let i = 0; i < category.length; i++) { %>
-                    <a href="/user/<%= userId%>/category/<%= category[i].category_id %>"><%= category[i].category_name %></a>
+                    <a href="/filter/category/<%= category[i].category_id %>"><%= category[i].category_name %></a>
                 <% } %>
             </div>
             <div>
@@ -35,7 +32,7 @@
                 </div>
                 <div class="products-container">
                     <% for (let i = 0; i < data.length; i++) { %>                        
-                            <a href="/user/<%= userId%>/product/<%= data[i].product_id%>" class="product">
+                            <a href="#" onclick="alert('Sign in to view product details')" class="product">
                                 <img src="<%= data[i].image_url%>" alt="" srcset="">
                                 <h4><%= data[i].product_name%></h4>
                                 <div class="price-container">
@@ -60,7 +57,7 @@
             alert('Enter name or id in the search box')
         }
         else {
-            window.location = "http://localhost:1234/user/<%= userId%>/search/products/" + search_input.value
+            window.location = "http://localhost:1234/search/products/" + search_input.value
         }
     })
 </script>

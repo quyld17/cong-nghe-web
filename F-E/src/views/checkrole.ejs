@@ -11,7 +11,7 @@
 <script>
     var token = localStorage.getItem("jwt")
     if (token == null || token.value == "") {
-        window.location = "http://localhost:1234/sign-in";
+        window.location = "http://localhost:1234/home";
     } 
     else {
         var data = {    token: token    }

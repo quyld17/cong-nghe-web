@@ -30,7 +30,7 @@
                         <div class="s-int"><%= data.totalOrders%></div>
                         <div class="s-per"><%= data.successOrderRate%>% <a>Success</a></div>
                     </div>
-                    <div class="product">
+                    <div class="products">
                         <div class="s-name">Products</div>
                         <div class="s-int"><%= data.totalProductS%></div>
                     </div>
@@ -58,31 +58,31 @@
                     <tbody>
                         <% for (let i = 0; i < rankL; i++) { %> 
                             <% if (i == 0) { %>
-                                <tr>
-                                    <td class="gold"><%= i+1 %></td>
+                                <tr class="gold">
+                                    <td ><%= i+1 %></td>
                                     <td width="180px"><%= rank[i].fN %></td>
-                                    <td><%= rank[i].tE %></td>
+                                    <td><%= String(rank[i].tE).replace(/\B(?=(\d{3})+(?!\d))/g, '.') %></td>
                                 </tr>
                             <% } %>
                             <% if (i == 1) { %>
-                                <tr>
-                                    <td class="silver"><%= i+1 %></td>
+                                <tr class="silver">
+                                    <td><%= i+1 %></td>
                                     <td width="180px"><%= rank[i].fN %></td>
-                                    <td><%= rank[i].tE %></td>
+                                    <td><%= String(rank[i].tE).replace(/\B(?=(\d{3})+(?!\d))/g, '.') %></td>
                                 </tr>
                             <% } %>
                             <% if (i == 2) { %>
-                                <tr>
-                                    <td class="copper"><%= i+1 %></td>
+                                <tr class="copper">
+                                    <td><%= i+1 %></td>
                                     <td width="180px"><%= rank[i].fN %></td>
-                                    <td><%= rank[i].tE %></td>
+                                    <td><%= String(rank[i].tE).replace(/\B(?=(\d{3})+(?!\d))/g, '.') %></td>
                                 </tr>
                             <% } %>
                             <% if (i > 2) { %>
                                 <tr>
                                     <td><%= i+1 %></td>
                                     <td width="180px"><%= rank[i].fN %></td>
-                                    <td><%= rank[i].tE %></td>
+                                    <td><%= String(rank[i].tE).replace(/\B(?=(\d{3})+(?!\d))/g, '.') %></td>
                                 </tr>
                             <% } %>
                             
