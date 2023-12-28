@@ -176,7 +176,46 @@ Response:
 
 *******USER*******
 
-I. Cart
+I. Infos
+1. Update Infos
+Path: /user/details
+Method: PATCH
+Request:
+    Headers:
+        {
+            authorization: jwt
+        }
+    Body: 
+        {
+            full_name:      string,
+            date_of_birth:  string,
+            phone_number:   string,
+            gender:         int
+        }
+Response:
+    {
+        "Updated user details successfully"
+    }
+
+2. Change password
+Path: /user/password
+Method: PATCH
+Request:
+    Headers:
+        {
+            authorization: jwt
+        }
+    Body: 
+        {
+            password:      string,
+            new_password:  string
+        }
+Response:
+    {
+        "Change password successfully"
+    }
+
+II. Cart
 1. Add product to cart
 Path: /user/cart/
 Method: PUT

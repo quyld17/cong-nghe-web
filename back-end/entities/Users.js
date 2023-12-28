@@ -94,9 +94,51 @@ async function updateUserDetails(user, user_id) {
   });
 }
 
+async function checkPassword(user_id, password) {
+  const query = ` SELECT COUNT(*) AS count 
+                  FROM user
+                  WHERE 
+                    user_id = ? AND
+                    password = ?;`;
+
+  return new Promise((resolve, reject) => {
+    db.query(query, [user_id, password], (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(results[0].count > 0);
+      }
+    });
+  });
+}
+
+async function changePassword(user_id, password, new_password) {
+  const query = ` UPDATE user
+                  SET password = ?
+                  WHERE 
+                    user_id = ? AND
+                    password = ?;`;
+
+  return new Promise((resolve, reject) => {
+    db.query(query, [new_password, user_id, password], (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        if (results.length === 0) {
+          resolve(null);
+        } else {
+          resolve(results.affectedRows > 0);
+        }
+      }
+    });
+  });
+}
+
 module.exports = {
   getUserIdByEmail,
   getRole,
   verifyAdmin,
   updateUserDetails,
+  checkPassword,
+  changePassword,
 };

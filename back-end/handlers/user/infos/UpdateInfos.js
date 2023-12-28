@@ -1,10 +1,10 @@
-const { tokenVerification } = require("../../middlewares/JWT");
-const { updateUserDetails } = require("../../entities/Users");
+const { tokenVerification } = require("../../../middlewares/JWT");
+const { updateUserDetails } = require("../../../entities/Users");
 
 const Router = require("express");
 const r = Router();
 
-r.post("/details", Router.json(), async (req, res) => {
+r.patch("/details", Router.json(), async (req, res) => {
   const token = req.headers.authorization;
   if (!token) {
     return res.status(400).json("Token not found");
@@ -31,7 +31,7 @@ r.post("/details", Router.json(), async (req, res) => {
       } else {
         return res.status(500).json("Failed to update user details");
       }
-    } catch (error) {
+    } catch (err) {
       console.error("Error:", err);
       return res.status(500).json("Internal Server Error");
     }
