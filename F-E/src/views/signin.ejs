@@ -31,22 +31,26 @@
   </style>
   <body>
     <div class="signup">
-      <h1 class="signup-heading">Sign in</h1>
-        <label for="email" class="signup-label">Email</label>
-        <input type="text" name="email" id="email" class="signup-input" placeholder="">
-        <label for="password" class="signup-label">Password</label>
-        <input type="password" name="password" id="password" class="signup-input" placeholder="">
-        <button type="submit" class="signup-submit" id="signup-btn">Sign in</button>
-      <p class="signup-already">
-        <span>Don't have an account.  </span>
-        <a href="/sign-up" class="signup-link">Create account</a>
-      </p>
+      <form action="" id="signin-form">
+        <h1 class="signup-heading">Sign in</h1>
+          <label for="email" class="signup-label">Email</label>
+          <input type="text" name="email" id="email" class="signup-input" placeholder="">
+          <label for="password" class="signup-label">Password</label>
+          <input type="password" name="password" id="password" class="signup-input" placeholder="">
+          <button type="submit" class="signup-submit" id="signup-btn">Sign in</button>
+        <p class="signup-already">
+          <span>Don't have an account.  </span>
+          <a href="/sign-up" class="signup-link">Create account</a>
+        </p>
+      </form>
     </div>
   </body>
   <script>
 
 
     var signup = document.getElementById("signup-btn");
+    var signinForm = document.getElementById("signin-form");
+
     var email = document.getElementById("email");
     var password = document.getElementById("password");
     var data;
@@ -76,5 +80,12 @@
         }
       }
     )
+  
+    signinForm.addEventListener("keypress", async function(event) {
+      if (event.key === 'Enter') {
+        signup.click();
+      }
+    })
+
   </script>
 </html>

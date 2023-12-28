@@ -81,6 +81,7 @@ let checkRole = async (req, res) => {
                 else data[i].sold = 0;
             }
             return res.render('user/user.ejs', {
+                userId: decoded.user_id,
                 data: data,
                 category: rows2
             });
@@ -88,6 +89,59 @@ let checkRole = async (req, res) => {
     }
     
     
+}
+
+let getHomePage = async (req, res) => {
+    var data = []
+    const [rows, field] = await pool.execute ('select product_id, product_name, price from product');
+    data = rows;
+    const [rows2, field2] = await pool.execute ('select * from category');
+    for (let i = 0; i<data.length; i++) {
+        const [rows3, field3] = await pool.execute('select image_url from product_image where product_id = ? and is_thumbnail = 1', [rows[i].product_id])
+        data[i].image_url = rows3[0].image_url;
+        const [rows4, field4] = await pool.execute('SELECT op.product_id, o.order_id, SUM(op.quantity) AS total_quantity FROM `order` o JOIN order_products op ON o.order_id = op.order_id WHERE o.status = ? and product_id = ? GROUP BY o.order_id', ["Complete", rows[i].product_id]);
+        if (rows4[0]) data[i].sold = Number(rows4[0].total_quantity);
+        else data[i].sold = 0;
+    }
+    return res.render('index.ejs', {    category: rows2, data: data     })
+}
+
+let getFilterPage = async (req, res) => {
+    const categoryId = req.params.categoryId
+    var data = []
+    const [rows, field] = await pool.execute ('select product_id, product_name, price from product where category_id = ?', [categoryId]);
+    data = rows;
+    const [rows2, field2] = await pool.execute ('select * from category');
+    for (let i = 0; i<data.length; i++) {
+        const [rows3, field3] = await pool.execute('select image_url from product_image where product_id = ? and is_thumbnail = 1', [rows[i].product_id])
+        data[i].image_url = rows3[0].image_url;
+        const [rows4, field4] = await pool.execute('SELECT op.product_id, o.order_id, SUM(op.quantity) AS total_quantity FROM `order` o JOIN order_products op ON o.order_id = op.order_id WHERE o.status = ? and product_id = ? GROUP BY o.order_id', ["Complete", rows[i].product_id]);
+        if (rows4[0]) data[i].sold = Number(rows4[0].total_quantity);
+        else data[i].sold = 0;
+    }
+    return res.render('index.ejs', {    category: rows2, data: data     })
+}
+
+let searchProductsPage = async(req, res) => {
+    const key = req.params.key
+    var data = []
+    const [rows, field] = await pool.execute ('select product_id, product_name, price from product');
+    var cnt = 0;
+    for (let i = 0; i < rows.length; i++){
+        if(String(rows[i].product_id).includes(key) || rows[i].product_name.includes(key)) {
+            data[cnt] = rows[i];
+            cnt ++;
+        }
+    }
+    const [rows2, field2] = await pool.execute ('select * from category');
+    for (let i = 0; i<data.length; i++) {
+        const [rows3, field3] = await pool.execute('select image_url from product_image where product_id = ? and is_thumbnail = 1', [rows[i].product_id])
+        data[i].image_url = rows3[0].image_url;
+        const [rows4, field4] = await pool.execute('SELECT op.product_id, o.order_id, SUM(op.quantity) AS total_quantity FROM `order` o JOIN order_products op ON o.order_id = op.order_id WHERE o.status = ? and product_id = ? GROUP BY o.order_id', ["Complete", rows[i].product_id]);
+        if (rows4[0]) data[i].sold = Number(rows4[0].total_quantity);
+        else data[i].sold = 0;
+    }
+    return res.render('index.ejs', {    category: rows2, data: data     })
 }
 
 let getProductsAdmin = async (req, res) => {
@@ -249,12 +303,13 @@ let orderOfCustomer = async (req, res) => {
 
 
 
-let deatailProductUser = async (req, res) => {
-    const id = req.params.id;
+let detailProductUser = async (req, res) => {
+    const userId = req.params.userId
+    const productId = req.params.productId;
 
     try {
         // Sử dụng async/await để đảm bảo xử lý đồng bộ
-        const [rows, fields] = await pool.execute('SELECT p.*, c.category_name FROM product AS p JOIN category AS c ON p.category_id = c.category_id WHERE p.product_id = ?', [id]);
+        const [rows, fields] = await pool.execute('SELECT p.*, c.category_name FROM product AS p JOIN category AS c ON p.category_id = c.category_id WHERE p.product_id = ?', [productId]);
     
         if (rows.length === 0) {
             return res.status(404).send('Không tìm thấy sản phẩm'); // Xử lý trường hợp không tìm thấy sản phẩm
@@ -266,10 +321,10 @@ let deatailProductUser = async (req, res) => {
         data.sold = 0;
     
         // Lấy danh sách hình ảnh sản phẩm
-        const [rows3, fields3] = await pool.execute('SELECT * FROM product_image WHERE product_id = ?', [id]);
+        const [rows3, fields3] = await pool.execute('SELECT * FROM product_image WHERE product_id = ?', [productId]);
     
         // Lấy tổng số lượng đã bán
-        const [rows4, fields4] = await pool.execute('SELECT op.product_id, o.order_id, SUM(op.quantity) AS total_quantity FROM `order` o JOIN order_products op ON o.order_id = op.order_id WHERE o.status = ? AND product_id = ? GROUP BY o.order_id', ["Complete", id]);
+        const [rows4, fields4] = await pool.execute('SELECT op.product_id, o.order_id, SUM(op.quantity) AS total_quantity FROM `order` o JOIN order_products op ON o.order_id = op.order_id WHERE o.status = ? AND product_id = ? GROUP BY o.order_id', ["Complete", productId]);
     
         if (rows4.length > 0) {
             data.sold = Number(rows4[0].total_quantity);
@@ -277,6 +332,7 @@ let deatailProductUser = async (req, res) => {
     
         // Trả về dữ liệu cho trang web
         return res.render('user/detailProduct.ejs', {
+            userId: userId,
             data: data,
             arrImage: rows3
         });
@@ -286,10 +342,76 @@ let deatailProductUser = async (req, res) => {
     }
 }
 
+let searchUserProducts = async (req, res) => {
+    const userId = req.params.userId 
+    const key = req.params.key
+    var data = []
+    try {
+        const [rows, field] = await pool.execute ('select product_id, product_name, price from product');
+        var cnt = 0;
+        for (let i = 0; i < rows.length; i++){
+            if(String(rows[i].product_id).includes(key) || rows[i].product_name.includes(key)) {
+                data[cnt] = rows[i];
+                cnt ++;
+            }
+        }
+        const [rows2, field2] = await pool.execute ('select * from category');
+        for (let i = 0; i<data.length; i++) {
+            const [rows3, field3] = await pool.execute('select image_url from product_image where product_id = ? and is_thumbnail = 1', [rows[i].product_id])
+            data[i].image_url = rows3[0].image_url;
+            const [rows4, field4] = await pool.execute('SELECT op.product_id, o.order_id, SUM(op.quantity) AS total_quantity FROM `order` o JOIN order_products op ON o.order_id = op.order_id WHERE o.status = ? and product_id = ? GROUP BY o.order_id', ["Complete", rows[i].product_id]);
+            if (rows4[0]) data[i].sold = Number(rows4[0].total_quantity);
+            else data[i].sold = 0;
+        }
+        return res.render('user/user.ejs', {
+            userId: userId,
+            data: data,
+            category: rows2
+        });
+    } catch(error) {
+        console.error('Error:', error);
+        return res.status(500).send('Error');
+    }
+}
+
+let getUserProfile = async (req, res) => {
+    function hideString(str) {
+        return '*'.repeat(str.length);
+    }
+    const userId = req.params.userId;
+    try {
+        const [rows, fields] = await pool.execute('select * from user where user_id = ?', [userId]);
+        rows[0].date_of_birth = (new Date(rows[0].date_of_birth)).toDateString();
+        rows[0].password = hideString(rows[0].password);
+        const [rows2, field2] = await pool.execute('select * from address where user_id = ?', [userId])
+        return res.render('user/profile.ejs', {     userId: userId, data: rows[0], address: rows2   })
+    } catch(error) {
+        console.error('Error:', error);
+        return res.status(500).send('Error');
+    }
+    
+}
+
+let getCartUserPage = async (req, res) => {
+    const userId = req.params.userId;
+    try {
+        const [rows, field] = await pool.execute('SELECT cp.* , pi.image_url,p.product_name, p.price, c.category_name FROM cart_product AS cp JOIN product AS p ON cp.product_id = p.product_id JOIN product_image AS pi ON cp.product_id = pi.product_id AND pi.is_thumbnail = 1 JOIN category AS c ON p.category_id = c.category_id');
+        return res.render('user/cart.ejs', {
+            userId: userId,
+            data: rows
+        })
+    } catch(error) {
+        console.error('Error:', error);
+        return res.status(500).send('Error');
+    }
+    
+}
+
 module.exports = {
     getCheck, getProductsAdmin, getSignUpPage, creatProduct,
     getSignInPage, getOrdersAdmin, getCustomerAdmin, checkRole,
     checkData, getDetailProductPage, getProductSearchCategory, getDetailOrder,
     getDetailCustomer, searchOrders, searchProducts, searchCustomers,
-    orderOfCustomer, deatailProductUser
+    orderOfCustomer, detailProductUser, getUserProfile, getHomePage,
+    getFilterPage, searchProductsPage, searchUserProducts, getCartUserPage,
 }
