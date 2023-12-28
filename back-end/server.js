@@ -10,10 +10,11 @@ const AdminCreateCategory = require("./handlers/admin/categories/Create");
 const AdminUpdateOrder = require("./handlers/admin/orders/Update");
 
 const UserDetails = require("./handlers/user/infos/UpdateInfos");
+const UserChangePassword = require("./handlers/user/infos/ChangePassword");
+const UserCreateAddress = require("./handlers/user/infos/Address");
 const UserAddProductToCart = require("./handlers/user/cart/AddProduct");
 const UserDeleteProductFromCart = require("./handlers/user/cart/DeleteProduct");
 const UserUpdateProductQuantity = require("./handlers/user/cart/UpdateQuantity");
-const UserChangePassword = require("./handlers/user/infos/ChangePassword");
 
 const express = require("express");
 const cors = require("cors");
@@ -36,6 +37,7 @@ try {
 
   app.use("/user", UserDetails);
   app.use("/user", UserChangePassword);
+  app.use("/user", UserCreateAddress);
 
   app.use("/user/cart", UserAddProductToCart);
   app.use("/user/cart", UserDeleteProductFromCart);

@@ -134,6 +134,104 @@ async function changePassword(user_id, password, new_password) {
   });
 }
 
+async function createAddress(user_id, address, is_default) {
+  const query = ` INSERT INTO address (
+                    city,
+                    district,
+                    ward,
+                    street,
+                    house_number,
+                    user_id,
+                    is_default)
+                  VALUES (?, ?, ?, ?, ?, ?, ?);`;
+
+  return new Promise((resolve, reject) => {
+    db.query(
+      query,
+      [
+        address.city,
+        address.district,
+        address.ward,
+        address.street,
+        address.house_number,
+        user_id,
+        is_default,
+      ],
+      (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          if (results.length === 0) {
+            resolve(null);
+          } else {
+            resolve(results.affectedRows > 0);
+          }
+        }
+      }
+    );
+  });
+}
+
+async function checkExistedAddress(user_id) {
+  const query = ` SELECT COUNT(*) AS count 
+                  FROM address
+                  WHERE user_id = ?;`;
+
+  return new Promise((resolve, reject) => {
+    db.query(query, [user_id], (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(results[0].count > 0);
+      }
+    });
+  });
+}
+
+async function deleteAddress(user_id, address_id) {
+  const query = ` DELETE FROM address
+                  WHERE 
+                    user_id = ? AND
+                    address_id = ?;`;
+
+  return new Promise((resolve, reject) => {
+    db.query(query, [user_id, address_id], (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        if (results.length === 0) {
+          resolve(null);
+        } else {
+          resolve(results.affectedRows > 0);
+        }
+      }
+    });
+  });
+}
+
+async function checkDefaultAddress(user_id, address_id) {
+  const query = ` SELECT COUNT(*) AS count 
+                  FROM address
+                  WHERE 
+                    user_id = ? AND
+                    address_id = ? AND 
+                    is_default = ?;`;
+
+  return new Promise((resolve, reject) => {
+    db.query(query, [user_id, address_id, 1], (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        if (results.length === 0) {
+          resolve(null);
+        } else {
+          resolve(results[0].count > 0);
+        }
+      }
+    });
+  });
+}
+
 module.exports = {
   getUserIdByEmail,
   getRole,
@@ -141,4 +239,8 @@ module.exports = {
   updateUserDetails,
   checkPassword,
   changePassword,
+  createAddress,
+  checkExistedAddress,
+  deleteAddress,
+  checkDefaultAddress,
 };

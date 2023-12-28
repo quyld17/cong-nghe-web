@@ -215,6 +215,44 @@ Response:
         "Change password successfully"
     }
 
+3. Create address
+Path: /user/address
+Method: PUT
+Request:
+    Headers:
+        {
+            authorization: jwt
+        }
+    Body: 
+        {
+            city:           string,
+            district:       string,
+            ward:           string,
+            street:         string,
+            house_number:   string
+        }
+Response:
+    {
+        "Create address successfully"
+    } 
+
+4. Delete address
+Path: /user/address/:id
+Method: DELETE
+Request:
+    Headers:
+        {
+            authorization: jwt
+        }
+    Params:
+        {
+            id:     int
+        }
+Response:
+    {
+        "Delete address successfully"
+    } 
+
 II. Cart
 1. Add product to cart
 Path: /user/cart/
