@@ -1,11 +1,14 @@
 const db = require("../services/SetUpMySQL");
 
 async function addProductToCart(user_id, product) {
-  const query = ` INSERT INTO cart_product (
-                    user_id, 
-                    product_id,
-                    quantity)
-                  VALUES (?, ?, ?);`;
+  const query = `INSERT INTO cart_product (
+                  user_id, 
+                  product_id,
+                  quantity
+                )
+                VALUES (?, ?, ?)
+                ON DUPLICATE KEY UPDATE
+                  quantity = quantity + VALUES(quantity);`;
 
   return new Promise((resolve, reject) => {
     db.query(
@@ -15,11 +18,7 @@ async function addProductToCart(user_id, product) {
         if (err) {
           reject(err);
         } else {
-          if (results.length === 0) {
-            resolve(null);
-          } else {
-            resolve(results.affectedRows > 0);
-          }
+          resolve(results.affectedRows > 0);
         }
       }
     );
