@@ -403,6 +403,59 @@ let getCartUserPage = async (req, res) => {
     } catch(error) {
         console.error('Error:', error);
         return res.status(500).send('Error');
+    }    
+}
+
+let creatOrder = async (req, res) => {
+    const userId = req.params.userId;
+    const orderArrayString = req.query.orderArray;
+    
+    let data = []
+    let totalOrderAmount = 0;
+    try {
+        if (orderArrayString) {
+            const orderArray = JSON.parse(decodeURIComponent(orderArrayString));
+            for (let i = 0; i < orderArray.length; i++) {
+                const [rows, field] = await pool.execute('select p.product_id, p.product_name, p.price, pi.image_url from product as p, product_image as pi where p.product_id = ? and pi.product_id = ? and pi.is_thumbnail = 1', [orderArray[i].product_id, orderArray[i].product_id]);
+                var total = Number(rows[0].price)*orderArray[i].quantity;
+                totalOrderAmount += total;
+                data[i] = rows[0];
+                data[i].product_id = orderArray[i].product_id;
+                data[i].quantity = orderArray[i].quantity;
+                data[i].total = String(total);
+            }
+            const [rows2, field] = await pool.execute('select * from address where user_id = ?', [userId]);
+            res.render('user/createOrder.ejs', { 
+                userId: userId,
+                data: data,
+                totalOrderAmount: String(totalOrderAmount),
+                address: rows2
+            });
+        } else {
+            res.status(400).send('OrderArray not found.');
+        }
+    } catch(error) {
+        console.error('Error: ', error);
+        return res.status(500).send('Error');
+    }
+}
+
+let orderUserPage = async (req, res) => {
+    const userId = req.params.userId;
+    var data = [];
+    try {
+        const [rows, field] = await pool.execute('select * from `order` where user_id = ?', [userId]);
+        data = rows;
+        for (let i = 0; i < data.length; i++) {
+            const [rows2, field2] = await pool.execute('select * from `order_products` where `order_id` = ?', [data[i].order_id]);
+            data[i].products = rows2;
+            const [rows3, field3] = await pool.execute('select * from address where address_id = ?', [data[i].address_id]);
+            data[i].address = rows3[0]
+        }
+        return res.render('user/order.ejs', {    userId: userId, data: data  })
+    } catch(error) {
+        console.error('Error: ', error);
+        return res.status(500).send('Error');
     }
     
 }
@@ -414,4 +467,5 @@ module.exports = {
     getDetailCustomer, searchOrders, searchProducts, searchCustomers,
     orderOfCustomer, detailProductUser, getUserProfile, getHomePage,
     getFilterPage, searchProductsPage, searchUserProducts, getCartUserPage,
+    creatOrder, orderUserPage
 }
