@@ -1253,6 +1253,13 @@
       font-size: 28px;
     }
 
+    .infor-user .gender {
+      display: flex;
+      flex-direction: row;
+      height: 30px;
+      align-items: center;
+    }
+
     .infor-user .update-password-container {
       margin-top: 15px;
     }
@@ -1328,8 +1335,80 @@
 
     .add-address:hover {
       background-color: #4675c7;
+      color: #fff;
     }
 
+    #popup-container {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: #000 0px 0px 10px;
+      z-index: 9999;
+    }
+
+    #popup-container h5 {
+      margin-left: 50%;
+      transform: translate(-50%, 0%);
+      margin-top: 0px;
+      font-size: 20px;
+    }
+
+    .input-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between; 
+      margin-bottom: 10px;
+      width: 300px;
+    }
+
+    .input-container input {
+      border: 0;
+      background-color: #e7eefa;
+      color: #3766b6;
+      width: 160px;
+      height: 25px;
+      border-radius: 10px;
+      padding-left: 10px;
+      font-size: 16px;
+    }
+
+    .input-container input:focus {
+      outline: none;
+      border: 1px solid #3766b6;
+    }
+
+    .close-container {
+      display: flex;
+      flex-direction: row;
+      margin-left: 50%;
+      width: 100%;
+      transform: translate(-50%, 0%);
+      justify-content: flex-end;
+    }
+
+    .close-container #cancel {
+      margin-right: 5px;
+      border: 0;
+      padding: 10px 15px 10px 15px;
+      border-radius: 5px;
+      text-align: center;
+      color: #3766b6;
+      background-color: #e7eefa;
+    }
+
+    .close-container #confirm {
+      border: 0;
+      padding: 10px 15px 10px 15px;
+      border-radius: 5px;
+      text-align: center;
+      color: #ffffff;
+      background-color: #3766b6;
+    }
 
     /* end profile*/
 
@@ -1457,5 +1536,315 @@
     }
 
     /*end cart page */
-   
+
+    /* creat order */
+    .create-order-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 70%;
+      height: auto;
+      margin-left: 50%;
+      transform: translate(-50%, 0%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+      "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+
+    .create-order-container h3 {
+      font-size: 28px;
+    }
+
+    .create-order-container .head {
+      width: 100%;
+      background-color: #fff;
+      padding-top: 3px;
+      height: 30px;
+      justify-content: center;
+    }
+
+    .order-list-product {
+      margin-top: 5px;
+      padding: 10px;
+      padding-bottom: 0;
+      background-color: #fff;
+    }
+
+    .address-order-container {
+      width: 100%;
+      background-color: #fff;
+      margin-top: 5px;
+    }
+
+    .address-order-container h5 {
+      margin-left: 15px;
+      font-weight: lighter;
+      height: 30px;
+      margin-bottom: 0px;
+    }
+
+    .address-line {
+      display: flex;
+      align-items: center;
+    }
+    
+    .default-address {
+      margin-right: 10px;
+      max-width: 60%;
+    }
+    
+    .address-order-container button {
+      border: 0px;
+      background-color: #fff;
+      color: #2979ff;
+    }
+
+    .default-address h6 {
+      margin-left: 15px;
+      font-weight: lighter;
+      height: 30px;
+      font-size: 14px;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 2;
+      display: none;
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      border-radius: 10px;
+      transform: translate(-50%, -50%);
+      background-color: #fefefe;
+      z-index: 3; 
+      padding: 10px;
+      box-shadow: #000 0px 0px 10px;
+    }
+
+    .modal-content form label {
+      display: flex;
+      align-items: center;
+      width: 500px;
+    }
+
+    .modal-content h5 {
+      margin: 0px;
+      font-size: 18px;
+    }
+    
+    .modal-content h6 {
+      width: 300px;
+      font-weight: lighter;
+    }
+
+    .modal-content span {
+      font-size: 15px;
+      color: red;
+    }
+
+    .close {
+      border: 0;
+      color: red;
+      margin-left: 100%;
+      border-radius: 5px;
+      transform: translate(-90%, -40%);
+    }
+
+    .close:hover {
+      background-color: rgb(230, 230, 230);
+    }
+
+    .sub-address {
+      border: 0;
+      background-color: #f8f4f4;
+      border-radius: 5px;
+      margin-left: 100%;
+      transform: translate(-100%, 0%);
+      font-size: 16px;
+    }
+
+    .sub-address:hover {
+      background-color: #fdcaca;
+    }
+    
+    .modal-open .overlay {
+      display: block;
+    }
+    
+    .modal-open .modal {
+      display: block;
+    }
+
+    .updated-address {
+      margin-left: 15px;
+      font-weight: lighter;
+      height: 30px;
+      margin-bottom: 0px;
+    }
+
+    .create-order-container .bottom {
+      display: flex;
+      width: 100%;
+      background-color: #fff;
+      margin-top: 5px;
+    }
+
+    .payment-method {
+      margin: 10px;
+      font-size: 24px;
+    }
+
+    .payment-method form label {
+      display: flex;
+      height: 40px;
+      align-items: center;
+      font-size: 18px;
+    }
+
+    .payment-method i {
+      font-size: 22px;
+      margin-left: 10px;
+    }
+
+
+    .total-payment {
+      display: flex;
+      align-items: center;
+      margin-left: 300px;
+      height: 52px;
+      right: 10px;
+      font-size: 24px;
+    }
+
+    .total-payment h4 {
+      margin-left: 30px;
+      font-weight: lighter;
+      font-size: 28px;
+      color: red;
+    }
+
+    .place-order {
+      width: 100%;
+      background-color: #fff;
+      margin-bottom: 15px;
+    }
+
+    .place-order button {
+      margin-left: 70%;
+      margin-bottom: 15px;
+      padding-left: 20px;
+      padding-right: 20px;
+      border: 0px;
+      background-color: rgb(253, 68, 68);
+      color: #fff;
+      font-size: 32px;
+    }
+
+    .place-order button:hover {
+      background-color: rgb(255, 88, 88);
+    }
+
+    /* end creat order */
+
+    /* list order */
+    .order-user-container {
+      margin-top: 5px;
+      padding: 12px;
+      padding-top: 0;
+      background-color: #fff;
+      border-radius: 5px;
+    }
+
+    .cart-container .order-user {
+      margin-top: 5px;
+      border: 1px solid #7e7e7e;
+      border-radius: 8px;
+    }
+
+    .order-user-container .order-head a, .order-user-container .order-user a {
+      display: inline-block;
+      text-decoration: none;
+      width: 500px;
+      padding-left: 12px;
+      color: #000;
+    }
+
+    .order-head label, .order-user-container .order-user label {
+      margin-left: 5px;
+      display: inline-block;
+      width: 100px;
+      text-align: center;
+      justify-self: middle;
+    }
+
+    .order-user-detail {
+      display: flex;
+    }
+
+    .order-user-detail .address h6 {
+      font-size: 16px;
+      font-weight: lighter;
+      width: 300px;
+      margin-top: 0px;
+    }
+
+    .order-user-detail .address label {
+      margin-left: 30px;
+    }
+
+    .status {
+      display: flex;
+      margin-left: auto;
+      flex-direction: column;
+      width: 300px;
+    }
+    
+    .status label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 30px;
+    }
+
+    .status .Pending {
+      padding: 5px;
+      background-color: #e0dabd;
+      border-radius: 10px;
+      color: #a18f30;
+    }
+
+    .status .Complete {
+      padding: 5px;
+      background-color: #c3e7c6;
+      border-radius: 10px;
+      color: #1e8a27;
+    }
+
+    .status .Cancel {
+      padding: 5px;
+      background-color: #ffd8d8;
+      border-radius: 10px;
+      color: #a52e1f;
+    }
+
+    .order-user-container button {
+      margin-left: 80%;
+      transform: translate(-50%, 0%);
+      font-size: 18px;
+      background-color: #f8ebeb;
+      border: 1px solid #ff2c2c;
+      color: red;
+    }
+
+  
+    /* end list order */   
  

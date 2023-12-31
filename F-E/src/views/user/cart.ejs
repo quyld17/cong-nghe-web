@@ -26,31 +26,33 @@
                 <h3><span><%= data.length%></span> items in your cart</h3>
             <% } %>
             <div class="cart-body">
+                <form id="formCreateOrder">
 
-                <div class="head">
-                    <label for="" style="margin-left: 20px;">Product</label>
-                    <label for="" style="margin-left: 400px;">Price</label>
-                    <label for="" style="margin-left: 120px;">Quantity</label>
-                    <button class="creat-order">
-                        <i class="fa-solid fa-clipboard"></i> Create
-                    </button>
-                </div>
-                <div class="cart-list-product">
-                    <% for (let i = 0; i < data.length; i++) { %>
-                        <div class="cart-product">
-                            <img src="<%= data[i].image_url%>" alt="" srcset="">
-                            <div class="name-category-product">
-                                <a href="/user/<%= userId%>/product/<%= data[i].product_id%>"><%= data[i].product_name%></a>
-                                <p><%= data[i].category_name%></p>
+                    <div class="head">
+                        <label for="" style="margin-left: 20px;">Product</label>
+                        <label for="" style="margin-left: 400px;">Price</label>
+                        <label for="" style="margin-left: 120px;">Quantity</label>
+                        <button type="button" class="creat-order" onclick="createOrder();">
+                            <i class="fa-solid fa-dollar-sign"></i> Buy Now
+                        </button>
+                    </div>
+                    <div class="cart-list-product">
+                        <% for (let i = 0; i < data.length; i++) { %>
+                            <div class="cart-product">
+                                <img src="<%= data[i].image_url%>" alt="" srcset="">
+                                <div class="name-category-product">
+                                    <a href="/user/<%= userId%>/product/<%= data[i].product_id%>"><%= data[i].product_name%></a>
+                                    <p><%= data[i].category_name%></p>
+                                </div>
+                                <label for=""><%= data[i].price.replace(/\B(?=(\d{3})+(?!\d))/g, '.')%></label>
+                                <input type="number" id="quantity-<%= data[i].product_id%>" min="1" oninput="updateQuantity('<%= data[i].product_id%>')" value="<%= data[i].quantity%>">
+                                <button type="button" onclick="deleteProduct('<%= data[i].product_id%>');"><i class="fa-solid fa-trash"></i></button>
+                                <input type="checkbox" name="product-<%= data[i].product_id%>" class="checkbox">
                             </div>
-                            <label for=""><%= data[i].price.replace(/\B(?=(\d{3})+(?!\d))/g, '.')%></label>
-                            <input type="number" id="quantity" value="1" min="1" value="<%= data[i].quantity%>">
-                            <button type="button" onclick=""><i class="fa-solid fa-trash"></i></button>
-                            <input type="checkbox" class="checkbox">
-                        </div>
-                        <hr>
-                    <% } %>
-                </div>
+                            <hr>
+                        <% } %>
+                    </div>
+                </form>
             </div>
             
         </div>
@@ -58,5 +60,68 @@
     
 </body>
 <script>
+    const jwt = localStorage.getItem("jwt");
+
+    async function deleteProduct(id) {
+        var url = "http://localhost:4000/user/cart/" + id;
+        var check = await fetch(url, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": jwt
+            },
+            body: "",
+        });
+
+        var result = await check.json();
+        alert(result);
+        window.location.reload(true);
+    }
+
+    async function updateQuantity (id) {
+        var quantity = document.getElementById("quantity-" + id);
+        var data = {
+            product_id: Number(id),
+            quantity: Number(quantity.value)
+        }
+        console.log(data)
+        var check = await fetch("http://localhost:4000/user/cart/", {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": jwt
+            },
+            body: JSON.stringify(data),
+        });
+
+        var result = await check.json();
+    }
+
+    function createOrder() {
+        const form = document.getElementById('formCreateOrder');
+        const checkboxes = form.querySelectorAll('.checkbox');
+        const orderArray = [];
+    
+        checkboxes.forEach((checkbox) => {
+            const productId = checkbox.getAttribute('name').replace('product-', '');
+            const quantityInput = form.elements[`quantity-${productId}`];
+    
+            if (checkbox.checked && quantityInput) {
+                const orderObject = {
+                    product_id: productId,
+                    quantity: quantityInput.value
+                };
+                orderArray.push(orderObject);
+            }
+        });
+    
+        if (orderArray.length === 0) {
+            alert('There are no products selected');
+        } else {
+            const queryString = `?orderArray=${encodeURIComponent(JSON.stringify(orderArray))}`;
+            window.location.href = `/user/<%= userId%>/create-order${queryString}`;
+        }
+    }
+
 </script>
 </html>

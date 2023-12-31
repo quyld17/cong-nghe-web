@@ -65,6 +65,10 @@ app.get('/user/:userId/profile', homeController.getUserProfile);
 
 app.get('/user/:userId/cart', homeController.getCartUserPage);
 
+app.get('/user/:userId/create-order', homeController.creatOrder);
+
+app.get('/user/:userId/orders', homeController.orderUserPage);
+
 app.listen(port, () => {
     console.log(`Website running on port ${port}`);
   });

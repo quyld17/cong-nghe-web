@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Website</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/css/style.css">
+    
+</head>
+
+<body>
+    <header>
+        <div class="topnav">
+            <a href="/" style="padding-top: 0px; padding-right: 20px;"><img src="/image/logo.png" alt="logo.png" border="0"></a>
+            <a href="/user/<%= userId%>/cart"><i class="fa-solid fa-cart-shopping"></i> Cart</a>
+            <a class="active" href="/user/<%= userId%>/orders"><i class="fa-solid fa-clipboard-list"></i> Orders</a>
+            <a href="/user/<%= userId%>/profile"><i class="fa-solid fa-user"></i> Profile</a>
+            <a href="/" onclick="let cf = confirm('Confirm Logout'); if (cf) localStorage.removeItem('jwt'); return cf" class="logout"><i class="fa-solid fa-right-from-bracket"></i> Log out</a>
+          </div>
+    </header>
+    <div class="main-container">
+        <div class="cart-container">
+            <div class="cart-body" style="margin-top: 5px; height: auto;">
+                <% for (let i = 0; i < data.length; i++) { %>
+                    <div class="order-user-container">
+                        <center><span>#<%= data[i].order_id%></span></center>
+                        <div class="order-head">
+                            <a href="">Product</a>
+                            <label for="">Quantity</label>
+                            <label for="">Price</label>
+                        </div>
+                        <div class="order-user">
+                            <% for (let j = 0; j < data[i].products.length; j++) { %>
+                                <a href=""><%= (data[i].products)[j].product_name %></a>
+                                <label for=""><%= (data[i].products)[j].quantity %></label>
+                                <label for=""><%= (data[i].products)[j].price %></label>
+                            <% } %>
+                        </div>
+                        <hr>
+                        <div class="order-user-detail">
+                            <div class="address">
+                                <label for="">Address:</label>
+                                <h6>
+                                    No. <%= data[i].address.house_number %>, <%= data[i].address.street %> Street, <%= data[i].address.ward %> Ward, <%= data[i].address.district %> District, <%= data[i].address.city %> City
+                                </h6>
+                            </div>
+                            <div class="status">
+                                <label for="">Total Payment Amount <h5><%= data[i].total_price%></h5></label>
+                                <label for="">Payment Method <h5><%= data[i].payment_method%></h5></label>
+                                <label for="">Status <h5 class="<%= data[i].status%>"><%= data[i].status%></h5></label>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="button">Cancel Order</button>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+            
+        </div>
+    </div>
+    
+</body>
+<script>
+        
+</script>
+</html>

@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="/css/style.css">
     
 </head>
+<style>
+
+</style>
 
 <body>
     <header>
@@ -31,17 +34,21 @@
 
                 </div>
                 <div class="infor-user">
-                    <label for="" class="name">Full name: <input type="text" value="<%= data.full_name%>"></label>
+                    <label for="" class="name">Full name: <input type="text" id="full_name" value="<%= data.full_name%>"></label>
                     <label for="" class="id">ID: <%= data.user_id%></label>
                     <label for="">Email address: <%= data.email%></label>
                     <div class="update-password-container">
-                        <label for="" class="password">Password: <input type="password" value="<%= data.password%>"></label>
-                        <button type="button">Update password</button>
+                        <label for="" class="password">Password: <input type="password" value="<%= data.password%>" id="newPassword"></label>
+                        <button type="button" id="changePassword">Change password</button>
                     </div>
                     <label for="">Date of birth: <input type="text" id="dateInput" name="date" pattern="\d{2}/\d{2}/\d{4}" placeholder="DD/MM/YYYY" required value="<%= data.date_of_birth%>"></label>
-                    <label for="">Phone number: <input type="text" value="<%= data.phone_number%>"></label>
+                    <label for="" style="display: flex;">Gender: <form id="gender" class="gender">
+                        <input type="radio" name="gender" id="maleRadio" value="1"> <p>Male</p>
+                        <input type="radio" name="gender" id="femaleRadio" value="0"> <p>Female</p>                        
+                    </form></label>
+                    <label for="">Phone number: <input type="text" id="phone_number" value="<%= data.phone_number%>"></label>
                     <label for="" class="total-expenditure">Total expenditure: <%= String(data.total_expenditure).replace(/\B(?=(\d{3})+(?!\d))/g, '.')%></label></label>
-                    <button type="button" class="update-profile">Update profile</button>
+                    <button type="button" class="update-profile" id="btn-update-profile">Update profile</button>
                 </div>                
             </div>
             <div class="address-container">
@@ -50,18 +57,172 @@
                     <% if (address[i].is_default == 1) { %>
                         <h6>No. <%= address[i].house_number %>, <%= address[i].street %> Street, <%= address[i].ward %> Ward, <%= address[i].district %> District, <%= address[i].city %> City <span>[Default]</span></h6>
                     <% } else { %>
-                        <h6>No. <%= address[i].house_number %>, <%= address[i].street %> Street, <%= address[i].ward %> Ward, <%= address[i].district %> District, <%= address[i].city %> City</h6>
+                        <h6>No. <%= address[i].house_number %>, <%= address[i].street %> Street, <%= address[i].ward %> Ward, <%= address[i].district %> District, <%= address[i].city %> City <button type="button" onclick="deleteAddress('<%=address[i].address_id%>')"><i class="fa-solid fa-trash"></i></button></h6>
                     <% } %>
                 <% } %>
-                <button type="button" class="add-address"><i class="fa-solid fa-plus"></i> Add new address</button>
+                <button type="button" class="add-address" onclick="openPopup()"><i class="fa-solid fa-plus"></i> Add new address</button>
             </div>
             <div class="bottom-customer">
                 <h5>Created at : <%= data.created_at%></h5>
+            </div>
+            <div id="popup-container">
+                <h5>New address</h5>
+                <div class="input-container">
+                    <label for="city">City:</label>
+                    <input type="text" id="city">
+                </div>
+                <div class="input-container">
+                    <label for="district">District:</label>
+                    <input type="text" id="district">
+                </div>
+                <div class="input-container">
+                    <label for="ward">Ward:</label>
+                    <input type="text" id="ward">
+                </div>
+                <div class="input-container">
+                    <label for="street">Street:</label>
+                    <input type="text" id="street">
+                </div>
+                <div class="input-container">
+                    <label for="house-number">House Number:</label>
+                    <input type="text" id="house-number">
+                </div>
+                <div class="close-container">
+                    <button id="cancel" onclick="closePopup()">Cancel</button>
+                    <button id="confirm" onclick="addNewAddress()">Confirm</button>
+                </div>
             </div>
         </div>
     </div>
     
 </body>
 <script>
+
+    if ('<%= data.gender%>' === '1') {
+        document.getElementById("maleRadio").checked = true;
+    }
+
+    if ('<%= data.gender%>' === '0') {
+        document.getElementById("femaleRadio").checked = true;
+    }
+
+    const jwt = localStorage.getItem("jwt");
+    var changePassword = document.getElementById("changePassword");
+    var updateProfile = document.getElementById("btn-update-profile");
+    var fullName = document.getElementById("full_name");
+    var dateOfBirth = document.getElementById("dateInput");
+    var phoneNumber = document.getElementById("phone_number");
+    var newPassword = document.getElementById("newPassword");
+    
+    updateProfile.addEventListener("click", async function() {
+        var selectedGender = document.querySelector('input[name="gender"]:checked');
+        if (selectedGender) {
+            var data = {
+                full_name: fullName.value,
+                date_of_birth: dateOfBirth.value,
+                phone_number: phoneNumber.value,
+                gender: selectedGender.value
+            };
+    
+            var check = await fetch("http://localhost:4000/user/details", {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "authorization": jwt
+                },
+                body: JSON.stringify(data)
+            });
+    
+            var result = await check.json();
+            alert(result);
+            window.location.reload(true); 
+        } else {
+            alert('Please select a gender.');
+        }
+    });
+
+    changePassword.addEventListener("click", async function() {
+        var checkPass = prompt("Enter password to authenticate.");
+        if (checkPass !== null) {
+            var data = {
+                password: checkPass,
+                new_password: newPassword.value
+            }
+            console.log(data);
+            var check = await fetch("http://localhost:4000/user/password", {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "authorization": jwt
+                },
+                body: JSON.stringify(data)
+            });
+    
+            var result = await check.json();
+            alert(result);
+            window.location.reload(true);        
+        }
+    });
+
+    async function deleteAddress(id) {
+        if (id !== null) {
+            var url = "http://localhost:4000/user/address/" + id;
+            var check = await fetch(url, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "authorization": jwt
+                },
+                body: "",
+            });
+    
+            var result = await check.json();
+            alert(result);
+            window.location.reload(true);
+        }
+    }
+
+    
+
+    async function addNewAddress() {
+        const city = document.getElementById("city").value;
+        const district = document.getElementById("district").value;
+        const ward = document.getElementById("ward").value;
+        const street = document.getElementById("street").value;
+        const houseNumber = document.getElementById("house-number").value;
+
+        if (city && district && ward && street && houseNumber) {
+            const data = {
+                city: city,
+                district: district,
+                ward: ward,
+                street: street,
+                house_number: houseNumber
+            };
+            var check = await fetch("http://localhost:4000/user/address", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "authorization": jwt
+                },
+                body: JSON.stringify(data)
+            });
+    
+            var result = await check.json();
+            alert(result);
+            window.location.reload(true); 
+        } else {
+            alert("Please fill in all fields.");
+        }
+    }
+
+
+    function openPopup() {
+        document.getElementById("popup-container").style.display = "block";
+    }
+
+    function closePopup() {
+        document.getElementById("popup-container").style.display = "none";
+    }
 </script>
 </html>

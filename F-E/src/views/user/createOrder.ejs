@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Website</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/css/style.css">
+    
+</head>
+<style>
+
+</style>
+
+<body>
+    <header>
+        <div class="topnav">
+            <a href="/" style="padding-top: 0px; padding-right: 20px;"><img src="/image/logo.png" alt="logo.png" border="0"></a>
+            <a href="/user/<%= userId%>/cart"><i class="fa-solid fa-cart-shopping"></i> Cart</a>
+            <a href="/user/<%= userId%>/orders"><i class="fa-solid fa-clipboard-list"></i> Orders</a>
+            <a href="/user/<%= userId%>/profile"><i class="fa-solid fa-user"></i> Profile</a>
+            <a href="/" onclick="let cf = confirm('Confirm Logout'); if (cf) localStorage.removeItem('jwt'); return cf" class="logout"><i class="fa-solid fa-right-from-bracket"></i> Log out</a>
+          </div>
+    </header>
+    <div class="main-container">
+        <div class="create-order-container">
+            <h3>New Order</h3>
+            <div class="head">
+                <label for="" style="margin-left: 30px;">Product</label>
+                <label for="" style="margin-left: 400px;">Price</label>
+                <label for="" style="margin-left: 80px;">Quantity</label>
+                <label for="" style="margin-left: 150px;">Total</label>
+            </div>
+            <div class="order-list-product">
+                <% for (let i = 0; i < data.length; i++) { %>
+                    <div class="cart-product">
+                        <img src="<%= data[i].image_url%>" alt="" srcset="">
+                        <div class="name-category-product">
+                            <a href="/user/<%= userId%>/product/<%= data[i].product_id%>"><%= data[i].product_name%></a>
+                            <p><%= data[i].category_name%></p>
+                        </div>
+                        <label for=""><%= String(data[i].price).replace(/\B(?=(\d{3})+(?!\d))/g, '.')%></label>
+                        <label for=""><%= data[i].quantity%></label>
+                        <label for=""><%= data[i].total.replace(/\B(?=(\d{3})+(?!\d))/g, '.') %></label>
+                    </div>
+                    <hr>
+                <% } %>
+            </div>
+            <div class="address-order-container">
+                <h5>Delivery address:</h5>
+                <div class="address-line">
+                    <div class="default-address">
+                        <% for (let i = 0; i < address.length; i++) { %>
+                            <% if (address[i].is_default == 1) { %>
+                                <h6>No. <%= address[i].house_number %>, <%= address[i].street %> Street, <%= address[i].ward %> Ward, <%= address[i].district %> District, <%= address[i].city %> City </h6>
+                            <% } %>
+                        <% } %>
+                    </div>
+                    <button onclick="showAllAddresses()">Change</button>
+                </div>
+            </div>
+            <div class="overlay"></div>
+            <div id="addressModal" class="modal">
+                <div class="modal-content">
+                    <button type="button" class="close" onclick="closeModal()">&times;</button>
+                    <h5>Select Delivery Address:</h5>
+                    <form id="addressForm">
+                        <% for (let i = 0; i < address.length; i++) { %>
+                            <label>
+                                <input type="radio" name="selectedAddress" value="<%= address[i].address_id %>">
+                                <h6 data-index="<%= address[i].address_id %>" class="<%= address[i].is_default === 1 ? 'default-address' : '' %>">
+                                    No. <%= address[i].house_number %>, <%= address[i].street %> Street, <%= address[i].ward %> Ward, <%= address[i].district %> District, <%= address[i].city %> City
+                                </h6>
+                                <% if (address[i].is_default == 1) { %>
+                                    <span>[Default]</span>
+                                <% } %>
+                            </label>
+                        <% } %>
+                        <button type="button" class="sub-address" onclick="selectAddress()">OK</button>
+                    </form>
+                </div>
+            </div>
+            <div class="bottom">
+                <div class="payment-method">
+                    <label for="">Payment method</label>
+                    <form action="">
+                        <label for="">
+                            <input type="radio" name="selectPaymentMethod" value="COD">
+                            <h6>Cash On Delivery </h6>
+                            <i class="fa-solid fa-money-bill"></i>
+                        </label>
+                        <label for="">
+                            <input type="radio" name="selectPaymentMethod" value="Visa card">
+                            <h6>Visa card</h6>
+                            <i class="fa-brands fa-cc-visa"></i>
+                        </label>
+                    </form>
+                </div>
+                <div class="total-payment">
+                    <label for="">Total Payment Amount</label>
+                    <h4><%= totalOrderAmount.replace(/\B(?=(\d{3})+(?!\d))/g, '.')%></h4>
+                </div>
+            </div>
+            <div class="place-order">
+                <button type="button"><i class="fa-solid fa-dollar-sign"></i> Place Order</button>
+            </div>
+        </div>
+    </div>
+    
+</body>
+<script>
+
+    function showAllAddresses() {
+        var modal = document.getElementById("addressModal");
+        modal.style.display = "block";
+        var overlay = document.querySelector(".overlay");
+        overlay.classList.add("modal-open");
+    }
+    
+    function closeModal() {
+        var modal = document.getElementById("addressModal");
+        modal.style.display = "none";
+        var overlay = document.querySelector(".overlay");
+        overlay.classList.remove("modal-open");
+    }
+    
+    function selectAddress() {
+        var modal = document.getElementById('addressModal');
+        var selectedRadio = document.querySelector('input[name="selectedAddress"]:checked');
+    
+        if (selectedRadio) {
+            var selectedIndex = selectedRadio.value;
+            var selectedAddressHTML = document.querySelector(`.modal-content h6[data-index="${selectedIndex}"]`).innerHTML;
+    
+            var defaultAddressContainer = document.querySelector('.default-address');
+            if (defaultAddressContainer) {
+                defaultAddressContainer.innerHTML = selectedAddressHTML;
+                defaultAddressContainer.classList.add('updated-address');
+            } else {
+                console.error('Default address container not found.');
+            }
+        }
+    
+        modal.style.display = 'none';
+    }
+</script>
+</html>

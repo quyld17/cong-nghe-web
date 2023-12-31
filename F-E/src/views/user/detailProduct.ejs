@@ -43,8 +43,8 @@
                     <h4 class="in-stock-container">In stock: <%= data.in_stock_quantity%></h4>
                 </div>
                 <div class="detail-product-operation-container">
-                    <button type="button" class="btn-add-to-cart"><i class="fa-solid fa-cart-plus"></i> Add to cart</button>
-                    <button type="button" class="btn-buy-now"><i class="fa-solid fa-dollar-sign"></i> Buy now</button>
+                    <button type="button" class="btn-add-to-cart" id="btn-add-to-cart"><i class="fa-solid fa-cart-plus"></i> Add to cart</button>
+                    <button type="button" class="btn-buy-now" id="btn-buy"><i class="fa-solid fa-dollar-sign"></i> Buy now</button>
                 </div>
             </div>
         </div>
@@ -53,14 +53,48 @@
 </body>
 <script>
 
+    const jwt = localStorage.getItem("jwt");
+
     var left = document.getElementById("left");
     var right = document.getElementById("right");
+
+
+    var add = document.getElementById("btn-add-to-cart");
+    var buy = document.getElementById("btn-buy");
+    var quantity = document.getElementById("quantity");
 
     var arrImg = []
 
     arrImg = arrayToUse = JSON.parse('<%- JSON.stringify(arrImage)%>')
 
     var count = 0;
+
+    buy.addEventListener("click", async function() {
+        const orderArray = [{
+            product_id: '<%= data.product_id %>',
+            quantity: quantity.value
+        }]
+        const queryString = `?orderArray=${encodeURIComponent(JSON.stringify(orderArray))}`;
+        window.location.href = `/user/<%= userId%>/create-order${queryString}`;
+    })
+
+    add.addEventListener("click", async function() {
+        var data = {
+            product_id: Number('<%= data.product_id %>'),
+            quantity: Number(quantity.value)
+        }
+        console.log(data)
+        var check = await fetch("http://localhost:4000/user/cart/", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": jwt
+            },
+            body: JSON.stringify(data)
+        });
+        var result = await check.json();
+        alert(result);
+    })
 
     left.addEventListener("click", async function() {
         if (count == 0) {
