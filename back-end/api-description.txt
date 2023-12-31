@@ -253,6 +253,23 @@ Response:
         "Delete address successfully"
     } 
 
+5. Set default address
+Path: /user/address/:id
+Method: PATCH
+Request:
+    Headers:
+        {
+            authorization: jwt
+        }
+    Params:
+        {
+            id: int
+        }
+Response:
+    {
+        "Set default address successfully"
+    }
+
 II. Cart
 1. Add product to cart
 Path: /user/cart/
@@ -305,4 +322,30 @@ Request:
 Response:
     {
         "Updated quantity successfully"
+    }
+
+III. Orders
+1. Place order
+Path: /user/order/
+Method: PUT
+Request:
+    Headers:
+        {
+            authorization: jwt
+        }
+    Body: 
+        {
+            payment_method: string,
+            address_id:     int,
+            products:
+                [
+                    {
+                        product_id: int,
+                        quantity:   int
+                    }
+                ]
+        }
+Response:
+    {
+        "Place order successfully"
     }
