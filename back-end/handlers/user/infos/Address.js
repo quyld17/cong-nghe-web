@@ -4,6 +4,7 @@ const {
   checkExistedAddress,
   deleteAddress,
   checkDefaultAddress,
+  setDefaultAddress,
 } = require("../../../entities/Users");
 
 const Router = require("express");
@@ -88,7 +89,7 @@ r.delete("/address/:id", async (req, res) => {
   }
 });
 
-r.post("/address/:id", async (req, res) => {
+r.patch("/address/:id", async (req, res) => {
   const token = req.headers.authorization;
   if (!token) {
     return res.status(400).json("Token not found");
@@ -104,7 +105,15 @@ r.post("/address/:id", async (req, res) => {
       return res.status(400).json("Invalid input");
     }
 
-    
+    const setDefaultAddressResult = await setDefaultAddress(
+      user_id,
+      address_id
+    );
+    if (setDefaultAddressResult) {
+      return res.status(200).json("Set default address successfully");
+    } else {
+      return res.status(500).json("Failed to set default address");
+    }
   } catch (err) {
     console.error("Error:", err);
     return res.status(500).json("Internal Server Error");

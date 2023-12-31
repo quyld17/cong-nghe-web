@@ -20,6 +20,9 @@ async function updateOrderStatus(status, order_id) {
   });
 }
 
+async function placeOrder(user_id, products) {}
+
 module.exports = {
   updateOrderStatus,
+  placeOrder,
 };

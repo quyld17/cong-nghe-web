@@ -20,7 +20,7 @@ r.post("/sign-in", express.json(), async (req, res) => {
         const user_id = await getUserIdByEmail(account.email);
         const role = await getRole(account.email);
         const token = jwt.sign({ user_id: user_id, role: role }, secretKey, {
-          expiresIn: "24h",
+          expiresIn: "72h",
         });
         return res.status(200).json({ jwt: token });
       } else {

@@ -232,6 +232,66 @@ async function checkDefaultAddress(user_id, address_id) {
   });
 }
 
+async function setDefaultAddress(user_id, address_id) {
+  const updatePreviousDefaultQuery = `  UPDATE address 
+                                        SET is_default = 0 
+                                        WHERE 
+                                          user_id = ? AND 
+                                          is_default = 1;`;
+  const setNewDefaultQuery = `  UPDATE address 
+                                SET is_default = 1 
+                                WHERE 
+                                  user_id = ? AND   
+                                  address_id = ?;`;
+
+  return new Promise(async (resolve, reject) => {
+    db.beginTransaction(async (err) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      try {
+        await new Promise((resolve, reject) => {
+          db.query(updatePreviousDefaultQuery, [user_id], (err, results) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(results.affectedRows);
+            }
+          });
+        });
+
+        await new Promise((resolve, reject) => {
+          db.query(
+            setNewDefaultQuery,
+            [user_id, address_id],
+            (err, results) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(results.affectedRows);
+              }
+            }
+          );
+        });
+
+        db.commit((err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(true);
+          }
+        });
+      } catch (error) {
+        db.rollback(() => {
+          reject(error);
+        });
+      }
+    });
+  });
+}
+
 module.exports = {
   getUserIdByEmail,
   getRole,
@@ -243,4 +303,5 @@ module.exports = {
   checkExistedAddress,
   deleteAddress,
   checkDefaultAddress,
+  setDefaultAddress,
 };
