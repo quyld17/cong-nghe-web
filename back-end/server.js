@@ -16,6 +16,8 @@ const UserAddProductToCart = require("./handlers/user/cart/AddProduct");
 const UserDeleteProductFromCart = require("./handlers/user/cart/DeleteProduct");
 const UserUpdateProductQuantity = require("./handlers/user/cart/UpdateQuantity");
 
+const UserPlaceOrder = require("./handlers/user/cart/PlaceOrder");
+
 const express = require("express");
 const cors = require("cors");
 
@@ -42,6 +44,8 @@ try {
   app.use("/user/cart", UserAddProductToCart);
   app.use("/user/cart", UserDeleteProductFromCart);
   app.use("/user/cart", UserUpdateProductQuantity);
+
+  app.use("/user/order", UserPlaceOrder);
 } catch (err) {
   console.log("error", err);
 }
