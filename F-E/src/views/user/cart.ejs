@@ -62,6 +62,8 @@
 <script>
     const jwt = localStorage.getItem("jwt");
 
+    const in_cart = 1;
+
     async function deleteProduct(id) {
         var url = "http://localhost:4000/user/cart/" + id;
         var check = await fetch(url, {
@@ -84,7 +86,6 @@
             product_id: Number(id),
             quantity: Number(quantity.value)
         }
-        console.log(data)
         var check = await fetch("http://localhost:4000/user/cart/", {
             method: "PATCH",
             headers: {
@@ -118,6 +119,7 @@
         if (orderArray.length === 0) {
             alert('There are no products selected');
         } else {
+            orderArray.push(in_cart)
             const queryString = `?orderArray=${encodeURIComponent(JSON.stringify(orderArray))}`;
             window.location.href = `/user/<%= userId%>/create-order${queryString}`;
         }

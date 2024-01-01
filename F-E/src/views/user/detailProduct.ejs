@@ -55,6 +55,8 @@
 
     const jwt = localStorage.getItem("jwt");
 
+    var in_cart = 0;
+
     var left = document.getElementById("left");
     var right = document.getElementById("right");
 
@@ -73,7 +75,7 @@
         const orderArray = [{
             product_id: '<%= data.product_id %>',
             quantity: quantity.value
-        }]
+        }, in_cart]
         const queryString = `?orderArray=${encodeURIComponent(JSON.stringify(orderArray))}`;
         window.location.href = `/user/<%= userId%>/create-order${queryString}`;
     })
