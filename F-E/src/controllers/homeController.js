@@ -412,9 +412,13 @@ let creatOrder = async (req, res) => {
     
     let data = []
     let totalOrderAmount = 0;
+
+    var in_cart 
+
     try {
         if (orderArrayString) {
             const orderArray = JSON.parse(decodeURIComponent(orderArrayString));
+            in_cart =orderArray.pop();
             for (let i = 0; i < orderArray.length; i++) {
                 const [rows, field] = await pool.execute('select p.product_id, p.product_name, p.price, pi.image_url from product as p, product_image as pi where p.product_id = ? and pi.product_id = ? and pi.is_thumbnail = 1', [orderArray[i].product_id, orderArray[i].product_id]);
                 var total = Number(rows[0].price)*orderArray[i].quantity;
@@ -424,12 +428,17 @@ let creatOrder = async (req, res) => {
                 data[i].quantity = orderArray[i].quantity;
                 data[i].total = String(total);
             }
-            const [rows2, field] = await pool.execute('select * from address where user_id = ?', [userId]);
-            res.render('user/createOrder.ejs', { 
+            const [rows2, field2] = await pool.execute('select * from address where user_id = ?', [userId]);
+            const [rows3, field3] = await pool.execute('select * from address where user_id = ? and is_default = 1', [userId])
+
+            res.render('user/createOrder.ejs', {
+                address_id: rows3[0].address_id,
                 userId: userId,
-                data: data,
+                data: data, 
                 totalOrderAmount: String(totalOrderAmount),
-                address: rows2
+                address: rows2,
+                in_cart: in_cart,
+                orderArray: orderArray
             });
         } else {
             res.status(400).send('OrderArray not found.');

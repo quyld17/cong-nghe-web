@@ -102,13 +102,50 @@
                 </div>
             </div>
             <div class="place-order">
-                <button type="button"><i class="fa-solid fa-dollar-sign"></i> Place Order</button>
+                <button type="button" onclick="createOrder();"><i class="fa-solid fa-dollar-sign"></i> Place Order</button>
             </div>
         </div>
     </div>
     
 </body>
 <script>
+    const jwt = localStorage.getItem('jwt')
+
+    const in_cart = Number('<%= in_cart %>')
+    var orderArray = []
+
+    var address_id = '<%= address_id %>'
+
+    async function createOrder() {
+        var selectPaymentMethod = document.querySelector('input[name="selectPaymentMethod"]:checked');
+        if (selectPaymentMethod === null) {
+            alert("Please select payment method");
+        } else {
+            var cf = confirm('Confirm create this order');
+            if (cf === true) {
+                orderArray = arrayToUse = JSON.parse('<%- JSON.stringify(orderArray)%>')
+                var data = {
+                    in_cart: in_cart,
+                    payment_method: selectPaymentMethod.value,
+                    address_id: Number(address_id),
+                    products: orderArray
+                }
+                var check = await fetch("http://localhost:4000/user/order/", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "authorization": jwt
+                    },
+                    body: JSON.stringify(data),
+                });
+        
+                var result = await check.json();
+                alert(result);
+                window.location = "http://localhost:1234/user/<%= userId%>/orders"
+                
+            }
+        }
+    }
 
     function showAllAddresses() {
         var modal = document.getElementById("addressModal");
@@ -131,6 +168,7 @@
         if (selectedRadio) {
             var selectedIndex = selectedRadio.value;
             var selectedAddressHTML = document.querySelector(`.modal-content h6[data-index="${selectedIndex}"]`).innerHTML;
+            address_id = selectedIndex;
     
             var defaultAddressContainer = document.querySelector('.default-address');
             if (defaultAddressContainer) {
