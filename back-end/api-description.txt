@@ -270,6 +270,21 @@ Response:
         "Set default address successfully"
     }
 
+6. Check profile
+Path: /user/
+Method: PATCH
+Request:
+    Headers:
+        {
+            authorization: jwt
+        }
+Response:
+    {
+        "Your profile is fully set up"
+        ("Please update your infos",
+        "Please update your address")
+    }
+
 II. Cart
 1. Add product to cart
 Path: /user/cart/
