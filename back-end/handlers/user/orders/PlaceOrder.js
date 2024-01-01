@@ -41,7 +41,7 @@ r.put("/", Router.json(), async (req, res) => {
       in_cart
     );
     if (placeOrderResult) {
-      return res.status(200).json("Place order successfully");
+      return res.status(200).json("Placed order successfully");
     } else {
       return res.status(500).json("Failed to place order");
     }
