@@ -1,5 +1,8 @@
 const { tokenVerification } = require("../../../middlewares/JWT");
-const { placeOrder } = require("../../../entities/Orders");
+const {
+  placeOrder,
+  checkValidProductQuantity,
+} = require("../../../entities/Orders");
 
 const Router = require("express");
 const r = Router();
@@ -14,17 +17,28 @@ r.put("/", Router.json(), async (req, res) => {
     return res.status(401).json("Failed to authorize user");
   }
 
-  const { payment_method, address_id, products } = req.body;
+  const { in_cart, payment_method, address_id, products } = req.body;
   try {
     if (!products) {
       return res.status(400).json("Invalid input");
+    }
+    const checkValidProductQuantityResult = await checkValidProductQuantity(
+      products
+    );
+    if (checkValidProductQuantityResult !== null) {
+      return res
+        .status(400)
+        .json(
+          `Insufficient quantity for product ${checkValidProductQuantityResult}`
+        );
     }
 
     const placeOrderResult = await placeOrder(
       user_id,
       payment_method,
       address_id,
-      products
+      products,
+      in_cart
     );
     if (placeOrderResult) {
       return res.status(200).json("Place order successfully");
