@@ -12,11 +12,14 @@ const AdminUpdateOrder = require("./handlers/admin/orders/Update");
 const UserDetails = require("./handlers/user/infos/UpdateInfos");
 const UserChangePassword = require("./handlers/user/infos/ChangePassword");
 const UserCreateAddress = require("./handlers/user/infos/Address");
+const UserCheckProfile = require("./handlers/user/infos/CheckInfos");
+
 const UserAddProductToCart = require("./handlers/user/cart/AddProduct");
 const UserDeleteProductFromCart = require("./handlers/user/cart/DeleteProduct");
 const UserUpdateProductQuantity = require("./handlers/user/cart/UpdateQuantity");
 
-const UserPlaceOrder = require("./handlers/user/cart/PlaceOrder");
+const UserPlaceOrder = require("./handlers/user/orders/PlaceOrder");
+const UserCancelOrder = require("./handlers/user/orders/CancelOrder");
 
 const express = require("express");
 const cors = require("cors");
@@ -40,12 +43,14 @@ try {
   app.use("/user", UserDetails);
   app.use("/user", UserChangePassword);
   app.use("/user", UserCreateAddress);
+  app.use("/user", UserCheckProfile);
 
   app.use("/user/cart", UserAddProductToCart);
   app.use("/user/cart", UserDeleteProductFromCart);
   app.use("/user/cart", UserUpdateProductQuantity);
 
   app.use("/user/order", UserPlaceOrder);
+  app.use("/user/order", UserCancelOrder);
 } catch (err) {
   console.log("error", err);
 }

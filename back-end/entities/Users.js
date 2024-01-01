@@ -292,6 +292,50 @@ async function setDefaultAddress(user_id, address_id) {
   });
 }
 
+async function getUserInfos(user_id) {
+  const query = ` SELECT 
+                    full_name,
+                    date_of_birth,
+                    phone_number,
+                    gender
+                  FROM user 
+                  WHERE user_id = ?;`;
+
+  return new Promise((resolve, reject) => {
+    db.query(query, [user_id], (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        if (results.length === 0) {
+          resolve(null);
+        } else {
+          resolve(results[0]);
+        }
+      }
+    });
+  });
+}
+
+async function checkAddress(user_id) {
+  const query = `SELECT COUNT(*) AS count 
+                            FROM address
+                            WHERE user_id = ?;`;
+
+  return new Promise((resolve, reject) => {
+    db.query(query, [user_id], (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        if (results.length === 0) {
+          resolve(null);
+        } else {
+          resolve(results[0].count);
+        }
+      }
+    });
+  });
+}
+
 module.exports = {
   getUserIdByEmail,
   getRole,
@@ -304,4 +348,6 @@ module.exports = {
   deleteAddress,
   checkDefaultAddress,
   setDefaultAddress,
+  getUserInfos,
+  checkAddress,
 };

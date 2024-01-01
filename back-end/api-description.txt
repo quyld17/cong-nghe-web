@@ -335,6 +335,7 @@ Request:
         }
     Body: 
         {
+            in_cart:        int,
             payment_method: string,
             address_id:     int,
             products:
@@ -348,4 +349,17 @@ Request:
 Response:
     {
         "Place order successfully"
+    }
+
+2. Cancel order
+Path: /user/order/:id
+Method: PATCH
+Request:
+    Headers:
+        {
+            authorization: jwt
+        }
+Response:
+    {
+        "Cancelled order successfully"
     }

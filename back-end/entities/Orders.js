@@ -1,4 +1,3 @@
-const { get } = require("../handlers/authentication/SignUp");
 const db = require("../services/SetUpMySQL");
 
 async function updateOrderStatus(status, order_id) {
@@ -21,33 +20,37 @@ async function updateOrderStatus(status, order_id) {
   });
 }
 
-async function placeOrder(user_id, payment_method, address_id, products) {
+async function placeOrder(
+  user_id,
+  payment_method,
+  address_id,
+  products,
+  in_cart
+) {
   const insertOrderQuery = `INSERT INTO \`order\` (
                               user_id,
                               total_price,
                               payment_method,
                               status,
-                              address_id
-                            ) VALUES (?, ?, ?, ?, ?);`;
+                              address_id) 
+                            VALUES (?, ?, ?, ?, ?);`;
 
   const insertOrderProductsQuery = `INSERT INTO order_products (
                                       order_id,
                                       product_id,
                                       product_name,
                                       quantity,
-                                      price
-                                    ) VALUES (?, ?, ?, ?, ?);`;
-
-  const updateCartQuantityQuery = ` UPDATE cart_product
-                                    SET quantity = GREATEST(quantity - ?, 0)
-                                    WHERE 
-                                      user_id = ? AND 
-                                      product_id = ?;`;
+                                      price) 
+                                    VALUES (?, ?, ?, ?, ?);`;
 
   const deleteFromCartQuery = ` DELETE FROM cart_product 
                                 WHERE 
                                   user_id = ? AND 
                                   product_id = ?;`;
+
+  const updateProductQuantityQuery = `UPDATE product
+                                      SET in_stock_quantity = in_stock_quantity - ?
+                                      WHERE product_id = ?;`;
 
   return new Promise(async (resolve, reject) => {
     db.beginTransaction(async (err) => {
@@ -98,31 +101,35 @@ async function placeOrder(user_id, payment_method, address_id, products) {
 
           await new Promise((resolve, reject) => {
             db.query(
-              updateCartQuantityQuery,
-              [product.quantity, user_id, product.product_id],
+              updateProductQuantityQuery,
+              [product.quantity, product.product_id],
               (err, results) => {
                 if (err) {
                   reject(err);
                 } else {
-                  if (results.affectedRows > 0 && results.changedRows > 0) {
-                    db.query(
-                      deleteFromCartQuery,
-                      [user_id, product.product_id],
-                      (err) => {
-                        if (err) {
-                          reject(err);
-                        } else {
-                          resolve(results);
-                        }
-                      }
-                    );
-                  } else {
-                    resolve(results);
-                  }
+                  resolve(results);
                 }
               }
             );
           });
+        }
+
+        if (in_cart === 1) {
+          for (const product of products) {
+            await new Promise((resolve, reject) => {
+              db.query(
+                deleteFromCartQuery,
+                [user_id, product.product_id],
+                (err, results) => {
+                  if (err) {
+                    reject(err);
+                  } else {
+                    resolve(results);
+                  }
+                }
+              );
+            });
+          }
         }
 
         db.commit((err) => {
@@ -187,7 +194,31 @@ async function calculateTotalPrice(products) {
   }
 }
 
+async function checkValidProductQuantity(products) {
+  const query = ` SELECT 
+                    product_name, 
+                    in_stock_quantity
+                  FROM product
+                  WHERE product_id = ?;`;
+
+  for (const product of products) {
+    return new Promise((resolve, reject) => {
+      db.query(query, [product.product_id], (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          if (product.quantity > results[0].in_stock_quantity) {
+            resolve(results[0].product_name);
+          }
+          resolve(null);
+        }
+      });
+    });
+  }
+}
+
 module.exports = {
   updateOrderStatus,
   placeOrder,
+  checkValidProductQuantity,
 };
