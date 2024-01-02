@@ -110,7 +110,7 @@ Request:
             product_name:       string,
             price:              int,
             in_stock_quantity:  int,
-            image_url:          string
+            image_urls:         []string
         }
 Response:
     {
@@ -272,7 +272,7 @@ Response:
 
 6. Check profile
 Path: /user/
-Method: PATCH
+Method: POST
 Request:
     Headers:
         {
