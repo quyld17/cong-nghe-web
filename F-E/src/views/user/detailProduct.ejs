@@ -23,7 +23,7 @@
         <div class="product-detail-container">
             <div class="image-container">
                 <button class="prev-button" id="left"><i class="fa-solid fa-caret-left"></i></button>
-                <img src="<%= arrImage[0].image_url%>" alt="Product Image">
+                <img src="<%= arrImage[0].image_url%>" alt="Product Image" id="image-url">
                 <button class="next-button" id="right"><i class="fa-solid fa-caret-right"></i></button>
             </div>
             <div>
@@ -57,6 +57,7 @@
 
     var in_cart = 0;
 
+    var img_product = document.getElementById("image-url")
     var left = document.getElementById("left");
     var right = document.getElementById("right");
 

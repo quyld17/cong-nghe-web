@@ -22,7 +22,7 @@
         <div class="order-body">
             <div class="header-order">
                 <a href=""><span>Order #<%= data.order_id %></span></a>
-                <a href=""><span class="user-order"><%= data.user_name %></span></a>
+                <a href="/customer/<%= data.user_id %>"><span class="user-order"><%= data.user_name %></span></a>
                 <a href="" class="phone-order">Phone: <%= data.phone_number %></a>
             </div>
             <hr>
@@ -59,7 +59,7 @@
                             <h4 class="<%= data.status %>"><%= data.status %></h4>
                         <% } %>
                         <% if (data.status == 'Pending') { %>
-                            <select name="" id="" class="<%= data.status %>">
+                            <select name="" id="status" class="<%= data.status %>">
                                 <option selected value="<%= data.status %>"><%= data.status %></option>
                                 <option value="Complete">Complete</option>
                                 <option value="Cancelled">Cancelled</option>
@@ -71,11 +71,33 @@
             </div>
             <% if (data.status == 'Pending') { %>
                 <div class="operation-order">
-                    <button type="button">Update status</button>
+                    <button type="button" onclick="updateStatus();">Update status</button>
                 </div>
             <% } %>
         </div>
     </div>
     
 </body>
+<script>
+    const jwt = localStorage.getItem("jwt")
+
+    async function updateStatus () {
+        if (confirm("Confirm update status")) {
+            var status = document.getElementById("status").value;
+            var check = await fetch ("http://localhost:4000/admin/order/<%= data.order_id%>", {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "authorization": jwt
+                },
+                body: JSON.stringify({
+                    status: status
+                })
+            })
+            var d = await check.json();
+            alert(d)
+            window.location.reload(true);
+        }
+    }
+</script>
 </html>

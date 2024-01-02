@@ -61,6 +61,8 @@ app.get('/user/:userId/product/:productId', homeController.detailProductUser);
 
 app.get('/user/:userId/search/products/:key', homeController.searchUserProducts);
 
+app.get('/user/:userId/category/:categoryId', homeController.getFilterProductPage)
+
 app.get('/user/:userId/profile', homeController.getUserProfile);
 
 app.get('/user/:userId/cart', homeController.getCartUserPage);
