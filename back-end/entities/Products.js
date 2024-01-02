@@ -141,7 +141,6 @@ async function createProduct(product) {
           if (err) {
             return db.rollback(() => reject(err));
           }
-
           const product_id = results.insertId;
           let is_thumbnail = 1;
           for (let i = 0; i < product.image_urls.length; i++) {
@@ -179,9 +178,14 @@ async function updateProduct(product) {
                                 in_stock_quantity = ?
                               WHERE product_id = ?;`;
 
-  const updateImageQuery = `UPDATE product_image
-                            SET image_url = ?
-                            WHERE product_id = ?;`;
+  const deleteImagesQuery = ` DELETE FROM product_image
+                              WHERE product_id = ?;`;
+
+  const insertImagesQuery = ` INSERT INTO product_image (
+                                product_id,
+                                image_url,
+                                is_thumbnail
+                              ) VALUES (?, ?, ?);`;
 
   return new Promise((resolve, reject) => {
     db.beginTransaction((err) => {
@@ -203,21 +207,38 @@ async function updateProduct(product) {
             return db.rollback(() => reject(err));
           }
           db.query(
-            updateImageQuery,
-            [product.image_url, product.product_id],
-            (err, imageResults) => {
+            deleteImagesQuery,
+            [product.product_id],
+            (err, deleteResults) => {
               if (err) {
                 return db.rollback(() => reject(err));
               }
-              db.commit((err) => {
-                if (err) {
-                  return db.rollback(() => reject(err));
+
+              let is_thumbnail = 1;
+              for (let i = 0; i < product.image_urls.length; i++) {
+                if (i !== 0) {
+                  is_thumbnail = 0;
                 }
-                resolve(
-                  productResults.affectedRows > 0 &&
-                    imageResults.affectedRows > 0
+                db.query(
+                  insertImagesQuery,
+                  [product.product_id, product.image_urls[i], is_thumbnail],
+                  (err, imageResults) => {
+                    if (err) {
+                      return db.rollback(() => reject(err));
+                    }
+                    db.commit((err) => {
+                      if (err) {
+                        return db.rollback(() => reject(err));
+                      }
+                      resolve(
+                        productResults.affectedRows > 0 &&
+                          imageResults.affectedRows > 0 &&
+                          deleteResults.affectedRows > 0
+                      );
+                    });
+                  }
                 );
-              });
+              }
             }
           );
         }
