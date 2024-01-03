@@ -65,7 +65,13 @@
     var arrImg = []
 
     arrImg = arrayToUse = JSON.parse('<%- JSON.stringify(img)%>')
+    console.log(arrImg)
 
+    var newImgs = []
+    for (let i = 0; i < arrImg.length; i++) {
+        newImgs.push(arrImg[i].image_url);
+    }
+    console.log(newImgs);
 
 
     var data
@@ -104,10 +110,11 @@
                 product_id: Number('<%= data.product_id %>'),
                 category_id: Number('<%= data.category_id %>'),
                 product_name: String('<%= data.product_name %>'),
-                price: product_price.value,
+                price: Number(product_price.value.replace(/\./g, "")),
                 in_stock_quantity: in_stock.value,
-                image_url: arrImg
+                image_urls: newImgs
             }
+            console.log(data)
             var check = await fetch("http://localhost:4000/admin/product", {
                 method: "PATCH",
                 headers: {
@@ -119,7 +126,7 @@
 
             var d = await check.json();
             alert(d);
-            window.location = "http://localhost:1234/product/<%= data.product_id %>"
+            <!-- window.location.reload(true); -->
         }        
     })
 

@@ -20,7 +20,7 @@
           </div>
     </header>
     <div class="main-container">
-        <div class="products-admin-container" style="height: 600px;">
+        <div class="products-user-container" style="height: 750px; width: 100%">
             <div class="categories">
                 <h3>Categories</h3>
                 <a href="/">View All</a>
@@ -28,7 +28,7 @@
                     <a href="/user/<%= userId%>/category/<%= category[i].category_id %>"><%= category[i].category_name %></a>
                 <% } %>
             </div>
-            <div>
+            <div class="input-products-container">
                 <div class="input-search">
                     <input type="text" id="search-input" placeholder="Search by id or name" value="">
                     <button type="button" class="" style="width: 30px" id="search-btn"><i class="fas fa-search" style="color: aliceblue;"></i></button>

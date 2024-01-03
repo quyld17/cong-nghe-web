@@ -98,7 +98,7 @@
         var result = await check.json();
     }
 
-    function createOrder() {
+    async function createOrder() {
         const form = document.getElementById('formCreateOrder');
         const checkboxes = form.querySelectorAll('.checkbox');
         const orderArray = [];
@@ -119,9 +119,23 @@
         if (orderArray.length === 0) {
             alert('There are no products selected');
         } else {
-            orderArray.push(in_cart)
-            const queryString = `?orderArray=${encodeURIComponent(JSON.stringify(orderArray))}`;
-            window.location.href = `/user/<%= userId%>/create-order${queryString}`;
+            var check = await fetch("http://localhost:4000/user/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "authorization": jwt
+                },
+                body: "",
+            });
+    
+            var result = await check.json();
+            if (result === "Your profile is fully set up") {
+                orderArray.push(in_cart)
+                const queryString = `?orderArray=${encodeURIComponent(JSON.stringify(orderArray))}`;
+                window.location.href = `/user/<%= userId%>/create-order${queryString}`;
+            } else {
+                alert(result);
+            }
         }
     }
 

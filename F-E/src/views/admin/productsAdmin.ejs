@@ -18,43 +18,45 @@
             <a href="/" onclick="let cf = confirm('Confirm Logout'); if (cf) localStorage.removeItem('jwt'); return cf" style="position: relative;  right: 0px;">Log out</a>
           </div>
     </header>
-    <div class="main-container products-container">
-        <div class="products-operation">
-            <button type="button" id="btn-ANP">ADD NEW PRODUCT</button>
-        </div>
-        <div class="products-admin-container">
-            <div class="categories">
-                <h3>Categories</h3>
-                <a href="/products">View All</a>
-                <% for (let i = 0; i < category.length; i++) { %>
-                    <a href="/category/<%= category[i].category_id %>"><%= category[i].category_name %></a>
-                <% } %>
-                <div class="new-category">
-                    <input type="text" id="newCategory" placeholder="Add category">
-                    <button type="button" id="btnAddCategory">Add</button>
-                </div>
+    <div class="main-container">
+        <div class="products-container">
+            <div class="products-operation">
+                <button type="button" id="btn-ANP">ADD NEW PRODUCT</button>
             </div>
-            <div>
-                <div class="input-search">
-                    <input type="text" id="search-input" placeholder="Search by id or name" value="">
-                    <button type="button" class="" style="width: 30px" id="search-btn"><i class="fas fa-search" style="color: aliceblue;"></i></button>
-                </div>
-                <div class="list-product" style="border: 0px;">
-                    <p style="width: 30px; text-align: center;">ID</p>
-                    <p style="width: 550px; text-align: center;">Name</p>
-                    <p style="width: 180px; text-align: center;">Price</p>
-                    <p style="width: 180px; text-align: center;">In stock</p>
-                </div>
-                <% for (let i = 0; i < data.length; i++) { %>
-                    <div class="list-product">
-                        <p style="width: 30px; text-align: center;"><%= data[i].product_id %></p>
-                        <p style="width: 550px; text-align: center;"><a href="/product/<%= data[i].product_id %>" class="product-name"><%= data[i].product_name %></a></p>
-                        <p style="width: 180px; text-align: center;"><%= data[i].price.replace(/\B(?=(\d{3})+(?!\d))/g, '.') %></p>
-                        <p style="width: 180px; text-align: center;"><%= data[i].in_stock_quantity %></p>
+            <div class="products-admin-container">
+                <div class="categories">
+                    <h3>Categories</h3>
+                    <a href="/products">View All</a>
+                    <% for (let i = 0; i < category.length; i++) { %>
+                        <a href="/category/<%= category[i].category_id %>"><%= category[i].category_name %></a>
+                    <% } %>
+                    <div class="new-category">
+                        <input type="text" id="newCategory" placeholder="Add category">
+                        <button type="button" id="btnAddCategory">Add</button>
                     </div>
-                <% } %>
+                </div>
+                <div>
+                    <div class="input-search">
+                        <input type="text" id="search-input" placeholder="Search by id or name" value="">
+                        <button type="button" class="" style="width: 30px" id="search-btn"><i class="fas fa-search" style="color: aliceblue;"></i></button>
+                    </div>
+                    <div class="list-product" style="border: 0px;">
+                        <p style="width: 30px; text-align: center;">ID</p>
+                        <p style="width: 550px; text-align: center;">Name</p>
+                        <p style="width: 180px; text-align: center;">Price</p>
+                        <p style="width: 180px; text-align: center;">In stock</p>
+                    </div>
+                    <% for (let i = 0; i < data.length; i++) { %>
+                        <div class="list-product">
+                            <p style="width: 30px; text-align: center;"><%= data[i].product_id %></p>
+                            <p style="width: 550px; text-align: center;"><a href="/product/<%= data[i].product_id %>" class="product-name"><%= data[i].product_name %></a></p>
+                            <p style="width: 180px; text-align: center;"><%= data[i].price.replace(/\B(?=(\d{3})+(?!\d))/g, '.') %></p>
+                            <p style="width: 180px; text-align: center;"><%= data[i].in_stock_quantity %></p>
+                        </div>
+                    <% } %>
+                </div>
+                
             </div>
-            
         </div>
     </div>
     

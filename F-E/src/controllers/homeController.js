@@ -374,6 +374,33 @@ let searchUserProducts = async (req, res) => {
     }
 }
 
+let getFilterProductPage = async (req, res) => {
+    const userId = req.params.userId;
+    const categoryId = req.params.categoryId;
+
+    try {
+        var data = []
+        const [rows, field] = await pool.execute ('select product_id, product_name, price from product where category_id = ?', [categoryId]);
+        data = rows;
+        const [rows2, field2] = await pool.execute ('select * from category');
+        for (let i = 0; i<data.length; i++) {
+            const [rows3, field3] = await pool.execute('select image_url from product_image where product_id = ? and is_thumbnail = 1', [rows[i].product_id])
+            data[i].image_url = rows3[0].image_url;
+            const [rows4, field4] = await pool.execute('SELECT op.product_id, o.order_id, SUM(op.quantity) AS total_quantity FROM `order` o JOIN order_products op ON o.order_id = op.order_id WHERE o.status = ? and product_id = ? GROUP BY o.order_id', ["Complete", rows[i].product_id]);
+            if (rows4[0]) data[i].sold = Number(rows4[0].total_quantity);
+            else data[i].sold = 0;
+        }
+        return res.render('user/user.ejs', {
+            userId: userId,
+            data: data,
+            category: rows2
+        });
+    } catch(error) {
+        console.error('Error:', error);
+        return res.status(500).send('Error');
+    }
+}
+
 let getUserProfile = async (req, res) => {
     function hideString(str) {
         return '*'.repeat(str.length);
@@ -476,5 +503,5 @@ module.exports = {
     getDetailCustomer, searchOrders, searchProducts, searchCustomers,
     orderOfCustomer, detailProductUser, getUserProfile, getHomePage,
     getFilterPage, searchProductsPage, searchUserProducts, getCartUserPage,
-    creatOrder, orderUserPage
+    creatOrder, orderUserPage, getFilterProductPage
 }

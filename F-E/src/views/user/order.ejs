@@ -51,9 +51,11 @@
                                 <label for="">Status <h5 class="<%= data[i].status%>"><%= data[i].status%></h5></label>
                             </div>
                         </div>
-                        <div>
-                            <button type="button">Cancel Order</button>
-                        </div>
+                        <% if (data[i].status == "Pending") { %>
+                            <div>
+                                <button type="button" onclick="cancelOrder('<%= data[i].order_id%>')">Cancel Order</button>
+                            </div>
+                        <% } %>
                     </div>
                 <% } %>
             </div>
@@ -63,6 +65,21 @@
     
 </body>
 <script>
-        
+    const jwt = localStorage.getItem("jwt");
+
+    async function cancelOrder(id) {
+        var url = "http://localhost:4000/user/order/" + id
+        var check = await fetch(url, {
+            method: "PATCH",
+            headers: {
+                "authorization": jwt,
+                "Content-Type": "application/json"
+            }
+        })
+
+        var result = await check.json();
+        alert(result);
+        window.location.reload(true)
+    }
 </script>
 </html>

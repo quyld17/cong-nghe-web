@@ -31,7 +31,7 @@
   </style>
   <body>
     <div class="signup">
-      <form action="" id="signin-form">
+      <form id="signin-form">
         <h1 class="signup-heading">Sign in</h1>
           <label for="email" class="signup-label">Email</label>
           <input type="text" name="email" id="email" class="signup-input" placeholder="">
@@ -56,31 +56,40 @@
     var data;
     
     signup.addEventListener("click", async function() {
-      if (email.value=='' || password.value=='') alert("Please fill in all the information");
-      else {       
-        data = {
-            password: password.value,
-            email: email.value
+      try {
+          if (email.value === '' || password.value === '') {
+              alert("Please fill in all the information");
+          } else {
+              const data = {
+                  password: password.value,
+                  email: email.value
+              };
+  
+              const response = await fetch("http://localhost:4000/sign-in", {
+                  method: "POST",
+                  headers: {
+                      "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify(data)
+              });
+  
+              if (response.ok) {
+                  const responseData = await response.json();
+                  if (responseData.jwt) {
+                      localStorage.setItem("jwt", responseData.jwt);
+                      window.location = "http://localhost:1234/";
+                  } else {
+                      alert(responseData.message || "Signup failed");
+                  }
+              } else {
+                  alert("Network error or server error");
+              }
           }
-          var check = await fetch("http://localhost:4000/sign-in", {
-            method: "POST",
-            headers:{
-              "Content-Type": "application/json"
-            },
-            body:JSON.stringify(data)
-          })
-          var d = await check.json();
-          if (d.jwt) {
-            localStorage.setItem("jwt", d.jwt);
-            window.location =  "http://localhost:1234/"
-          }
-          else {
-            alert(d);
-          }
-        }
+      } catch (error) {
+          console.error("An unexpected error occurred:", error);
+          alert("An unexpected error occurred");
       }
-    )
-
-
+  });
+  
   </script>
 </html>
