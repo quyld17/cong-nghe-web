@@ -37,7 +37,7 @@
           <input type="text" name="email" id="email" class="signup-input" placeholder="">
           <label for="password" class="signup-label">Password</label>
           <input type="password" name="password" id="password" class="signup-input" placeholder="">
-          <button type="submit" class="signup-submit" id="signup-btn">Sign in</button>
+          <button type="button" class="signup-submit" id="signup-btn">Sign in</button>
         <p class="signup-already">
           <span>Don't have an account.  </span>
           <a href="/sign-up" class="signup-link">Create account</a>
@@ -77,7 +77,7 @@
                   const responseData = await response.json();
                   if (responseData.jwt) {
                       localStorage.setItem("jwt", responseData.jwt);
-                      window.location = "http://localhost:1234/";
+                      window.location = "/";
                   } else {
                       alert(responseData.message || "Signup failed");
                   }

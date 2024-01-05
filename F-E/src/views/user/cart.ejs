@@ -45,7 +45,7 @@
                                     <p><%= data[i].category_name%></p>
                                 </div>
                                 <label for=""><%= data[i].price.replace(/\B(?=(\d{3})+(?!\d))/g, '.')%></label>
-                                <input type="number" id="quantity-<%= data[i].product_id%>" min="1" oninput="updateQuantity('<%= data[i].product_id%>')" value="<%= data[i].quantity%>">
+                                <input type="number" id="quantity-<%= data[i].product_id%>" oninput="updateQuantity('<%= data[i].product_id%>')" value="<%= data[i].quantity%>">
                                 <button type="button" onclick="deleteProduct('<%= data[i].product_id%>');"><i class="fa-solid fa-trash"></i></button>
                                 <input type="checkbox" name="product-<%= data[i].product_id%>" class="checkbox">
                             </div>
@@ -60,6 +60,7 @@
     
 </body>
 <script>
+
     const jwt = localStorage.getItem("jwt");
 
     const in_cart = 1;
@@ -82,20 +83,26 @@
 
     async function updateQuantity (id) {
         var quantity = document.getElementById("quantity-" + id);
-        var data = {
-            product_id: Number(id),
-            quantity: Number(quantity.value)
-        }
-        var check = await fetch("http://localhost:4000/user/cart/", {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-                "authorization": jwt
-            },
-            body: JSON.stringify(data),
-        });
+        if (quantity.value < 1) {
+            if (confirm("Do you want to remove this product ?")) {
+                await deleteProduct(id);
+            }
+        } else {
+            var data = {
+                product_id: Number(id),
+                quantity: Number(quantity.value)
+            }
+            var check = await fetch("http://localhost:4000/user/cart/", {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "authorization": jwt
+                },
+                body: JSON.stringify(data),
+            });
 
-        var result = await check.json();
+            var result = await check.json();
+        }
     }
 
     async function createOrder() {

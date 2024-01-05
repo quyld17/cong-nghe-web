@@ -422,7 +422,7 @@ let getUserProfile = async (req, res) => {
 let getCartUserPage = async (req, res) => {
     const userId = req.params.userId;
     try {
-        const [rows, field] = await pool.execute('SELECT cp.* , pi.image_url,p.product_name, p.price, c.category_name FROM cart_product AS cp JOIN product AS p ON cp.product_id = p.product_id JOIN product_image AS pi ON cp.product_id = pi.product_id AND pi.is_thumbnail = 1 JOIN category AS c ON p.category_id = c.category_id');
+        const [rows, field] = await pool.execute('SELECT cp.* , pi.image_url,p.product_name, p.price, c.category_name FROM cart_product AS cp JOIN product AS p ON cp.product_id = p.product_id JOIN product_image AS pi ON cp.product_id = pi.product_id AND pi.is_thumbnail = 1 JOIN category AS c ON p.category_id = c.category_id and cp.user_id = ?', [userId]);
         return res.render('user/cart.ejs', {
             userId: userId,
             data: rows
@@ -483,7 +483,7 @@ let orderUserPage = async (req, res) => {
         const [rows, field] = await pool.execute('select * from `order` where user_id = ?', [userId]);
         data = rows;
         for (let i = 0; i < data.length; i++) {
-            const [rows2, field2] = await pool.execute('select * from `order_products` where `order_id` = ?', [data[i].order_id]);
+            const [rows2, field2] = await pool.execute('select op.*, pi.image_url from `order_products` as op, product_image as pi where op.order_id = ? and pi.product_id = op.product_id and pi.is_thumbnail = 1', [data[i].order_id]);
             data[i].products = rows2;
             const [rows3, field3] = await pool.execute('select * from address where address_id = ?', [data[i].address_id]);
             data[i].address = rows3[0]

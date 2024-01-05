@@ -26,15 +26,18 @@
                     <div class="order-user-container">
                         <center><span>#<%= data[i].order_id%></span></center>
                         <div class="order-head">
-                            <a href="">Product</a>
+                            <label for="" style="width: 650px; text-align:left;">Product</label>
                             <label for="">Quantity</label>
                             <label for="">Price</label>
                         </div>
                         <div class="order-user">
                             <% for (let j = 0; j < data[i].products.length; j++) { %>
-                                <a href=""><%= (data[i].products)[j].product_name %></a>
-                                <label for=""><%= (data[i].products)[j].quantity %></label>
-                                <label for=""><%= (data[i].products)[j].price %></label>
+                                <div class="product-order-user">
+                                    <img src="<%= (data[i].products)[j].image_url %>" alt="" style="max-height: 100px; width: auto;"> 
+                                    <a href=""> <%= (data[i].products)[j].product_name %></a>
+                                    <label for=""><%= (data[i].products)[j].quantity %></label>
+                                    <label for=""><%= (data[i].products)[j].price %></label>
+                                </div>
                             <% } %>
                         </div>
                         <hr>
@@ -68,18 +71,20 @@
     const jwt = localStorage.getItem("jwt");
 
     async function cancelOrder(id) {
-        var url = "http://localhost:4000/user/order/" + id
-        var check = await fetch(url, {
-            method: "PATCH",
-            headers: {
-                "authorization": jwt,
-                "Content-Type": "application/json"
-            }
-        })
+        if (confirm("Confirm cancel this order ?")) {
+            var url = "http://localhost:4000/user/order/" + id
+            var check = await fetch(url, {
+                method: "PATCH",
+                headers: {
+                    "authorization": jwt,
+                    "Content-Type": "application/json"
+                }
+            })
 
-        var result = await check.json();
-        alert(result);
-        window.location.reload(true)
+            var result = await check.json();
+            alert(result);
+            window.location.reload(true)
+        }
     }
 </script>
 </html>
