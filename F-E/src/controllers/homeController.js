@@ -226,6 +226,7 @@ let getDetailOrder = async (req, res) => {
 let getDetailCustomer = async (req, res) => {
     const id = req.params.id;
     const [rows, field] = await pool.execute('select * from user where user_id = ?', [id])
+    rows[0].date_of_birth = (new Date(rows[0].date_of_birth)).toDateString();
     const [rows2, field2] = await pool.execute('select * from address where user_id = ?', [id])
     return res.render('admin/detailCustomer.ejs', {   data: rows[0], address: rows2  })
 }

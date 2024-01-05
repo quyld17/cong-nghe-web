@@ -165,20 +165,22 @@
     });
 
     async function deleteAddress(id) {
-        if (id !== null) {
-            var url = "http://localhost:4000/user/address/" + id;
-            var check = await fetch(url, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                    "authorization": jwt
-                },
-                body: "",
-            });
-    
-            var result = await check.json();
-            alert(result);
-            window.location.reload(true);
+        if (confirm("Confirm delete this address")) {
+            if (id !== null) {
+                var url = "http://localhost:4000/user/address/" + id;
+                var check = await fetch(url, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "authorization": jwt
+                    },
+                    body: "",
+                });
+        
+                var result = await check.json();
+                alert(result);
+                window.location.reload(true);
+            }
         }
     }
 

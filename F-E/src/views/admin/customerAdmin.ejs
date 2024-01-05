@@ -39,15 +39,26 @@
                     <% for (let i = 0; i < data.length; i++) { %>
                         <tr>
                             <td><%= data[i].user_id %></td>
-                            <td><a href="/customer/<%= data[i].user_id %>"><%= data[i].full_name %></a></td>
+                            <% if (data[i].full_name == null) { %>
+                                <td><a href="/customer/<%= data[i].user_id %>" style="font-style: italic;">NULL</a></td>
+                            <% } else { %>
+                                <td><a href="/customer/<%= data[i].user_id %>"><%= data[i].full_name %></a></td>
+                            <% } %>
                             <% if (data[i].gender == 1) { %>
                                 <td class="gender-men">Men</td>
                             <% } %>
                             <% if (data[i].gender == 0) { %>
                                 <td class="gender-women">Woman</td>
-                            <% } %>                            
+                            <% } %>      
+                            <% if (data[i].gender == null) { %>
+                                <td class="gender-women" style="font-style: italic;">NULL</td>
+                            <% } %>                       
                             <td><%= data[i].email %></td>
-                            <td><%= data[i].phone_number %></td>
+                            <% if (data[i].full_name == null) { %>
+                                <td style="font-style: italic;">NULL</td>
+                            <% } else { %>
+                                <td><%= data[i].phone_number %></td>
+                            <% } %>                            
                             <td><%= String(data[i].total_expenditure).replace(/\B(?=(\d{3})+(?!\d))/g, '.') %></td>
                         </tr>
                     <% } %>
