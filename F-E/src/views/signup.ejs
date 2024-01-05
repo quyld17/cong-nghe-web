@@ -25,12 +25,12 @@
     <div class="signup">
       <h1 class="signup-heading">Sign up</h1>
 
-        <label for="fullname" class="signup-label">Fullname</label>
-        <input type="text" name="fullname" id="fullname" class="signup-input" placeholder="">
         <label for="email" class="signup-label">Email</label>
         <input type="text" name="email" id="email" class="signup-input" placeholder="">
         <label for="password" class="signup-label">Password</label>
         <input type="password" name="password" id="password" class="signup-input" placeholder="">
+        <label for="password" class="signup-label">Confirm Password</label>
+        <input type="password" name="password" id="cf-password" class="signup-input" placeholder="">
 
         <button type="submit" class="signup-submit" id="signup-btn">Sign up</button>
       
@@ -44,17 +44,26 @@
 
 
     var signup = document.getElementById("signup-btn");
-    var fullname = document.getElementById("fullname");
     var email = document.getElementById("email");
     var password = document.getElementById("password");
+    var confirmPassword = document.getElementById("cf-password");
     var data;
+
+    function warning() {
+      password.classList.remove("signup-input");
+      password.classList.add("warning");
+      confirmPassword.classList.remove("signup-input");
+      confirmPassword.classList.add("warning");
+    }
     
     signup.addEventListener("click", async function() {
-      if (fullname.value == '' || email.value=='' || password.value=='') alert("Please fill in all the information");
+      if (email.value=='' || password.value=='' || confirmPassword.value == '') alert("Please fill in all the information");
       else {
-          
+        if (password.value !== confirmPassword.value) {
+          warning();
+          alert("Password and confirm password must be the same.");        
+        } else {
           data = {
-            fullname: fullname.value,
             password: password.value,
             email: email.value
           }
@@ -76,6 +85,6 @@
           }
         }
       }
-    )
+    })
   </script>
 </html>

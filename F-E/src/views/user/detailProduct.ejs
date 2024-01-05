@@ -73,12 +73,27 @@
     var count = 0;
 
     buy.addEventListener("click", async function() {
-        const orderArray = [{
-            product_id: '<%= data.product_id %>',
-            quantity: quantity.value
-        }, in_cart]
-        const queryString = `?orderArray=${encodeURIComponent(JSON.stringify(orderArray))}`;
-        window.location.href = `/user/<%= userId%>/create-order${queryString}`;
+        var check = await fetch("http://localhost:4000/user/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": jwt
+            },
+            body: "",
+        });
+
+        var result = await check.json();
+        if (result === "Your profile is fully set up") {
+            const orderArray = [{
+                product_id: '<%= data.product_id %>',
+                quantity: quantity.value
+            }, in_cart]
+            const queryString = `?orderArray=${encodeURIComponent(JSON.stringify(orderArray))}`;
+            window.location.href = `/user/<%= userId%>/create-order${queryString}`;
+        } else {
+            alert(result);
+        }
+            
     })
 
     add.addEventListener("click", async function() {
